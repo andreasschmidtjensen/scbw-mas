@@ -1,0 +1,6 @@
+/examples/Jason/bin/
+/*/build/
+/*/dist/
+/**/nbproject/private/
+*.asl~
+*.mas2j~

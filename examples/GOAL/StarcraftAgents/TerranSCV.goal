@@ -1,0 +1,20 @@
+main module{
+	
+	program{
+		if bel(mineralField(Id), not(gathering(X))) then gather(Id).
+	}
+	
+	actionspec {	
+		gather(Id) {
+			pre { not(gathering(X)) }
+			post { true }
+		}
+	}
+}
+
+event module {
+	program {
+		if bel(percept(gathering(X))) then insert(gathering(X)).
+		if bel(percept(mineralField(Id,_,_))) then insert(mineralField(Id)). 	
+	}	
+}

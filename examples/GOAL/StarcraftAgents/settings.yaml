@@ -1,0 +1,78 @@
+PMPreferences: {
+  agentCopyEnvRunState: false,
+  agentsBrowseDir: 'C:\Dropbox\code\phd\scbw\examples\GOAL\StarcraftAgents/GOALagents',
+  defaultKRLanguage: swiprolog,
+  middlewareLocal: false,
+  rememberLastUsedAgentDir: true,
+  removeKilledAgent: false,
+  sleepRepetetiveAgent: false,
+  useMASNameAsAgentPrefix: false
+}
+EnvironmentPreferences: {
+  printNewEntities: true,
+  registryhost: ''
+}
+RunPreferences: {
+  middleware: LOCAL
+}
+CorePreferences: {
+  learnedBehaviourFile: '',
+  learning: false
+}
+DebugPreferences: {
+  ACTION_EXECUTED_BUILTIN: VIEW,
+  ACTION_EXECUTED_USERSPEC: VIEW,
+  ACTION_PRECOND_EVALUATION: NONE,
+  ACTION_PRECOND_EVALUATION_USERSPEC: PAUSE,
+  ATOM_QUERIES: NONE,
+  BB_UPDATES: NONE,
+  BREAKPOINTS: HIDDENPAUSE,
+  CALL_MODULE: PAUSE,
+  EVENT_MODULE_ENTRY: VIEWPAUSE,
+  EVENT_MODULE_EXIT: VIEW,
+  GB_CHANGES: HIDDEN,
+  GB_UPDATES: NONE,
+  GOAL_ACHIEVED: VIEW,
+  HIDDEN_RULE_CONDITION_EVALUATION: HIDDEN,
+  INIT_MODULE_ENTRY: VIEWPAUSE,
+  INIT_MODULE_EXIT: VIEW,
+  MAILS: NONE,
+  MAILS_CONDITIONAL_VIEW: CONDITIONALVIEW,
+  MAIN_MODULE_ENTRY: VIEWPAUSE,
+  MAIN_MODULE_EXIT: VIEW,
+  MIDDLEWARE_AGENT: HIDDEN,
+  PERCEPTS: NONE,
+  PERCEPTS_CONDITIONAL_VIEW: CONDITIONALVIEW,
+  REASONING_CYCLE_SEPARATOR: VIEW,
+  RULE_APPLICATION_SUMMARY: NONE,
+  RULE_CONDITIONAL_VIEW: CONDITIONALVIEW,
+  RULE_CONDITION_EVALUATION: PAUSE,
+  RUNMODE: HIDDEN,
+  SLEEP: HIDDENVIEW,
+  USER_MODULE_ENTRY: VIEW,
+  USER_MODULE_EXIT: VIEW
+}
+LoggingPreferences: {
+  eclipseActionHistory: true,
+  eclipseAgentConsoles: true,
+  eclipseDebug: false,
+  javadetails: false,
+  logconsoles: false,
+  logdirectory: 'C:\Dropbox\code\phd\scbw\examples\GOAL\StarcraftAgents/logs',
+  logtofile: false,
+  overwritelogfiles: false,
+  showLogsInConsole: false,
+  showlogtime: false,
+  stackdump: false,
+  suppresslevel: 5
+}
+DBExportPreferences: {
+  exportBrowseDir: 'C:\Dropbox\code\phd\scbw\examples\GOAL\StarcraftAgents',
+  exportbeliefs: true,
+  exportgoals: true,
+  exportmailbox: true,
+  exportpercepts: true,
+  openaftersave: false,
+  rememberLastUsedExportDir: true,
+  separatefiles: true
+}
