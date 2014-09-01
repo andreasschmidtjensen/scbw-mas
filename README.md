@@ -19,16 +19,13 @@ The environment interface standard ([EIS](https://github.com/eishub/eis/wiki "EI
 
 ### Current status
 
-- Only a subset of the Terran units have been implemented.
-	- SCV
-	- Marine
-	- Command Center
-	- Barracks
-- No other races are available yet.
+- Most units can be controlled by the MAS.
+- Only a subset of the Terran units have had implemented special abilities:
+	- Marine (Stimpacks)
 
 ### Project overview
 The project contains the following folders:
 
 * **EISBW:** The EIS implementation of BWAPI. 
-* **examples:** A collection of examples for different multi-agent systems.
+* **examples:** A collection of examples for different multi-agent systems (currently Jason and GOAL).
 * **libs:** Jar-files required for building the interface and running the various examples.

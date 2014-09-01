@@ -37,6 +37,6 @@ public class AttackMove  extends StarcraftAction {
 
     @Override
     public String toString() {
-        return "attackMove(unitId, x, y)"; //To change body of generated methods, choose Tools | Templates.
+        return "attack(unitId, x, y)"; //To change body of generated methods, choose Tools | Templates.
     } 
 }

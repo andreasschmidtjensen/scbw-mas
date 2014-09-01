@@ -17,14 +17,14 @@ public class ActionProvider {
     }
 
     public void loadActions(JNIBWAPI api) {
-        actions.put("gather", new Gather(api));
-        actions.put("train", new Train(api));
-        actions.put("build", new Build(api));
-        actions.put("attack", new Attack(api));
-        actions.put("move", new Move(api));
-        actions.put("use", new Use(api));
-        actions.put("useOnPosition", new UseOnPosition(api));
-        actions.put("useOnTarget", new UseOnTarget(api));
-        actions.put("attackMove", new AttackMove(api));
+        actions.put("attack/1", new Attack(api));
+        actions.put("attack/2", new AttackMove(api));
+        actions.put("build/3", new Build(api));
+        actions.put("gather/1", new Gather(api));
+        actions.put("move/2", new Move(api));
+        actions.put("train/1", new Train(api));
+        actions.put("use/1", new Use(api));
+        actions.put("use/2", new UseOnTarget(api));
+        actions.put("use/3", new UseOnPosition(api));
     }
 }

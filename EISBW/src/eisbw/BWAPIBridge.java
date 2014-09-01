@@ -133,7 +133,7 @@ public class BWAPIBridge extends EIDefaultImpl {
 
     @Override
     protected boolean isSupportedByEnvironment(Action action) {
-        return actionProvider.getAction(action.getName()) != null;
+        return getAction(action) != null;
     }
 
     @Override
@@ -141,12 +141,15 @@ public class BWAPIBridge extends EIDefaultImpl {
         return true;
     }
 
+	private StarcraftAction getAction(Action action) {
+		return actionProvider.getAction(action.getName() + "/" + action.getParameters().size());
+	}
+	
     @Override
     protected boolean isSupportedByEntity(Action act, String name) {
         Unit unit = units.get(name);
-        String actionName = act.getName();
 
-        StarcraftAction action = actionProvider.getAction(actionName);
+        StarcraftAction action = getAction(act);
 
         // if action is invalid, we need to provide a failure message (which can only be provided by performEntityAction, so return true in that case)
         return !action.isValid(act) || action.canExecute(unit, act);
@@ -162,9 +165,7 @@ public class BWAPIBridge extends EIDefaultImpl {
         }
 
         if (!pendingActions.containsKey(unit)) {
-            String actionName = act.getName();
-
-            StarcraftAction action = actionProvider.getAction(actionName);
+            StarcraftAction action = getAction(act);
             // Action might be invalid
             if (action.isValid(act)) {
                 logger.info("[" + name + "] Pending action: " + act.toProlog());
@@ -183,7 +184,6 @@ public class BWAPIBridge extends EIDefaultImpl {
         units.put(unitName, u);
         unitNames.put(u.getID(), unitName);
         try {
-			System.out.println("u.getType().getName(): " + bwApiUtility.getEISUnitType(u));
             addEntity(unitName, bwApiUtility.getEISUnitType(u));
         } catch (EntityException ex) {
             throw new RuntimeException(ex);
@@ -226,9 +226,7 @@ public class BWAPIBridge extends EIDefaultImpl {
                     Unit unit = it.next();
                     Action act = pendingActions.get(unit);
 
-                    String actionName = act.getName();
-
-                    StarcraftAction action = actionProvider.getAction(actionName);
+                    StarcraftAction action = getAction(act);
                     logger.info("[" + bwApiUtility.getUnitName(unit) + "] Performing action: " + act.toProlog());
                     try {
                         action.execute(unit, act);

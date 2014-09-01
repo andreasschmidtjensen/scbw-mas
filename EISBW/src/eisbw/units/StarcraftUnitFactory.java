@@ -25,25 +25,26 @@ public class StarcraftUnitFactory {
         perceptGenerators.add(new EnemyPerceiver(api));
         perceptGenerators.add(new PlayerUnitsPerceiver(api, util));
 
+		if (unit.getType().isBuilding()) {
+            perceptGenerators.add(new AvailableResourcesPerceiver(api));
+            perceptGenerators.add(new QueuePerceiver(this.api, unit));			
+		}
+		if (unit.getType().isAttackCapable()) {
+            perceptGenerators.add(new AttackingUnitsPerceiver(api));			
+		}
+		if (unit.getType().isWorker()) {
+            perceptGenerators.add(new AvailableResourcesPerceiver(api));
+            perceptGenerators.add(new BuilderUnitPerceiver(api, unit));
+            perceptGenerators.add(new GathererUnitPerceiver(api, unit));			
+		}
+		
         String un = unit.getType().getName();
         if (un.equals(UnitTypes.Terran_Command_Center.getName())) {
-            perceptGenerators.add(new AvailableResourcesPerceiver(api));
-            perceptGenerators.add(new QueuePerceiver(this.api, unit));
             perceptGenerators.add(new IdleWorkersPerceiver(api, util));
-            return new CommandCenter(api, unit, perceptGenerators);
-        } else if (un.equals(UnitTypes.Terran_Barracks.getName())) {
-            perceptGenerators.add(new QueuePerceiver(this.api, unit));
-            return new Barracks(api, unit, perceptGenerators);
-        } else if (un.equals(UnitTypes.Terran_SCV.getName())) {
-            perceptGenerators.add(new BuilderUnitPerceiver(api, unit));
-            perceptGenerators.add(new GathererUnitPerceiver(api, unit));
-            return new SCV(api, unit, perceptGenerators);
         } else if (un.equals(UnitTypes.Terran_Marine.getName())) {
             perceptGenerators.add(new StimUnitPerceiver(api, unit));
-            perceptGenerators.add(new AttackingUnitsPerceiver(api));
-            return new Marine(api, unit, perceptGenerators);
-        } else {
-            return new StarcraftUnit(api, unit, perceptGenerators);
         }
+		
+		return new StarcraftUnit(api, unit, perceptGenerators);
     }
 }

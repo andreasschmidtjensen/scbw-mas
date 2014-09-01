@@ -28,7 +28,9 @@ public class BWApiUtility {
     }
 
     public String getUnitName(Unit u) {
-        return (u.getType().getName() + u.getID()).replace("_", "").replace(" ", "");
+		String name = (u.getType().getName() + u.getID()).replace("_", "").replace(" ", "");
+		name = name.substring(0, 1).toLowerCase() + name.substring(1);
+        return name;
     }
 	
 	public String getEISUnitType(Unit u) {
