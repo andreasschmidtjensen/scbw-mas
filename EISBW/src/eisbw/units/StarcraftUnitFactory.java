@@ -2,8 +2,6 @@ package eisbw.units;
 
 import eisbw.*;
 import eisbw.percepts.perceivers.*;
-import eisbw.units.terran.*;
-import eisbw.units.terran.buildings.*;
 import java.util.*;
 import jnibwapi.*;
 import jnibwapi.types.UnitType.UnitTypes;
