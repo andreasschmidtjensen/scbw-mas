@@ -2,8 +2,6 @@ package eisbw.units;
 
 import eisbw.*;
 import eisbw.percepts.perceivers.*;
-import eisbw.units.terran.*;
-import eisbw.units.terran.buildings.*;
 import java.util.*;
 import jnibwapi.*;
 import jnibwapi.types.UnitType.UnitTypes;
@@ -27,7 +25,8 @@ public class StarcraftUnitFactory {
 
 		if (unit.getType().isBuilding()) {
             perceptGenerators.add(new AvailableResourcesPerceiver(api));
-            perceptGenerators.add(new QueuePerceiver(this.api, unit));			
+            perceptGenerators.add(new QueueSizePerceiver(this.api, unit))     ;
+            perceptGenerators.add(new BuildUnitPerceiver(this.api, unit));			
 		}
 		if (unit.getType().isAttackCapable()) {
             perceptGenerators.add(new AttackingUnitsPerceiver(api));			
@@ -41,6 +40,8 @@ public class StarcraftUnitFactory {
         String un = unit.getType().getName();
         if (un.equals(UnitTypes.Terran_Command_Center.getName())) {
             perceptGenerators.add(new IdleWorkersPerceiver(api, util));
+            perceptGenerators.add(new ConstructionSitePerceiver(api, unit));
+            perceptGenerators.add(new AccessibleVespeneGeyserPerceiver(api, unit));
         } else if (un.equals(UnitTypes.Terran_Marine.getName())) {
             perceptGenerators.add(new StimUnitPerceiver(api, unit));
         }

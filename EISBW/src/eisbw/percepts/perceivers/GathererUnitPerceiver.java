@@ -1,7 +1,9 @@
 package eisbw.percepts.perceivers;
 
 import eis.iilang.Percept;
+import eisbw.percepts.CarryingPercept;
 import eisbw.percepts.GatheringPercept;
+import eisbw.percepts.MineralFieldPercept;
 import eisbw.percepts.VespeneGeyserPercept;
 import java.util.*;
 import jnibwapi.*;
@@ -20,14 +22,11 @@ public class GathererUnitPerceiver extends UnitPerceiver {
             Percept p = new GatheringPercept(unit.isGatheringGas());
             result.add(p);
         }
-		
-		for (Unit u : api.getNeutralUnits()) {
-			if (u.getType() == UnitType.UnitTypes.Resource_Vespene_Geyser) {
-				Percept p = new VespeneGeyserPercept(u.getID(), u.getResources(), u.getResourceGroup());
-				result.add(p);
-			}
-		}
-		
+	if (unit.isCarryingGas() ||unit.isCarryingMinerals()){
+            Percept p = new CarryingPercept();
+            result.add(p);
+        }
+        	
         return result;
     }
 }

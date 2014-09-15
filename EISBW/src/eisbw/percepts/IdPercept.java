@@ -1,4 +1,4 @@
-package eisbw.percepts;
+ package eisbw.percepts;
 
 import eis.iilang.Numeral;
 import eis.iilang.Percept;
