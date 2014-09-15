@@ -216,6 +216,11 @@ public class BWAPIBridge extends EIDefaultImpl {
             mapPercepts = new ArrayList<>();
             gameStarted = true;
             //jnibwapi.Map map = bwapi.getMap();
+			try {
+				setState(EnvironmentState.RUNNING);
+			} catch (ManagementException ex) {
+				throw new RuntimeException("Could not set state to RUNNING!");
+			}
         }
 
         @Override
