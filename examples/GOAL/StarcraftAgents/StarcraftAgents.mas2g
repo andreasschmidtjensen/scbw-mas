@@ -1,10 +1,13 @@
 environment {
-	env = "../../../EISBW/dist/EISBW.jar".	
+	env = "../../../EISBW/dist/EISBW-with-deps.jar".	
 }
+
 agentfiles{
 	"TerranSCV.goal" [name = terranSCV].
+	"TerranCommandCenter.goal" [name = terranCommandCenter].
 }
 
 launchpolicy{
 	when [type = terranSCV]@env do launch terranSCV:terranSCV.
+	when [type = terranCommandCenter]@env do launch terranCommandCenter:terranCommandCenter.
 }

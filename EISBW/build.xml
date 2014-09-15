@@ -10,6 +10,14 @@
 <project name="EISBW" default="default" basedir=".">
     <description>Builds, tests, and runs the project EISBW.</description>
     <import file="nbproject/build-impl.xml"/>
+	<target name="-post-jar">
+		<jar destfile="dist/EISBW-with-deps.jar" filesetmanifest="skip" basedir="${build.classes.dir}">
+			<zipgroupfileset dir="../libs/" includes="jnibwapi.jar"/>
+			<manifest>
+				<attribute name="Main-Class" value="eisbw.BWAPIBridge"/>
+			</manifest>
+		</jar>
+	</target>
     <!--
 
     There exist several targets which are by default empty and which can be 
