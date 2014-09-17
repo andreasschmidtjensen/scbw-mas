@@ -22,6 +22,7 @@ public class Percepts {
     public static final String Constructing = "constructing";    
     public static final String Idle = "idle";
     public static final String QueueSize = "queueSize";
+    public static final String Queue = "queue";
     public static final String Stimmed = "stimmed";
     public static final String Enemy = "enemy";
     public static final String Friendly = "friendly";
