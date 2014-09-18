@@ -1,0 +1,12 @@
+MAS res {
+	infrastructure: Centralised
+	environment: jason.eis.EISAdapter("../../EISBW/dist/EISBW.jar")
+    agents:
+		terranSCV;
+		terranCommandCenter;
+		terranBarracks;
+		terranMarine;
+		player;
+				
+	classpath: "../../libs/eis-0.3.jar";"../../libs/jason-eis.jar";"../../libs/jnibwapi.jar";"../../EISBW/dist/EISBW.jar";
+}
