@@ -18,6 +18,7 @@ public class Percepts {
     public static final String Supply = "supply";
     public static final String Id = "id";
     public static final String Position = "position";
+    public static final String BuildTilePosition = "buildTilePosition";
     public static final String Gathering = "gathering";
     public static final String Carrying = "carrying";
     public static final String Constructing = "constructing";    
