@@ -32,7 +32,7 @@ public class ConstructionSitePerceiver extends UnitPerceiver {
         ArrayList<Point> illegals = new ArrayList<>();
         for (Unit u : api.getNeutralUnits()) {
             if (UnitTypesEx.isResourceType(u.getType())) {
-                illegals.add(new Point(u.getTileX(), u.getTileY()));
+                illegals.add(new Point(u.getTilePosition().getBX(), u.getTilePosition().getBY()));
             }
         }
         
@@ -46,7 +46,7 @@ public class ConstructionSitePerceiver extends UnitPerceiver {
                     Point possible = new Point(x, y);
                     boolean add = true;
                     for (Point illegal : illegals) {
-                        if (illegal.distance(possible) < 10.1) {
+                        if (illegal.distance(possible) < 5) {
                             add = false;
                             break;
                         }

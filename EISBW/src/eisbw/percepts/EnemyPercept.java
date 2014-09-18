@@ -6,8 +6,8 @@ import eis.iilang.Percept;
 
 public class EnemyPercept extends Percept {
 
-    public EnemyPercept(String name, int id, int x, int y) {
-        super(Percepts.Enemy, new Identifier(name), new Numeral(id), new Numeral(x), new Numeral(y));
+    public EnemyPercept(String name, int id, int wX, int wY, int bX, int bY) {
+        super(Percepts.Enemy, new Identifier(name), new Numeral(id), new Numeral(wX), new Numeral(wY), new Numeral(bX), new Numeral(bY));
     }
 
 }
