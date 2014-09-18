@@ -19,7 +19,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
         }
         
         result.add(new IdPercept(unit.getID()));
-        result.add(new PositionPercept(unit.getTileX(), unit.getTileY()));
+        result.add(new PositionPercept(unit.getPosition().getWX(), unit.getPosition().getWY()));
         
         return result;
     }
