@@ -1,16 +1,14 @@
 main module{
-	
 	program{
-		if bel(mineralField(Id), not(gathering(X))) then gather(Id).
+		if true then test.
 	}
 	
-	actionspec {	
-		gather(Id) {
-			pre { not(gathering(X)) }
-			post { true }
-		}
+	actionspec {
+		skip { pre {} post {} }
 	}
 }
+
+#import "test.mod2g".
 
 event module {
 	program {

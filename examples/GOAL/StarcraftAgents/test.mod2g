@@ -1,0 +1,13 @@
+module test {
+	
+	program{
+		if bel(mineralField(Id), not(gathering(X))) then gather(Id).
+	}
+	
+	actionspec {	
+		gather(Id) {
+			pre { not(gathering(X)) }
+			post { true }
+		}
+	}
+}

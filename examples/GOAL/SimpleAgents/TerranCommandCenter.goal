@@ -1,0 +1,21 @@
+main module{
+	beliefs{
+		trainSCV.
+	}
+	program{
+		if bel(aggregate_all(count,(percept(friendly(_, "Terran SCV", _, _, _))),X),X<25) then train("Terran SCV").	
+	}
+	actionspec {	
+		train(Id) {
+			pre {trainSCV}
+			post {not(trainSCV)}
+		}
+	}
+}
+
+event module {
+	program {
+				if bel(percept(minerals(X)),X>=50,percept(supply(Y,Z)),Y<Z) then insert(trainSCV).	
+%		if true then insert(minerals(51)).	
+	}	
+}

@@ -1,0 +1,73 @@
+init module {
+	
+	beliefs {
+		cost("Terran Supply Depot", 100, 0).
+		cost("Terran Barracks", 150, 0).
+		condition("Terran Supply Depot") 
+			:- supply(C, Max), Max - C < 3.
+		condition("Terran Barracks") 
+			:- 	not(friendly(_, "Terran Barracks", _, _, _)), 
+				supply(_, Max), Max > 10.
+		
+		canBuild(Building, X, Y) 
+			:- 	condition(Building), 
+				cost(Building, M, G), 
+				minerals(MQ), M =< MG, 
+				gas(GQ), G =< GQ,
+				friendly(_, "Terran Command Center", Id, _, _),
+				buildingLocation(Id, Building, X, Y),
+				position(MyX, MyY),
+				distance(MyX, MyY, X, Y, D),
+				findall(_, (friendly(_, "Terran SCV", _, OtherX, OtherY),
+							distance(OtherX, OtherY, X, Y, OtherD),
+							OtherD < D), []).
+							
+		distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
+	}
+	
+	program {
+		if bel(percept(supply(C,M))) then insert(supply(C,M)).
+		if bel(percept(minerals(M))) then insert(minerals(M)).
+		if bel(percept(gas(G))) then insert(gas(G)).
+		if bel(percept(position(X,Y))) then insert(position(X,Y)).
+	}
+	
+}
+
+main module{
+
+	program {
+		if bel(canBuild(Building, X, Y)) then build(Building, X, Y).
+		if bel(mineralField(Id), not(gathering(X))) then gather(Id).
+	}
+	
+	actionspec {	
+		gather(Id) {
+			pre { not(gathering(X)) }
+			post { true }
+		}
+		build(Building, X, Y) {
+			pre { cost(Building, M, G), minerals(MQ), M =< MG, gas(GQ), G =< GQ }
+			post { true }	
+		}
+	}
+}
+
+event module {
+	program {
+		if bel(percept(supply(C1,Max1)), supply(C2, Max2)) then insert(supply(C1,Max1)) + delete(supply(C2, Max2)).
+		
+		if bel(percept(gathering(Y)), gathering(X), X \= Y) then insert(gathering(Y)) + delete(gathering(X)).
+		if bel(percept(gathering(X)), not(gathering(X))) then insert(gathering(X)).
+		if bel(gathering(X), not(percept(gathering(X)))) then delete(gathering(X)).
+		
+		if bel(percept(minerals(M1)), minerals(M2), M1 \= M2) then insert(minerals(M1)) + delete(minerals(M2)).
+		if bel(percept(gas(G1)), gas(G2), G1 \= G2) then insert(gas(G1)) + delete(gas(G2)).
+		
+		forall bel(percept(mineralField(Id,_,_)), not(mineralField(Id))) do insert(mineralField(Id)).
+		
+		forall bel(percept(friendly(Name,Type,Id,X,Y)), not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
+		
+		if bel(percept(position(X1,Y1)), position(X2,Y2), (X1 \= X2 ; Y1 \= Y2)) then insert(position(X1,Y1)) + delete(position(X2,Y2)).
+	}	
+}
