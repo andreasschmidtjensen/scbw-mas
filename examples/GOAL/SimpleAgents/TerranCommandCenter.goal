@@ -15,6 +15,6 @@ main module{
 
 event module {
 	program {
-		if bel(not(trainSCV), percept(queue(N)), N < 2, percept(minerals(X)),X>=50,percept(supply(Y,Z)),Y<Z) then insert(trainSCV).
+		if bel(not(trainSCV), percept(queueSize(N)), N < 2, percept(minerals(X)),X>=50,percept(supply(Y,Z)),Y<Z) then insert(trainSCV).
 	}	
 }

@@ -1,16 +1,13 @@
 init module {
-	
 	beliefs {
 		busy :- constructing ; gathering(_).
-		
 		cost("Terran Supply Depot", 100, 0).
 		cost("Terran Barracks", 150, 0).
 		condition("Terran Supply Depot") 
-			:- supply(C, Max), Max < C + 3.
+			:- supply(C, Max), Max - C < 6.
 		condition("Terran Barracks") 
 			:- 	aggregate_all(count,friendly(_, "Terran Barracks", _, _, _),0), 
-				supply(_, Max), Max > 10.
-		
+				supply(_, Max), Max > 20.
 		canBuild(Building, X, Y) 
 			:- 	condition(Building), 
 				cost(Building, M, G), 
@@ -18,33 +15,27 @@ init module {
 				gas(GQ), G =< GQ,
 				friendly(_, "Terran Command Center", _, TX, TY),
 				buildingLocation(TX, TY, X, Y),
-				id(Id),
-				findall(_, (friendly(_, "Terran SCV", OtherId, _, _),
-							OtherId > Id), []).
-		
+				position(MyX,MyY), distance(MyX,MyY,X,Y,D),
+				findall(_, (friendly(_, "Terran SCV", _, OtherX, OtherY),
+							distance(OtherX,OtherY,X,Y,OtherD), OtherD < D), []).		
 		buildingLocation(X,Y, RX,RY) 
-			:-	findall([D,BX,BY], (buildLocation(BX,BY), distance(X,Y,BX,BY,D)), L),
+			:-	findall([D,BX,BY], (constructionSite(BX,BY), distance(X,Y,BX,BY,D)), L),
 				sort(L, [[_,RX,RY]|_]). 				
 		distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
 	}
-	
 	program {
 		if bel(percept(id(Id))) then insert(id(Id)).
 		if bel(percept(supply(C,M))) then insert(supply(C,M)).
 		if bel(percept(minerals(M))) then insert(minerals(M)).
 		if bel(percept(gas(G))) then insert(gas(G)).
 		if bel(percept(position(X,Y))) then insert(position(X,Y)).
-	}
-	
+	}	
 }
-
 main module{
-
 	program {
 		if bel(not(constructing), canBuild(Building, X, Y)) then insert(constructing) + build(Building, X, Y).
-		if bel(not(busy), mineralField(Id), not(gathering(X))) then gather(Id).
-	}
-	
+		if bel(not(busy), mineralField(Id)) then gather(Id).
+	}	
 	actionspec {
 		gather(Id) {
 			pre { not(gathering(X)) }
@@ -56,7 +47,6 @@ main module{
 		}
 	}
 }
-
 event module {
 	program {
 		forall bel(not(percept(supply(C,Max))), supply(C, Max)) do delete(supply(C,Max)).
@@ -70,14 +60,14 @@ event module {
 		if bel(not(percept(gas(G))), gas(G)) then delete(gas(G)).
 		if bel(percept(gas(G)), not(gas(G))) then insert(gas(G)).
 				
-		forall bel(percept(mineralField(Id,_,_)), not(mineralField(Id))) do insert(mineralField(Id)).
+		forall bel(percept(mineralField(Id,_,_,_,_)), not(mineralField(Id))) do insert(mineralField(Id)).
 		
 		forall bel(percept(id(MyId)), percept(friendly(Name,Type,Id,X,Y)), MyId \= Id, not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
 		
 		if bel(percept(position(X1,Y1)), position(X2,Y2), (X1 \= X2 ; Y1 \= Y2)) then insert(position(X1,Y1)) + delete(position(X2,Y2)).
 		
-		forall bel(percept(buildLocation(X,Y)), not(buildLocation(X,Y))) do insert(buildLocation(X,Y)).
-		forall bel(not(percept(buildLocation(X,Y))), buildLocation(X,Y)) do delete(buildLocation(X,Y)).
+		forall bel(percept(constructionSite(X,Y)), not(constructionSite(X,Y))) do insert(constructionSite(X,Y)).
+		forall bel(not(percept(constructionSite(X,Y))), constructionSite(X,Y)) do delete(constructionSite(X,Y)).
 		
 		if bel(percept(constructing), not(constructing)) then insert(constructing).
 		if bel(not(percept(constructing)), constructing) then delete(constructing).
