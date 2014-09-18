@@ -7,11 +7,15 @@ import eisbw.actions.*;
 import eisbw.percepts.*;
 import eisbw.percepts.perceivers.*;
 import eisbw.units.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Map;
 import java.util.logging.*;
 import jnibwapi.*;
 import jnibwapi.types.UnitType;
+import jnibwapi.util.BWColor;
 
 public class BWAPIBridge extends EIDefaultImpl {
 
@@ -214,6 +218,7 @@ public class BWAPIBridge extends EIDefaultImpl {
             bwapi.drawIDs(true);
             bwapi.drawHealth(true);
             bwapi.drawTargets(true);
+			
 
             mapPercepts = new ArrayList<>();
             gameStarted = true;
@@ -244,11 +249,11 @@ public class BWAPIBridge extends EIDefaultImpl {
                     it.remove();
                 }
             }
-//            for (int x = 0; x < bwapi.getMap().getSize().getBX(); x++) {
-//                for (int y = 0; y < bwapi.getMap().getSize().getBY(); y++) {
-//                    bwapi.drawBox(new Position(x, y, Position.PosType.BUILD), new Position(x + 1, y + 1, Position.PosType.BUILD), BWColor.Yellow, false, false);
-//                }
-//            }
+			for (ChokePoint cp : bwapi.getMap().getChokePoints()) {
+				bwapi.drawLine(cp.getFirstSide(), cp.getSecondSide(), BWColor.Yellow, false);
+				bwapi.drawCircle(cp.getCenter(), (int)cp.getRadius(), BWColor.Red, false, false);
+				bwapi.drawText(cp.getCenter(), "(" + cp.getCenter().getBX() + "," + cp.getCenter().getBY() + ")", false);
+			}
             
         }
 
@@ -282,10 +287,6 @@ public class BWAPIBridge extends EIDefaultImpl {
 
         @Override
         public void unitCreate(int i) {
-            Unit u = bwapi.getUnit(i);
-            if (bwapi.getMyUnits().contains(u)) {
-                register(u);
-            }
         }
 
         @Override
@@ -323,6 +324,10 @@ public class BWAPIBridge extends EIDefaultImpl {
 
         @Override
         public void unitComplete(int unitID) {
+            Unit u = bwapi.getUnit(unitID);
+            if (bwapi.getMyUnits().contains(u)) {
+                register(u);
+            }
         }
 
         @Override

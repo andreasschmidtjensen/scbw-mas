@@ -30,7 +30,8 @@ public class Move extends StarcraftAction {
         int x = ((Numeral) parameters.get(0)).getValue().intValue();
         int y = ((Numeral) parameters.get(1)).getValue().intValue();
         
-        api.move(unit.getID(), x, y);
+		Position pos = new Position(x, y, Position.PosType.WALK);
+		unit.move(pos, false);
     }
 
     @Override

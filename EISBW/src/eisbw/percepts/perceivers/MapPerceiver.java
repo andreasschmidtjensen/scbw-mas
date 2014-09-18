@@ -1,5 +1,6 @@
 package eisbw.percepts.perceivers;
 
+import eis.iilang.Numeral;
 import eis.iilang.Percept;
 import eisbw.percepts.*;
 import java.util.*;
@@ -24,6 +25,11 @@ public class MapPerceiver extends Perceiver {
             Percept basePercept = new BasePercept(location.getTx(), location.getTy(), location.isStartLocation(), location.getRegionID());
             percepts.add(basePercept);
         }
+		
+		for (ChokePoint cp : map.getChokePoints()) {
+			Percept chokePercept = new ChokepointPercept(cp.getCenter().getWX(), cp.getCenter().getWY());
+			percepts.add(chokePercept);
+		}
 
         return percepts;
     }
