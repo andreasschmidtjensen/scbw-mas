@@ -4,7 +4,7 @@ import eis.*;
 import eis.exceptions.*;
 import eis.iilang.*;
 import eisbw.actions.*;
-import eisbw.percepts.GameStartPercept;
+import eisbw.percepts.*;
 import eisbw.percepts.perceivers.*;
 import eisbw.units.*;
 import java.io.BufferedReader;
@@ -91,7 +91,7 @@ public class BWAPIBridge extends EIDefaultImpl {
             percepts.addAll(scu.perceive());
         }
 		
-		percepts.addAll(new TotalResourcesPerceiver(bwapi).perceive());
+	percepts.addAll(new TotalResourcesPerceiver(bwapi).perceive());
 
         Map<UnitType, Integer> count = new HashMap<>();
         for (Unit myUnit : bwapi.getMyUnits()) {
@@ -102,31 +102,31 @@ public class BWAPIBridge extends EIDefaultImpl {
             count.put(unitType, count.get(unitType) + 1);
         }
         for (UnitType unitType : count.keySet()) {
-            percepts.add(new Percept("unit", new Identifier(unitType.getName()), new Numeral(count.get(unitType))));
+            percepts.add(new UnitPercept(unitType.getName(), count.get(unitType)));
         }
 
         for (Unit u : bwapi.getNeutralUnits()) {
             UnitType unitType = u.getType();
             if (u.isVisible()) {
                 if (UnitTypesEx.isMineralField(unitType)) {
-                    Percept p = new Percept("mineralField");
-                    p.addParameter(new Numeral(u.getID()));
-                    p.addParameter(new Numeral(u.getResources()));
-                    p.addParameter(new Numeral(u.getResourceGroup()));
+                    MineralFieldPercept p = new MineralFieldPercept(u.getID(),
+                            u.getResources(),
+                            u.getResourceGroup(),
+                            u.getPosition().getBX(),
+                            u.getPosition().getBY());
                     percepts.add(p);
                 } else if (UnitTypesEx.isVespeneGeyser(unitType)) {
-                    Percept p = new Percept("vespeneGeyser");
-                    p.addParameter(new Numeral(u.getID()));
-                    p.addParameter(new Numeral(u.getResources()));
-                    p.addParameter(new Numeral(u.getResourceGroup()));
-					p.addParameter(new Numeral(u.getTileX()));
-					p.addParameter(new Numeral(u.getTileY()));
+                    VespeneGeyserPercept p = new VespeneGeyserPercept(u.getID(),
+                            u.getResources(),
+                            u.getResourceGroup(),
+                            u.getPosition().getBX(),
+                            u.getPosition().getBY());
                     percepts.add(p);
                 } else if (UnitTypesEx.isRefinery(unitType)) {
-                    Percept p = new Percept("refinery");
-                    p.addParameter(new Numeral(u.getID()));
-                    p.addParameter(new Numeral(u.getResources()));
-                    p.addParameter(new Numeral(u.getResourceGroup()));
+                    RefineryPercept p = new RefineryPercept(
+                            u.getID(),
+                            u.getResources(),
+                            u.getResourceGroup());
                     percepts.add(p);
                 }
             }

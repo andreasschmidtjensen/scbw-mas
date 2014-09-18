@@ -19,6 +19,10 @@ public class GenericUnitPerceiver extends UnitPerceiver {
         }
         
         result.add(new IdPercept(unit.getID()));
+        result.add(new UnitTypePercept(unit.getType().getName()));
+        if( !unit.isCompleted()){
+            result.add(new IsBeingConstructedPercept());
+        }
         result.add(new PositionPercept(unit.getPosition().getWX(), unit.getPosition().getWY()));
         
         return result;

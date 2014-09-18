@@ -20,7 +20,7 @@ public class IdleWorkersPerceiver extends Perceiver {
         
         List<Unit> units = api.getMyUnits();
         for (Unit unit : units) {
-            if (unit.isIdle() && unit.getType() == UnitTypes.Terran_SCV) {
+            if (unit.isIdle() && unit.getType().isWorker()) {
                 percepts.add(new IdleWorkerPercept(util.getUnitName(unit)));
             }
         }

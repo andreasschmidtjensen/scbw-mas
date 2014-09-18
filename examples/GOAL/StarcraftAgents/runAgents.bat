@@ -11,5 +11,5 @@ set PATH=.;%GOALHOME%/win32;%PATH%
 set SWI_HOME_DIR=%GOALHOME%/win32
 
 echo Running java -cp .;%GOALHOME%/goal.jar;%LIBS%/jnibwapi.jar -Djava.library.path=.;%GOALHOME%/win32 goal.tools.Run -p . 
-java -cp .;%GOALHOME%/goal.jar;%LIBS%/jnibwapi.jar -Djava.library.path=.;%GOALHOME%/win32 goal.tools.eclipse.RunTool -p .
+java -cp .;%GOALHOME%/goal.jar;%LIBS%/jnibwapi.jar -Djava.library.path=.;%GOALHOME%/win32 goal.tools.Run -p .
 
