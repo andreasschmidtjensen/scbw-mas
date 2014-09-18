@@ -3,7 +3,7 @@ main module{
 		trainSCV.
 	}
 	program{
-		if bel(aggregate_all(count,(percept(friendly(_, "Terran SCV", _, _, _))),X),X<25) then train("Terran SCV").	
+		if bel(aggregate_all(count,(percept(friendly(_, "Terran SCV", _, _, _))),X),X<8) then train("Terran SCV").	
 	}
 	actionspec {	
 		train(Id) {
@@ -15,7 +15,6 @@ main module{
 
 event module {
 	program {
-				if bel(percept(minerals(X)),X>=50,percept(supply(Y,Z)),Y<Z) then insert(trainSCV).	
-%		if true then insert(minerals(51)).	
+		if bel(not(trainSCV), percept(queue(N)), N < 2, percept(minerals(X)),X>=50,percept(supply(Y,Z)),Y<Z) then insert(trainSCV).
 	}	
 }

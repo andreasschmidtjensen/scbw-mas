@@ -1,31 +1,35 @@
 init module {
 	
 	beliefs {
+		busy :- constructing ; gathering(_).
+		
 		cost("Terran Supply Depot", 100, 0).
 		cost("Terran Barracks", 150, 0).
 		condition("Terran Supply Depot") 
-			:- supply(C, Max), Max - C < 3.
+			:- supply(C, Max), Max < C + 3.
 		condition("Terran Barracks") 
-			:- 	not(friendly(_, "Terran Barracks", _, _, _)), 
+			:- 	aggregate_all(count,friendly(_, "Terran Barracks", _, _, _),0), 
 				supply(_, Max), Max > 10.
 		
 		canBuild(Building, X, Y) 
 			:- 	condition(Building), 
 				cost(Building, M, G), 
-				minerals(MQ), M =< MG, 
+				minerals(MQ), M =< MQ, 
 				gas(GQ), G =< GQ,
-				friendly(_, "Terran Command Center", Id, _, _),
-				buildingLocation(Id, Building, X, Y),
-				position(MyX, MyY),
-				distance(MyX, MyY, X, Y, D),
-				findall(_, (friendly(_, "Terran SCV", _, OtherX, OtherY),
-							distance(OtherX, OtherY, X, Y, OtherD),
-							OtherD < D), []).
-							
+				friendly(_, "Terran Command Center", _, TX, TY),
+				buildingLocation(TX, TY, X, Y),
+				id(Id),
+				findall(_, (friendly(_, "Terran SCV", OtherId, _, _),
+							OtherId > Id), []).
+		
+		buildingLocation(X,Y, RX,RY) 
+			:-	findall([D,BX,BY], (buildLocation(BX,BY), distance(X,Y,BX,BY,D)), L),
+				sort(L, [[_,RX,RY]|_]). 				
 		distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
 	}
 	
 	program {
+		if bel(percept(id(Id))) then insert(id(Id)).
 		if bel(percept(supply(C,M))) then insert(supply(C,M)).
 		if bel(percept(minerals(M))) then insert(minerals(M)).
 		if bel(percept(gas(G))) then insert(gas(G)).
@@ -37,17 +41,17 @@ init module {
 main module{
 
 	program {
-		if bel(canBuild(Building, X, Y)) then build(Building, X, Y).
-		if bel(mineralField(Id), not(gathering(X))) then gather(Id).
+		if bel(not(constructing), canBuild(Building, X, Y)) then insert(constructing) + build(Building, X, Y).
+		if bel(not(busy), mineralField(Id), not(gathering(X))) then gather(Id).
 	}
 	
-	actionspec {	
+	actionspec {
 		gather(Id) {
 			pre { not(gathering(X)) }
 			post { true }
 		}
 		build(Building, X, Y) {
-			pre { cost(Building, M, G), minerals(MQ), M =< MG, gas(GQ), G =< GQ }
+			pre { cost(Building, M, G), minerals(MQ), M =< MQ, gas(GQ), G =< GQ }
 			post { true }	
 		}
 	}
@@ -55,19 +59,27 @@ main module{
 
 event module {
 	program {
-		if bel(percept(supply(C1,Max1)), supply(C2, Max2)) then insert(supply(C1,Max1)) + delete(supply(C2, Max2)).
+		forall bel(not(percept(supply(C,Max))), supply(C, Max)) do delete(supply(C,Max)).
+		if bel(percept(supply(C,Max)), not(supply(C, Max))) then insert(supply(C,Max)).
 		
-		if bel(percept(gathering(Y)), gathering(X), X \= Y) then insert(gathering(Y)) + delete(gathering(X)).
 		if bel(percept(gathering(X)), not(gathering(X))) then insert(gathering(X)).
 		if bel(gathering(X), not(percept(gathering(X)))) then delete(gathering(X)).
 		
-		if bel(percept(minerals(M1)), minerals(M2), M1 \= M2) then insert(minerals(M1)) + delete(minerals(M2)).
-		if bel(percept(gas(G1)), gas(G2), G1 \= G2) then insert(gas(G1)) + delete(gas(G2)).
-		
+		if bel(not(percept(minerals(M))), minerals(M)) then delete(minerals(M)).
+		if bel(percept(minerals(M)), not(minerals(M))) then insert(minerals(M)).
+		if bel(not(percept(gas(G))), gas(G)) then delete(gas(G)).
+		if bel(percept(gas(G)), not(gas(G))) then insert(gas(G)).
+				
 		forall bel(percept(mineralField(Id,_,_)), not(mineralField(Id))) do insert(mineralField(Id)).
 		
-		forall bel(percept(friendly(Name,Type,Id,X,Y)), not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
+		forall bel(percept(id(MyId)), percept(friendly(Name,Type,Id,X,Y)), MyId \= Id, not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
 		
 		if bel(percept(position(X1,Y1)), position(X2,Y2), (X1 \= X2 ; Y1 \= Y2)) then insert(position(X1,Y1)) + delete(position(X2,Y2)).
+		
+		forall bel(percept(buildLocation(X,Y)), not(buildLocation(X,Y))) do insert(buildLocation(X,Y)).
+		forall bel(not(percept(buildLocation(X,Y))), buildLocation(X,Y)) do delete(buildLocation(X,Y)).
+		
+		if bel(percept(constructing), not(constructing)) then insert(constructing).
+		if bel(not(percept(constructing)), constructing) then delete(constructing).
 	}	
 }
