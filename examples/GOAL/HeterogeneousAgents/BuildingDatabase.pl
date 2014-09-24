@@ -20,7 +20,7 @@
 		cost('Terran Armory',100,50,0).
 		
 		
-		shouldConstruct('Terran Supply Depot'):-percept(supply(S,TotalS)),CompareS is TotalS-16,S>=CompareS,TotalS<400.
+		shouldConstruct('Terran Supply Depot'):-percept(supply(S,TotalS)),CompareS is TotalS-14,S>=CompareS,TotalS<400.
 				
 		shouldConstruct('Terran Barracks'):- percept(supply(S,TotalS)), TotalS > 20,
 							percept(unit('Terran Barracks', Count)),
