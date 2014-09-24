@@ -23,25 +23,30 @@ public class StarcraftUnitFactory {
         perceptGenerators.add(new EnemyPerceiver(api));
         perceptGenerators.add(new PlayerUnitsPerceiver(api, util));
 
-		if (unit.getType().isBuilding()) {
+        if (unit.getType().isBuilding()) {
             perceptGenerators.add(new AvailableResourcesPerceiver(api));
-            perceptGenerators.add(new QueueSizePerceiver(this.api, unit))     ;
+            perceptGenerators.add(new QueueSizePerceiver(this.api, unit));
             perceptGenerators.add(new BuildUnitPerceiver(this.api, unit));			
-		}
-		if (unit.getType().isAttackCapable()) {
+        }
+        if (UnitTypesEx.isRefinery(unit.getType())) {
+            perceptGenerators.add(new WorkerActivityPerceiver(api,util));
+        }
+        if (unit.getType().isAttackCapable()) {
             perceptGenerators.add(new AttackingUnitsPerceiver(api));			
-		}
-		if (unit.getType().isWorker()) {
+        }
+        if (unit.getType().isWorker()) {
             perceptGenerators.add(new AvailableResourcesPerceiver(api));
             perceptGenerators.add(new BuilderUnitPerceiver(api, unit));
-            perceptGenerators.add(new GathererUnitPerceiver(api, unit));			
-		}
+            perceptGenerators.add(new GathererUnitPerceiver(api, unit));
+            perceptGenerators.add(new ConstructionSitePerceiver(api, unit));	
+            perceptGenerators.add(new AccessibleVespeneGeyserPerceiver(api, unit));		
+        }
 		
         String un = unit.getType().getName();
         if (un.equals(UnitTypes.Terran_Command_Center.getName())) {
             perceptGenerators.add(new IdleWorkersPerceiver(api, util));
-            perceptGenerators.add(new ConstructionSitePerceiver(api, unit));
-            perceptGenerators.add(new AccessibleVespeneGeyserPerceiver(api, unit));
+             //For some reason the refinerys can't be matched in GOAL right now. Just using command center for now
+            perceptGenerators.add(new RefineryPerceiver(api, unit));
         } else if (un.equals(UnitTypes.Terran_Marine.getName())) {
             perceptGenerators.add(new StimUnitPerceiver(api, unit));
         }

@@ -7,6 +7,7 @@ public class Percepts {
     public static final String Base = "base";
     public static final String Chokepoint = "chokepoint";
     public static final String Map = "map";
+    public static final String WorkerActivity = "workerActivity";
     public static final String VespeneGeyser = "vespeneGeyser";
     public static final String Refinery = "refinery";
     public static final String AccessibleVespeneGeyserVespeneGeyser = "accessibleVespeneGeyser";

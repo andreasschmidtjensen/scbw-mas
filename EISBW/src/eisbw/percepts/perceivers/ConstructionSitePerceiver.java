@@ -31,7 +31,7 @@ public class ConstructionSitePerceiver extends UnitPerceiver {
         
         ArrayList<Point> illegals = new ArrayList<>();
         for (Unit u : api.getNeutralUnits()) {
-            if (UnitTypesEx.isResourceType(u.getType())) {
+            if (UnitTypesEx.isResourceType(u.getType()) && u.isExists()) {
                 illegals.add(new Point(u.getTilePosition().getBX(), u.getTilePosition().getBY()));
             }
         }
@@ -40,13 +40,13 @@ public class ConstructionSitePerceiver extends UnitPerceiver {
             for (int y = 0; y < mapHeight; y++) {
                 Position p = new Position(x, y, Position.PosType.BUILD);
                 
-                boolean buildable = api.canBuildHere(unit, p, unit.getType(), true);
+                boolean buildable = api.canBuildHere(unit, p, UnitType.UnitTypes.Terran_Command_Center, true);
                 boolean explored = api.isExplored(p);
                 if (buildable && explored) {
                     Point possible = new Point(x, y);
                     boolean add = true;
                     for (Point illegal : illegals) {
-                        if (illegal.distance(possible) < 5) {
+                        if (illegal.distance(possible) < 10) {
                             add = false;
                             break;
                         }

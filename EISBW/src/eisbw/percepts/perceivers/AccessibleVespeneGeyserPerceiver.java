@@ -22,7 +22,8 @@ public class AccessibleVespeneGeyserPerceiver extends UnitPerceiver {
         ArrayList<Percept> percepts = new ArrayList<>();
         for (Unit u : api.getNeutralUnits()) {
             UnitType unitType = u.getType();
-            if (u.isVisible()) {if (UnitTypesEx.isVespeneGeyser(unitType)) {
+            if (u.isVisible()) {
+                if (UnitTypesEx.isVespeneGeyser(unitType)) {
                     AccessibleVespeneGeyserPercept p = new AccessibleVespeneGeyserPercept(
                             u.getPosition().getBX(),
                             u.getPosition().getBY());
