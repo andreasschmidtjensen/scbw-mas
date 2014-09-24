@@ -1,0 +1,29 @@
+environment {
+	env = "../../../EISBW/dist/EISBW-with-deps.jar".	
+}
+
+agentfiles{
+	"TerranSCV.goal" [name = terranSCV].
+	"TerranCommandCenter.goal" [name = terranCommandCenter].
+	"TerranBarracks.goal" [name = terranBarracks].
+	"TerranMarine.goal" [name = terranMarine].
+	"TerranFirebat.goal" [name = terranFirebat].
+	"TerranMedic.goal" [name = terranMedic].
+	"TerranSupplyDepot.goal" [name = terranSupplyDepot].
+	"TerranAcademy.goal" [name = terranAcademy].
+	"TerranEngineeringBay.goal" [name = terranEngineeringBay].
+	"TerranRefinery.goal" [name = terranRefinery].
+}
+
+launchpolicy{
+	when [type = terranSCV]@env do launch terranSCV:terranSCV.
+	when [type = terranCommandCenter]@env do launch terranCommandCenter:terranCommandCenter.
+	when [type = terranBarracks]@env do launch terranBarracks:terranBarracks.
+	when [type = terranMarine]@env do launch terranMarine:terranMarine.
+	when [type = terranFirebat]@env do launch terranFirebat:terranFirebat.
+	when [type = terranMedic]@env do launch terranMedic:terranMedic.
+	when [type = terranSupplyDepot]@env do launch terranSupplyDepot:terranSupplyDepot.
+	when [type = terranAcademy]@env do launch terranAcademy:terranAcademy.
+	when [type = terranEngineeringBay]@env do launch terranEngineeringBay:terranEngineeringBay.
+	when [type = terranRefinery]@env do launch terranRefinery:terranRefinery.
+}

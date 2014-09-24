@@ -1,0 +1,67 @@
+main module{
+	knowledge{
+		#import "GeneralKnowledge.pl".
+		
+		
+		
+		train('Terran SCV',25).
+		nearestField(vespene, Id, X, Y) :- findall( (BestId,BestX,BestY),
+										percept(friendly(_,'Terran Refinery',BestId,_,_,BestX,BestY)),
+										 [M1|Rest]),
+								  		nearestField(M1, Rest, (Id, X, Y)).
+								  		
+		nearestField(MineralField, [], MineralField).
+		nearestField((BestId,BestX,BestY), [(Id,X,Y)|Rest], MineralField) :-
+	  								distanceTo(BestX,BestY,Res),
+	  								distanceTo(X,Y,Res1), 
+	  								Res <Res1 -> nearestField((BestId,BestX,BestY), Rest, MineralField)
+		            							; nearestField((Id,X,Y), Rest, MineralField).
+		            							
+		shouldMineVespene(Id,VesId, X ,Y ) :- percept(friendly(_,'Terran Refinery',_,_,_,_,_)),
+											aggregate_all(count, percept(gathering(_,vespene)), Count),
+								Count < 3,
+								chooseWorkerForVespene(Id,VesId, X,Y).
+
+		chooseWorkerForVespene(BestId,VesId, VesX,VesY):- 
+				findall( (Id,X,Y),percept(friendly(_, 'Terran SCV',Id,_,_,X,Y)), [W1|Rest]),
+				nearestField(vespene, VesId, VesX, VesY),
+				chooseWorkerForVespene(W1, Rest,VesX,VesY, (BestId,_,_)).
+									
+		chooseWorkerForVespene(Worker, [],X,Y, Worker).
+		chooseWorkerForVespene((BestId,BestX,BestY), [(Id,X,Y)|Rest],VesX,VesY, Worker) :-
+		  		distance(BestX,BestY,VesX,VesY,Res),
+		  		distance(X,Y,VesX,VesY,Res1), 
+		  		Res <Res1 -> chooseWorkerForVespene((BestId,BestX,BestY), Rest,VesX,VesY, Worker)
+			        		; chooseWorkerForVespene((Id,X,Y), Rest,VesX,VesY, Worker).		
+	}
+	beliefs {
+	}
+	goals{
+		
+	}
+	program[order=linearall]{
+	
+		if true then handlePercepts+train.
+		
+		if bel(shouldMineVespene(Id,VesId,X,Y), nameMapping(Mail,_,Id)) then print('Sending message to SCV')+Mail.send(gather(vespene,VesId,X,Y)).
+	}
+}
+
+#import "TrainHandler.mod2g".
+
+#import "MessageHandler.mod2g".
+
+#import "Communication.mod2g".
+
+#import "PerceptHandler.mod2g".
+
+
+event module {
+	program[order=linearall] {
+				%if true then clearSent.
+				if true then idNameMapping.
+				if bel(not(hasSent)) then idNameMappingBroadcast.
+				
+		
+	}	
+}

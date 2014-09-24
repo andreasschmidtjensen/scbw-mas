@@ -1,0 +1,26 @@
+main module{
+	knowledge{
+		#import "GeneralKnowledge.pl".
+
+	}
+	beliefs {
+	}
+	goals{
+		
+	}
+	program[order=linearall]{
+	}
+}
+
+#import "MessageHandler.mod2g".
+
+#import "Communication.mod2g".
+
+
+event module {
+	program[order=linearall] {
+		if true then idNameMapping.
+		
+		if bel(not(hasSent)) then idNameMappingBroadcast.
+	}	
+}

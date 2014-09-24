@@ -1,0 +1,18 @@
+module upgrade{
+	knowledge {
+		#import "UpgradeDatabase.pl".		
+		#import "ResourceKnowledge.pl".
+	}
+	
+	program[order = linearall]{
+		
+		if bel(shouldUpgrade(Type), percept(id(Id)), string_concat(Id, ' Trying to upgrade: ', Res), string_concat(Res, Type, Res2)) then print(Res2)+upgrade(Type).
+			
+	}
+	actionspec {	
+		upgrade(Type) {
+			pre {canAfford(Type)}
+			post {true}
+		}
+	}	
+}

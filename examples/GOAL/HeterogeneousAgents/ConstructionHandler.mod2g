@@ -1,0 +1,34 @@
+
+module handleConstruction{
+	knowledge{
+		#import "BuildingDatabase.pl".			
+		#import "ResourceKnowledge.pl".		
+	}
+	program[order=linearall]{
+		%supply depot
+		%request for resource
+		if bel(shouldConstruct('Terran Supply Depot')) then log(pb).
+		if bel(shouldConstruct(Type), 
+				isBuilding(Type),
+				chooseWorker(Type,WorkerId,X,Y),
+				percept(id(Id)),
+				WorkerId = Id, 
+				string_concat('Building: ', Type, Res), 
+				string_concat(Res,' At pos: ',Res2), 
+				string_concat(Res2, X, Res3), 
+				string_concat(Res3,Y,Res4)) then {
+							if bel(gather(vespene,Id,X,Y)) then delete(gather(vespene,Id,X,Y)).	
+							if true then build(Type, X, Y) + 
+										print(Res4).
+					
+				}
+		
+			}
+	actionspec{
+		build(Type,X,Y) {
+			pre {canAfford(Type)}
+			post { true }
+		}	
+	}
+		
+}

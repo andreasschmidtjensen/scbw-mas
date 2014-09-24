@@ -1,0 +1,24 @@
+module idNameMapping{	
+	knowledge {
+			
+	}	
+	
+	program[order=linearall]{
+		forall bel(received(Sender,nameExchange(Type,Id)), percept(id(MyId)), percept(unitType(MyType))) do insert(nameMapping(Sender,Type,Id)) +
+															delete(received(Sender,nameExchange(Type,Id))) +
+															Sender.sendonce(name(MyType,MyId)).
+															
+		forall bel(received(Sender,name(Type,Id))) do insert(nameMapping(Sender,Type,Id)) +
+														delete(received(Sender,name(Type,Id))).
+		
+	}
+}
+
+module idNameMappingBroadcast{
+	
+	program[order=linearall]{
+
+		if bel(not(hasSent), percept(id(MyId)), percept(unitType(MyType))) then allother.sendonce(nameExchange(MyType,MyId))+insert(hasSent).		
+	}
+	
+}

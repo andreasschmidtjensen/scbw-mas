@@ -1,0 +1,27 @@
+module train{
+	knowledge {
+		#import "UnitCostDatabase.pl".		
+		#import "ResourceKnowledge.pl".
+		
+	}
+	
+	program[order = linearall]{
+		%Manage Goals
+		if bel(train(Type,Amount),aggregate_all(count,percept(friendly(_, Type, _, _, _,_,_)),X)) then {
+			if bel(not(owned(Type,_))) then insert(owned(Type,X)).
+			if bel(owned(Type,Y), Y\=X) then delete(owned(Type,Y))+insert(owned(Type,X)).
+		}
+		if bel(train(Type,Amount),owned(Type,X),X<Amount),not(goal (owned(Type,_))) then adopt(owned(Type,Amount)).
+		
+		
+		%Train
+		if a-goal(owned(Type,X)),bel(owned(Type,Y), Y<X,percept(queueSize(Size)),Size<2) then train(Type).
+			
+	}
+		actionspec {	
+		train(Type) {
+			pre {canAfford(Type)}
+			post {true}
+		}
+	}	
+}
