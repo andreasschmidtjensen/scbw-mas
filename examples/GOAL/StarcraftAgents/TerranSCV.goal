@@ -1,16 +1,19 @@
 main module{
-	
+	goals {
+		justSpawned.
+		
+	}
 	program{
-		if bel(mineralField(Id), not(gathering(X))) then gather(Id).
+		if goal( justSpawned) then drop(justSpawned)+print("sdfsdf")+log(bb). 
+		if true then test.
 	}
 	
-	actionspec {	
-		gather(Id) {
-			pre { not(gathering(X)) }
-			post { true }
-		}
+	actionspec {
+		skip { pre {} post {} }
 	}
 }
+
+#import "test.mod2g".
 
 event module {
 	program {

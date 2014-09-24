@@ -7,7 +7,7 @@ module handleConstruction{
 	program[order=linearall]{
 		%supply depot
 		%request for resource
-		if bel(shouldConstruct('Terran Supply Depot')) then log(pb).
+		if bel(not(percept(constructionSite(_,_)))) then log(pb).
 		if bel(shouldConstruct(Type), 
 				isBuilding(Type),
 				chooseWorker(Type,WorkerId,X,Y),

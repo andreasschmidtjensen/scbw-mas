@@ -1,7 +1,0 @@
-
-% Clears out received messages and sent messages, these are now processed and irrelevant, hence slowing down the queries for no reason
-module clearSent{
-	program[order=linearall]{
-		forall bel(sent(Agent,Message)) do delete(sent(Agent,Message)).
-	}
-}

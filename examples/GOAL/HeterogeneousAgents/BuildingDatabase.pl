@@ -23,25 +23,29 @@
 		shouldConstruct('Terran Supply Depot'):-percept(supply(S,TotalS)),CompareS is TotalS-16,S>=CompareS,TotalS<400.
 				
 		shouldConstruct('Terran Barracks'):- percept(supply(S,TotalS)), TotalS > 20,
-							aggregate_all(count,(percept(friendly(_, 'Terran Barracks', _, _, _,_,_))),X),
-									percept(minerals(M)),shouldConstruct('Terran Barracks',X,M).
+							percept(unit('Terran Barracks', Count)),
+							percept(minerals(M)),
+							shouldConstruct('Terran Barracks',Count,M).
+									
+		shouldConstruct('Terran Barracks'):- percept(supply(S,TotalS)), TotalS > 20,
+							not(percept(unit('Terran Barracks', _))),
+							percept(minerals(M)),
+							shouldConstruct('Terran Barracks',0,M).
 									
 		shouldConstruct('Terran Barracks',0,M):-M>=150.
 		shouldConstruct('Terran Barracks',1,M):-M>=1000.
 		shouldConstruct('Terran Barracks',2,M):-M>=2000.
 		
 		
-		shouldConstruct('Terran Refinery') :- percept(accessibleVespeneGeyser(X,Y)).
+		shouldConstruct('Terran Refinery') :- percept(vespeneGeyser(_,_,_,_,_)).
 									
 									
 		
-		shouldConstruct('Terran Engineering Bay'):-
-					aggregate_all(count,(percept(friendly(_, 'Terran Barracks', _, _, _,_,_))),X), X>0, 
-					aggregate_all(count,(percept(friendly(_, 'Terran Engineering Bay', _, _, _,_,_))),Y), Y=0.
+		shouldConstruct('Terran Engineering Bay'):-percept(unit('Terran Barracks', _)), 
+							not(percept(unit('Terran Engineering Bay', _))).
 		
-		shouldConstruct('Terran Academy'):-
-					aggregate_all(count,(percept(friendly(_, 'Terran Barracks', _, _, _,_,_))),X), X>0, 
-					aggregate_all(count,(percept(friendly(_, 'Terran Academy', _, _, _,_,_))),Y), Y=0.
+		shouldConstruct('Terran Academy'):-	percept(unit('Terran Barracks', _)), 
+							not(percept(unit('Terran Academy', _))).
 			
 													
 		
@@ -67,11 +71,11 @@
 		  				;someConstructionSite((BestX,BestY), Rest, CX,CY,BuildingList, ConstructionSite).
 		
 		distanceLargerThan([(CX,CY)|Rest],X,Y) :-distance(X,Y,CX,CY,Res),
-					  		    Res > 5 -> distanceLargerThan(Rest,X,Y)
+					  		    Res > 4 -> distanceLargerThan(Rest,X,Y)
 					  				;!,fail.
 		
 		chooseWorker(Type,BestId,ConX,ConY):- 
-				findall( (Id,X,Y),percept(friendly(_, 'Terran SCV',Id,_,_,X,Y)), [W1|Rest]),
+				findall( (Id,X,Y),(percept(friendly(_, 'Terran SCV',Id,_,_,X,Y)),not(percept(workerActivity(Id,constructing)))), [W1|Rest]),
 				someConstructionSite(Type,ConX,ConY),
 				chooseWorker(W1, Rest,ConX,ConY, (BestId,_,_)).
 									

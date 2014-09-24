@@ -39,14 +39,14 @@ public class StarcraftUnitFactory {
             perceptGenerators.add(new BuilderUnitPerceiver(api, unit));
             perceptGenerators.add(new GathererUnitPerceiver(api, unit));
             perceptGenerators.add(new ConstructionSitePerceiver(api, unit));	
-            perceptGenerators.add(new AccessibleVespeneGeyserPerceiver(api, unit));		
+            perceptGenerators.add(new WorkerActivityPerceiver(api,util));
         }
 		
         String un = unit.getType().getName();
         if (un.equals(UnitTypes.Terran_Command_Center.getName())) {
             perceptGenerators.add(new IdleWorkersPerceiver(api, util));
              //For some reason the refinerys can't be matched in GOAL right now. Just using command center for now
-            perceptGenerators.add(new RefineryPerceiver(api, unit));
+            perceptGenerators.add(new WorkerActivityPerceiver(api,util));
         } else if (un.equals(UnitTypes.Terran_Marine.getName())) {
             perceptGenerators.add(new StimUnitPerceiver(api, unit));
         }

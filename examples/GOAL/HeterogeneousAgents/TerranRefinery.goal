@@ -14,7 +14,6 @@ main module{
 	}
 }
 
-#import "MessageHandler.mod2g".
 #import "Communication.mod2g".
 
 event module {

@@ -17,7 +17,6 @@ main module{
 	}
 }
 
-#import "MessageHandler.mod2g".
 #import "UpgradeHandler.mod2g".
 #import "Communication.mod2g".
 #import "PerceptHandler.mod2g".

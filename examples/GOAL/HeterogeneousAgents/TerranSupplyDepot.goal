@@ -12,14 +12,13 @@ main module{
 	}
 }
 
-#import "MessageHandler.mod2g".
 
 #import "Communication.mod2g".
 
 
 event module {
 	program[order=linearall] {
-		if true then idNameMapping.
+		if true then idNameMapping+clearSent.
 		
 		if bel(not(hasSent)) then idNameMappingBroadcast.
 	}	

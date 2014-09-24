@@ -17,10 +17,11 @@ main module{
 	  								Res <Res1 -> nearestField((BestId,BestX,BestY), Rest, MineralField)
 		            							; nearestField((Id,X,Y), Rest, MineralField).
 		            							
-		shouldMineVespene(Id,VesId, X ,Y ) :- percept(friendly(_,'Terran Refinery',_,_,_,_,_)),
-											aggregate_all(count, percept(gathering(_,vespene)), Count),
-								Count < 3,
-								chooseWorkerForVespene(Id,VesId, X,Y).
+		shouldMineVespene(Id,VesId, X ,Y ) :- percept(unit('Terran Refinery',RefCount)),
+											NeededWorkers is RefCount * 3,
+											aggregate_all(count, percept(workerActivity(_,vespene)), Count),
+											Count < NeededWorkers,
+											chooseWorkerForVespene(Id,VesId, X,Y).
 
 		chooseWorkerForVespene(BestId,VesId, VesX,VesY):- 
 				findall( (Id,X,Y),percept(friendly(_, 'Terran SCV',Id,_,_,X,Y)), [W1|Rest]),
@@ -49,8 +50,6 @@ main module{
 
 #import "TrainHandler.mod2g".
 
-#import "MessageHandler.mod2g".
-
 #import "Communication.mod2g".
 
 #import "PerceptHandler.mod2g".
@@ -59,7 +58,7 @@ main module{
 event module {
 	program[order=linearall] {
 				%if true then clearSent.
-				if true then idNameMapping.
+				if true then idNameMapping+clearSent.
 				if bel(not(hasSent)) then idNameMappingBroadcast.
 				
 		

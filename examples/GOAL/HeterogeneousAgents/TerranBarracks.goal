@@ -15,8 +15,6 @@ main module{
 }
 #import "TrainHandler.mod2g".
 
-#import "MessageHandler.mod2g".
-
 #import "Communication.mod2g".
 
 #import "PerceptHandler.mod2g".
@@ -24,6 +22,6 @@ main module{
 
 event module {
 	program[order=linearall] {
-				if true then idNameMapping+handlePercepts.
+				if true then idNameMapping+handlePercepts+clearSent.
 	}	
 }
