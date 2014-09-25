@@ -1,0 +1,77 @@
+main module{
+	knowledge{
+		#import "GeneralKnowledge.pl".
+		nearestField(mineral, Id, X, Y) :- findall( (BestId,BestX,BestY),percept(mineralField(BestId,_,_,BestX,BestY)), [M1|Rest]),
+								  		nearestField(M1, Rest, (Id, X, Y)).
+		nearestField(vespene, Id, X, Y) :- findall( (BestId,BestX,BestY),percept(friendly(_,'Terran Refinery',BestId,_,_,BestX,BestY)), [M1|Rest]),
+								  		nearestField(M1, Rest, (Id, X, Y)).
+								
+		nearestField(MineralField, [], MineralField).
+		nearestField((BestId,BestX,BestY), [(Id,X,Y)|Rest], MineralField) :-
+	  								distanceTo(BestX,BestY,Res),
+	  								distanceTo(X,Y,Res1), 
+	  								Res <Res1 -> nearestField((BestId,BestX,BestY), Rest, MineralField)
+		            							; nearestField((Id,X,Y), Rest, MineralField).
+	}
+	
+	beliefs{
+	}
+	goals{
+		delivered(minerals).
+	}
+	
+	
+	program[order = linearall]{
+		if true then handlePercepts+handleConstruction.
+		
+		if bel(not(percept(constructing)))  then {
+		
+			if bel(gather(vespene,Id,X,Y), not(percept(gathering(vespene)))) then print('Started printed vespene')+gather(Id).
+			
+			if bel(not(gather(_,_,_,_))) then {
+				
+				if bel(not(carrying),percept(carrying)) then insert(carrying).
+				if bel(carrying, not(percept(carrying))), 
+						goal(delivered(Resource)) then delete(carrying)+
+									insert(delivered(Resource))+
+									drop(delivered(Resource)).
+				
+				if a-goal(delivered(Resource)),
+							bel(not(gathering(Resource)),
+							nearestField(mineral, Id, X, Y)) then 
+										insert(gathering(Resource))+
+										gather(Id).
+		
+				
+				if bel(delivered(OldResource)) then delete(delivered(OldResource))+ 
+													adopt(delivered(mineral)).
+			}
+		}
+	}
+	
+	actionspec {	
+		gather(Id) {
+			pre { true }
+			post { true }
+		}
+	}
+
+}
+
+#import "Communication.mod2g".
+#import "ConstructionHandler.mod2g".
+#import "PerceptHandler.mod2g".
+
+event module {
+	program {
+		if bel(received(Sender, gather(vespene,Id,X,Y))) then 
+					insert(gather(vespene,Id,X,Y))+
+					delete(received(Sender, gather(vespene,Id,X,Y))).
+		forall bel(not(percept(gathering(Resource))),gathering(Resource)) do delete(gathering(Resource)).
+		
+
+		if true then idNameMapping+clearSent.
+		if bel(not(hasSent)) then idNameMappingBroadcast.
+	}	
+		
+}

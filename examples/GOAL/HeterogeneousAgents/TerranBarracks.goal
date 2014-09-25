@@ -1,0 +1,27 @@
+main module{
+	knowledge{
+		#import "GeneralKnowledge.pl".
+		train('Terran Marine',80).
+		train('Terran Firebat',50).
+		train('Terran Medic',70).
+		
+	}
+	beliefs {
+	}
+	program{
+			if true then train.
+
+	}
+}
+#import "TrainHandler.mod2g".
+
+#import "Communication.mod2g".
+
+#import "PerceptHandler.mod2g".
+
+
+event module {
+	program[order=linearall] {
+				if true then idNameMapping+handlePercepts+clearSent.
+	}	
+}

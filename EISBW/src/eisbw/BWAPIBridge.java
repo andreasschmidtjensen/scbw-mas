@@ -122,12 +122,7 @@ public class BWAPIBridge extends EIDefaultImpl {
                             u.getPosition().getBX(),
                             u.getPosition().getBY());
                     percepts.add(p);
-                } else if (UnitTypesEx.isRefinery(unitType)) {
-                    RefineryPercept p = new RefineryPercept(
-                            u.getID(),
-                            u.getResources(),
-                            u.getResourceGroup());
-                    percepts.add(p);
+                
                 }
             }
         }

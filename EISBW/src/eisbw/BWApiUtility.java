@@ -6,6 +6,7 @@ import java.util.HashMap;
 import jnibwapi.*;
 import jnibwapi.types.*;
 import jnibwapi.types.TechType.TechTypes;
+import jnibwapi.types.UpgradeType.UpgradeTypes;
 import jnibwapi.types.UnitType.UnitTypes;
 
 public class BWApiUtility {
@@ -13,6 +14,7 @@ public class BWApiUtility {
     public JNIBWAPI bwapi;
     private final HashMap<String, UnitType> unitTypeMap = new HashMap<>();
     private final HashMap<String, TechType> techTypeMap = new HashMap<>();
+    private final HashMap<String, UpgradeType> upgradeTypeMap = new HashMap<>();
 
     public BWApiUtility(JNIBWAPI api) {
         this.bwapi = api;
@@ -56,7 +58,18 @@ public class BWApiUtility {
                 techTypeMap.put(tt.getName(), tt);
             }
         }
-        
+                
         return this.techTypeMap.get(type);
     }
+    
+    public UpgradeType getUpgradeType(String type) {
+        if (this.upgradeTypeMap.isEmpty()) {
+            for (UpgradeType tt : UpgradeTypes.getAllUpgradeTypes()) {
+                upgradeTypeMap.put(tt.getName(), tt);
+            }
+        }
+                
+        return this.upgradeTypeMap.get(type);
+    }
+    
 }

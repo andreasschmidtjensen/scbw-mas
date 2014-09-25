@@ -49,4 +49,14 @@ public class UnitTypesEx {
                 return false;
         }
     }
+    
+    public static boolean isUpgradeCapable(UnitType unitType) {
+        switch (unitType.getName()) {
+            case "Terran Engineering Bay":
+            case "Terran Academy":
+                return true;
+            default:
+                return false;
+        }
+    }
 }

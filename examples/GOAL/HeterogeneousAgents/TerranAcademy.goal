@@ -1,0 +1,29 @@
+main module{
+	knowledge{
+		#import "GeneralKnowledge.pl".
+		shouldUpgrade('U-238 Shells').
+		shouldUpgrade('Caduceus Reactor').
+		%shouldUpgrade('StimPack').
+		%shouldUpgrade('Restoration').
+		%shouldUpgrade('Optic Flare').
+
+	}
+	beliefs {
+	}
+	goals{
+		
+	}
+	program[order=linearall]{
+		if true then handlePercepts+upgrade.
+	}
+}
+
+#import "UpgradeHandler.mod2g".
+#import "Communication.mod2g".
+#import "PerceptHandler.mod2g".
+
+event module {
+	program[order=linearall] {
+		if true then idNameMapping+clearSent.
+	}	
+}

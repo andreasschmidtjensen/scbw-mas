@@ -23,9 +23,8 @@ public class GathererUnitPerceiver extends UnitPerceiver {
             Percept p = new GatheringPercept(unit.isGatheringGas());
             result.add(p);
         }
-	if (unit.isCarryingGas() ||unit.isCarryingMinerals()){
-            Percept p = new CarryingPercept();
-            result.add(p);
+	if (unit.isCarryingGas() || unit.isCarryingMinerals()){
+            result.add(new CarryingPercept());
         }
 		
 		for (Unit u : api.getNeutralUnits()) {

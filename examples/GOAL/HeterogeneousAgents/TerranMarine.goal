@@ -1,0 +1,21 @@
+main module{
+	knowledge{
+		#import "GeneralKnowledge.pl".
+		
+	}
+	beliefs {
+	}
+	program{
+	 	if true then attack.
+	}	
+
+}
+
+#import "AttackHandler.mod2g".
+
+
+event module {
+	program {
+		
+	}
+}

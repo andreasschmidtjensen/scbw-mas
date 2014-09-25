@@ -1,0 +1,24 @@
+module attack{
+	knowledge{
+		findEnemy(Id):- percept(enemy(_,_,_,_,_,_)),
+				findall( (EId,BestX,BestY),percept(enemy(_,EId,BestX,BestY,_,_)), [C1|Rest]),
+				findEnemy(C1, Rest, (Id,X,Y)).
+										
+		findEnemy(Enemy, [], Enemy).
+		findEnemy((BestEId,BestX,BestY), [(Eid,X,Y)|Rest], Enemy) :-
+	  								walkDistanceTo(BestX,BestY,Res),
+	  								walkDistanceTo(X,Y,Res1), 
+	  								Res >Res1 -> findEnemy((EId,X,Y), Rest, Enemy)
+	  											;findEnemy((BestEId,BestX,BestY), Rest, Enemy).	
+	}
+	program{
+		if bel(findEnemy(EId), percept(enemy(_,EId,_,_,_,_))) then attack(EId).
+	}
+	
+	actionspec {	
+		attack(Id) {
+			pre {percept(enemy(_,Id,_,_,_,_))}
+			post {true}
+		}
+	}
+}

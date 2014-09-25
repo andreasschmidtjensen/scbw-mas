@@ -1,0 +1,23 @@
+main module{
+	knowledge{
+
+	}
+	beliefs {
+	}
+	goals{
+		
+	}
+	program[order=linearall]{
+		if bel(percept(workerActivity(Id,Activity)),
+			 string_concat(Id, Activity, Res)) then print(Res).
+		if true then print(sDFS).
+	}
+}
+
+#import "Communication.mod2g".
+
+event module {
+	program[order=linearall] {
+		if true then idNameMapping+clearSent.
+	}	
+}
