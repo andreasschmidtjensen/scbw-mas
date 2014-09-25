@@ -9,7 +9,8 @@ want("Terran Medic", 3).
 +gameStart <- !work.
 /* Test if researched before trying */
 +!work 
-	: 	.findall(Unit, (want(Unit, X) & .findall(_, friendly(_, Unit, _, _, _), L) & .length(L, N) & N < X), L) &
+	: 	queueSize(Q) & Q < 3 & 
+		.findall(Unit, (want(Unit, X) & .findall(_, friendly(_, Unit, _, _, _, _, _), L) & .length(L, N) & N < X), L) &
 		.shuffle(L, S) & S = [Unit|_]
 	<-	!train(Unit); .wait(1000); !!work.
 +!work
