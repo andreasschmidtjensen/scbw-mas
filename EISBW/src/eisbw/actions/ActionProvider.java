@@ -19,6 +19,7 @@ public class ActionProvider {
     public void loadActions(JNIBWAPI api) {
         actions.put("attack/1", new Attack(api));
         actions.put("attack/2", new AttackMove(api));
+        actions.put("upgrade/1", new Upgrade(api));
         actions.put("build/3", new Build(api));
         actions.put("gather/1", new Gather(api));
         actions.put("move/2", new Move(api));

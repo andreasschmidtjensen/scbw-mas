@@ -71,11 +71,12 @@ public class BWAPIBridge extends EIDefaultImpl {
         }
         apiThread.start();
 		
-		setState(EnvironmentState.PAUSED);
+	setState(EnvironmentState.PAUSED);
     }
 
     @Override
     protected LinkedList<Percept> getAllPerceptsFromEntity(String entity) throws PerceiveException, NoEnvironmentException {
+        
         LinkedList<Percept> percepts = new LinkedList<>();
         if (!gameStarted) {
             return percepts;
@@ -84,7 +85,6 @@ public class BWAPIBridge extends EIDefaultImpl {
         if (mapPercepts != null) {
             percepts.addAll(mapPercepts);
         }
-
         Unit unit = units.get(entity);
         if (unit != null) {
             StarcraftUnit scu = this.unitFactory.Create(unit);
@@ -142,11 +142,11 @@ public class BWAPIBridge extends EIDefaultImpl {
         return true;
     }
 
-	private StarcraftAction getAction(Action action) {
-		return actionProvider.getAction(action.getName() + "/" + action.getParameters().size());
-	}
+    private StarcraftAction getAction(Action action) {
+            return actionProvider.getAction(action.getName() + "/" + action.getParameters().size());
+    }
 	
-    @Override
+     @Override
     protected boolean isSupportedByEntity(Action act, String name) {
         Unit unit = units.get(name);
 
