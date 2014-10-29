@@ -1,0 +1,16 @@
+ROLES:
+builder: build(barrack); build(terranSupplyDepot).
+mineralGatherer: gather(minerals);returned(Minerals).
+
+OBJECTIVES: 
+build(barrack).
+build(terranSupplyDepot).
+gather(minerals).
+
+OBLIGATIONS:
+mineralGatherer: returned(Minerals) < bel(me(Me)) | gathering(Minerals).
+builder: build(terranSupplyDepot) < false | supply(X,Y), Res is Y-X, 6 > Res .
+builder: build(barrack) <  false | org(alreadyBuilt(terranSupplyDepot,N)), N > 0, 3 > N.
+
+RULES:
+org(alreadyBuilt(Type,N)) :- findall(_, friendly(_, Type, _, _, _, _, _), L), length(L, N).

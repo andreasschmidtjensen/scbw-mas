@@ -1,0 +1,4 @@
+role(builder) : true => enact(builder).
+%~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
+obj(build(Type)) : ~goal(build(Type)) => commit(build(Type)).
+
