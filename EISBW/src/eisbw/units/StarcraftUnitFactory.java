@@ -41,6 +41,9 @@ public class StarcraftUnitFactory {
             perceptGenerators.add(new ConstructionSitePerceiver(api, unit));	
             perceptGenerators.add(new WorkerActivityPerceiver(api,util));
         }
+		if (unit.getType().getSpaceProvided() > 0) {
+			perceptGenerators.add(new TransporterPerceiver(api, util, unit));
+		}
 		
         String un = unit.getType().getName();
         if (un.equals(UnitTypes.Terran_Command_Center.getName())) {

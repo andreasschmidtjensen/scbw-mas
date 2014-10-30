@@ -37,5 +37,8 @@ public class Percepts {
     public static final String IsBeingConstructed = "isBeingConstructed";
     public static final String ConstructionSite = "constructionSite";
     
+	public static final String SpaceProvided = "spaceProvided";
+	public static final String UnitLoaded = "unitLoaded";
+	
     
 }
