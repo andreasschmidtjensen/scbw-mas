@@ -39,6 +39,7 @@ public class Percepts {
     
 	public static final String SpaceProvided = "spaceProvided";
 	public static final String UnitLoaded = "unitLoaded";
+	public static final String RequiresRepair = "requiresRepair";
 	
     
 }

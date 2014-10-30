@@ -4,6 +4,7 @@ import eisbw.*;
 import eisbw.percepts.perceivers.*;
 import java.util.*;
 import jnibwapi.*;
+import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType.UnitTypes;
 
 public class StarcraftUnitFactory {
@@ -40,6 +41,10 @@ public class StarcraftUnitFactory {
             perceptGenerators.add(new GathererUnitPerceiver(api, unit));
             perceptGenerators.add(new ConstructionSitePerceiver(api, unit));	
             perceptGenerators.add(new WorkerActivityPerceiver(api,util));
+			
+			if (unit.getType().getRaceID() == RaceTypes.Terran.getID()) {
+				perceptGenerators.add(new RepairPerceiver(api));
+			}
         }
 		if (unit.getType().getSpaceProvided() > 0) {
 			perceptGenerators.add(new TransporterPerceiver(api, util, unit));
