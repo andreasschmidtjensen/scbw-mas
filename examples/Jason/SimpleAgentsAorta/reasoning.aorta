@@ -1,6 +1,6 @@
 role(scout) : ~org(rea(_,scout)), bel(supply(X,_), X>10) => enact(scout).
 role(worker) : bel(me(Me)), ~org(rea(Me,scout))  => enact(worker).
-role(worker) : bel(me(Me)), org(rea(Me,scout)), org(rea(Me,worker)) => deact(worker).
+~role(worker) : bel(me(Me)), org(rea(Me,scout)), org(rea(Me,worker)) => deact(worker).
 
 %~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
 obj(O) : ~goal(O) => commit(O).

@@ -11,6 +11,7 @@ condition("Terran Academy") :- not(friendly(_, "Terran Academy", _, _, _, _, _))
 condition("Terran Engineering Bay") :- not(friendly(_, "Terran Engineering Bay", _, _, _, _, _)) & friendly(_, "Terran Barracks", _,_,_, _, _).
 condition("Terran Bunker") :- friendly(_, "Terran Barracks", _,_,_, _, _).
 
+
 canBuild(Building, X, Y) 
 	:- 	cost(Building, M, G) & 
 		minerals(MQ) & M <= MQ &
@@ -21,6 +22,7 @@ canBuild(Building, X, Y)
 		jia.tileDistance(MyX,MyY,X,Y,D) &
 		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & jia.tileDistance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), []).
 
+	
 +constructing <- -building(_).
 
 +!work
@@ -38,12 +40,17 @@ canBuild(Building, X, Y)
 	:	friendly(_, "Terran Refinery", Id, _, _, _, _) &
 		.findall(_, gathering(_, vespene), L) & .length(L, N) & N < 3
 	<-	gather(Id); .wait(1000); !!work.
-+!work 
++!gather 
 	:	not(gathering(_)) & 
-		mineralField(Id, _, _, _, _)
-	<-	gather(Id); .wait(1000); !!work.
+		.findall(Id,mineralField(Id,_,_,_,_) , L)&
+		id(MyId)&
+		jia.closest(MyId,L,ClosestId)
+	<-	.print("gather");gather(ClosestId); .wait(1000).
 +!work <- .wait(200); !work.
 -!work <- .wait(200); !work.
+
++!gather <- .wait(200); !gather.
+-!gather <- .wait(200); !gather.
 
 +!build(Building, X, Y)
 	:	cost(Building, M, G) & 

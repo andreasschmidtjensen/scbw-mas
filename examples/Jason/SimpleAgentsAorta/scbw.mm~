@@ -1,16 +1,15 @@
 ROLES:
-builder: build(barrack); build(terranSupplyDepot).
-mineralGatherer: gather(minerals);returned(Minerals).
+worker: work.
+scout: scouting.
 
-OBJECTIVES: 
-build(barrack).
-build(terranSupplyDepot).
-gather(minerals).
+OBJECTIVES:
+work.
+scouting.
 
 OBLIGATIONS:
-mineralGatherer: returned(Minerals) < bel(me(Me)) | gathering(Minerals).
-builder: build(terranSupplyDepot) < false | supply(X,Y), Res is Y-X, 6 > Res .
-builder: build(barrack) <  false | org(alreadyBuilt(terranSupplyDepot,N)), N > 0, 3 > N.
+worker: work < false | me(Me).
+scout: scouting  < false | me(Me).
 
 RULES:
-org(alreadyBuilt(Type,N)) :- findall(_, friendly(_, Type, _, _, _, _, _), L), length(L, N).
+d(d) :- true.
+
