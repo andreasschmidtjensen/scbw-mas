@@ -3,7 +3,7 @@ MAS res {
 	environment: jason.eis.EISAdapter("../../../EISBW/dist/EISBW-with-deps.jar")
     agents:
 		terranSCV[aorta="reasoning.aorta"];
-		terranCommandCenter[aorta="reasoning.aorta"];
+		terranCommandCenter[aorta="terranCommandCenter.aorta"];
 		terranBarracks[aorta="reasoning.aorta"];
 		terranMarine[aorta="reasoning.aorta"]; 
 		terranFirebat groundUnit.asl[aorta="reasoning.aorta"];

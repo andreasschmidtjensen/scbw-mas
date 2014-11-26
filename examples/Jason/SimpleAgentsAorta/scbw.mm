@@ -1,18 +1,16 @@
 ROLES:
 gatherer: gather.
-builder: build.
+builder: constructBase.
 scout: scouting.
 
 OBJECTIVES:
-work.
 scouting.
+constructBase.
+gather.
 
 OBLIGATIONS:
 gatherer: gather < false | true.
-builder: build(X) < false | condition(X).
-scout: scouting  < false | me(Me).
+builder: constructBase < false | true.
+scout: scouting < false | true.
 
-RULES:
-condition(X):-true.
-d(d) :- true.
 
