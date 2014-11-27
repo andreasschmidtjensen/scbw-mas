@@ -1,6 +1,6 @@
 MAS res {
 	infrastructure: AORTA(organization("scbw.mm"),sleep(200),inspector)
-	environment: jason.eis.EISAdapter("../../../EISBW/dist/EISBW-with-deps.jar")
+	environment: jason.eis.EISAdapter("../../../EISBW-remote/dist/EISBW-remote.jar")
     agents:
 		terranSCV[aorta="reasoning.aorta"];
 		terranCommandCenter[aorta="terranCommandCenter.aorta"];

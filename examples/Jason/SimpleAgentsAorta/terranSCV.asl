@@ -11,22 +11,35 @@ condition("Terran Academy") :- not(friendly(_, "Terran Academy", _, _, _, _, _))
 condition("Terran Engineering Bay") :- not(friendly(_, "Terran Engineering Bay", _, _, _, _, _)) & friendly(_, "Terran Barracks", _,_,_, _, _).
 condition("Terran Bunker") :- friendly(_, "Terran Barracks", _,_,_, _, _).
 
+distance(MyX,MyY,X,Y,D)
+	:-	D = math.sqrt((MyX-X)**2 + (MyY-Y)**2).
 
+findBuildingLocation(Id,Building,ResX,ResY) 
+	:-	friendly(_, "Terran Command Center", _, _, _, CX, CY) &
+		.findall([Dist,X,Y],(constructionSite(X,Y)&distance(CX,CY,X,Y,Dist)), L) &
+		.min(L, [_,ResX,ResY]).
+	
+closest("mineralField", ClosestId)
+	:-	buildTilePosition(MyX,MyY) &
+		.findall([Dist,Id],(mineralField(Id,_,_,X,Y)&distance(MyX,MyY,X,Y,Dist)),L) &
+		.min(L,[ClosestDist,ClosestId]) &
+		.print(ClosestDist).
+		
 canBuild(Building, X, Y) 
 	:- 	cost(Building, M, G) & 
 		minerals(MQ) & M <= MQ &
 		gas(GQ) & G <= GQ &
 		friendly(_, "Terran Command Center", Id, _, _, _, _) & 
-		jia.findBuildingLocation(Id, Building, X, Y) & 
+		findBuildingLocation(Id, Building, X, Y) & 
 		buildTilePosition(MyX,MyY) & 
-		jia.tileDistance(MyX,MyY,X,Y,D) &
-		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & jia.tileDistance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), []).
+		distance(MyX,MyY,X,Y,D) &
+		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & distance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), []).
 	
 +!scouting
 	:	not(busy) &
 		friendly(Name, "Terran Command Center", _, ComX, ComY, _, _ ) &
 		position(MyX,MyY) &
-		jia.tileDistance(MyX,MyY,ComX,ComY,D) &
+		distance(MyX,MyY,ComX,ComY,D) &
 		.findall([Name,OtherX,OtherY,OtherD], (friendly(Name, _, _, OtherX, OtherY, _, _)), M) &
 		map(MapWidth,MapHeight)& 
 		M = [] &
@@ -62,9 +75,8 @@ canBuild(Building, X, Y)
 +!gather 
 	:	not(busy) &
 		not(gathering(_)) & 
-		.findall(Id,mineralField(Id,_,_,_,_) , L)&
 		id(MyId)&
-		jia.closest(MyId,L,ClosestId)
+		closest("mineralField",ClosestId)
 	<-	+busy;gather(ClosestId); .wait(2000); -busy.
  
 -!gather <- .wait(200).
