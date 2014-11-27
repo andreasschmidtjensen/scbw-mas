@@ -2,7 +2,6 @@
 %Enacting and deacting of roles
 role(gatherer) : bel(me(Me)), ~org(rea(Me,builder))  => enact(gatherer).
 role(scout) :  true => enact(scout).
-~role(scout) : bel(sufficientMap) => deact(scout).
 role(builder) : bel(me(Me))  => enact(builder).
 ~role(builder) : bel(me(Me)), org(rea(Me,scout)), org(rea(Me,builder)) => deact(builder).
 

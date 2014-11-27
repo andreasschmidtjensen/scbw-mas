@@ -43,7 +43,8 @@ canBuild(Building, X, Y)
 	:	building(Building) | constructing
 	<-	.wait(1000); !constructBase.
 +!constructBase
-	:	canBuild(Building, X, Y)
+	:	condition(Building) &
+		canBuild(Building, X, Y)
 	<-	!build(Building, X, Y).
 +!constructBase
 	:	Building = "Terran Refinery" &
