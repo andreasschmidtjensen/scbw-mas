@@ -12,6 +12,7 @@ agentfiles{
 	"TerranAcademy.goal" [name = terranAcademy].
 	"TerranEngineeringBay.goal" [name = terranEngineeringBay].
 	"TerranRefinery.goal" [name = terranRefinery].
+	"TerranCommandCenter.goal" [name = terranCommandCenter].
 }
 
 launchpolicy{
@@ -19,6 +20,7 @@ launchpolicy{
 	when [type = terranBarracks]@env do launch terranBarracks:terranBarracks.
 	when [type = terranMarine]@env do launch terranMarine:terranMarine.
 	when [type = terranFirebat]@env do launch terranFirebat:terranFirebat.
+	when [type = terranCommandCenter]@env do launch terranCommandCenter:terranCommandCenter.
 	when [type = terranMedic]@env do launch terranMedic:terranMedic.
 	when [type = terranSupplyDepot]@env do launch terranSupplyDepot:terranSupplyDepot.
 	when [type = terranAcademy]@env do launch terranAcademy:terranAcademy.
