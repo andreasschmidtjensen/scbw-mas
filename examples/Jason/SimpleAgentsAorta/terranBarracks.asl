@@ -1,26 +1,41 @@
-cost("Terran Marine", 50, 0, 1).
-cost("Terran Firebat", 50, 25, 1).
-cost("Terran Medic", 50, 25, 1).
+cost("Terran Marine", 50, 0, 2).
+cost("Terran Firebat", 50, 25, 2).
+cost("Terran Medic", 50, 25, 2).
 
-want("Terran Marine", 10).
-want("Terran Firebat", 5).
-want("Terran Medic", 3).
+//want("Terran Marine", 10).
+//want("Terran Firebat", 5).
+//want("Terran Medic", 3).
 
-+gameStart <- !work.
+//+gameStart <- !work.
 /* Test if researched before trying */
-+!work 
++!train(Unit,Y)
+	:	unit(Unit,Count) &
+		Y = Count
+	<-	+train(Unit,Y).
++!train(Unit,Y) 
+	:	queueSize(Q) & Q < 3 & 
+		not unit(Unit,_)
+	<-	!train(Unit);.print("Training ", Unit); .wait(1000); !!train(Unit,Y).
++!train(Unit,Y) 
 	: 	queueSize(Q) & Q < 3 & 
-		.findall(Unit, (want(Unit, X) & .findall(_, friendly(_, Unit, _, _, _, _, _), L) & .length(L, N) & N < X), L) &
-		.shuffle(L, S) & S = [Unit|_]
-	<-	!train(Unit); .wait(1000); !!work.
-+!work
-	<- .wait(1000); !!work.
--!work <- .wait(200); !work.
+		unit(Unit,Count) &
+		Count < Y
+	<-	!train(Unit); .wait(1000); !!train(Unit,Y).
++!train(Unit,Y) 
+	<- .wait(1000); !!train(Unit,Y).
+-!train(Unit,Y)  <- .wait(200); !!train(Unit,Y) .
 	
 +!train(Unit) 
-	: 	cost(Unit, M, G, S) & 
+	: 	.print("unit1",Unit) &
+		cost(Unit2, M, G, S) &
+		.print("unit2",Unit2) &
+		cost(Unit, M, G, S) & 
+		.print(M, G, S) &
 		minerals(MQ) & M <= MQ &
+		.print("After minerals") &
 		gas(GQ) & G <= GQ & 
-		supply(C, Max) & C + S <= Max
+		.print("After gas") &
+		supply(C, Max) & C + S <= Max&
+		.print("After supply")
 	<- train(Unit).
 +!train(_).

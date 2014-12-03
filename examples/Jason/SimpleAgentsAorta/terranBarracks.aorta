@@ -1,4 +1,4 @@
-role(commander) : true  => enact(commander).
+role(armyTrainer) : true  => enact(armyTrainer).
 
 % tell others about enacting roles
 send(_,tell,org(rea(Me,R))) : bel(agent(A), A \= Me), ~bel(sent(A, org(rea(Me,R)))) => send(A, org(rea(Me,R))).

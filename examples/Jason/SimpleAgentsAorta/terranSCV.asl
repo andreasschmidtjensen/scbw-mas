@@ -22,8 +22,7 @@ findBuildingLocation(Id,Building,ResX,ResY)
 closest("mineralField", ClosestId)
 	:-	buildTilePosition(MyX,MyY) &
 		.findall([Dist,Id],(mineralField(Id,_,_,X,Y)&distance(MyX,MyY,X,Y,Dist)),L) &
-		.min(L,[ClosestDist,ClosestId]) &
-		.print(ClosestDist).
+		.min(L,[ClosestDist,ClosestId]).
 		
 canBuild(Building, X, Y) 
 	:- 	cost(Building, M, G) & 

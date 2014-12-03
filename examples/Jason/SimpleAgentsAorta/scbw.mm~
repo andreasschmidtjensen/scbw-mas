@@ -1,23 +1,16 @@
 ROLES:
 gatherer: gather.
-commander: constructBase; scouting.
-builder: test.
+builder: constructBase.
+scout: scouting.
 
 OBJECTIVES:
 scouting.
 constructBase.
 gather.
-test.
-
-DEPENDENCIES:
-commander > builder : constructBase.
-commander > builder : scouting.
 
 OBLIGATIONS:
-gatherer: gather < false | \+ busy(d).
+gatherer: gather < false | true.
 builder: constructBase < false | true.
-builder: scouting < false | true.
+scout: scouting < false | true.
 
-RULES:
-busy(d) :- constructing; scouting.
 

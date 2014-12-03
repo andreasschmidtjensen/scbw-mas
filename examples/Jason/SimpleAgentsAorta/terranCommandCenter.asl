@@ -1,4 +1,4 @@
-cost("Terran SCV", 50, 0, 1).
+cost("Terran SCV", 50, 0, 2).
 
 +gameStart <- !work.
 
