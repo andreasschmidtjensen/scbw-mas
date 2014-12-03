@@ -4,7 +4,6 @@ environment {
 
 agentfiles{
 	"TerranSCV.goal" [name = terranSCV].
-	"TerranCommandCenter.goal" [name = terranCommandCenter].
 	"TerranBarracks.goal" [name = terranBarracks].
 	"TerranMarine.goal" [name = terranMarine].
 	"TerranFirebat.goal" [name = terranFirebat].
@@ -17,7 +16,6 @@ agentfiles{
 
 launchpolicy{
 	when [type = terranSCV]@env do launch terranSCV:terranSCV.
-	when [type = terranCommandCenter]@env do launch terranCommandCenter:terranCommandCenter.
 	when [type = terranBarracks]@env do launch terranBarracks:terranBarracks.
 	when [type = terranMarine]@env do launch terranMarine:terranMarine.
 	when [type = terranFirebat]@env do launch terranFirebat:terranFirebat.
