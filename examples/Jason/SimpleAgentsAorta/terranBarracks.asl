@@ -8,10 +8,28 @@ cost("Terran Medic", 50, 25, 2).
 
 //+gameStart <- !work.
 /* Test if researched before trying */
++!trainTerranMedicX
+	<-	!train("Terran Medic", 1).
++!trainTerranMarineX
+	<-	!train("Terran Marine", 1).
++!trainTerranFirebatX
+	<-	!train("Terran Firebat", 1).
+
 +!train(Unit,Y)
-	:	unit(Unit,Count) &
+	:	Unit = "Terran Marine" &
+		unit(Unit,Count) &
 		Y = Count
-	<-	+train(Unit,Y).
+	<-	+trainTerranMarineX.
++!train(Unit,Y)
+	:	Unit = "Terran Medic" &
+		unit(Unit,Count) &
+		Y = Count
+	<-	+trainTerranMedicX.
++!train(Unit,Y)
+	:	Unit = "Terran Firebat" &
+		unit(Unit,Count) &
+		Y = Count
+	<-	+trainTerranFirebatX.
 +!train(Unit,Y) 
 	:	queueSize(Q) & Q < 3 & 
 		not unit(Unit,_)

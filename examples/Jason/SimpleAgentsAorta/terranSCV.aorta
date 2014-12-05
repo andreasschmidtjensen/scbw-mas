@@ -1,6 +1,9 @@
 if bel(me(Me)){
-	role(attacker) : true  => enact(attacker).
-	role(scout) : true  => enact(scout).
+	%Enacting and deacting of roles
+	role(gatherer) : true  => enact(gatherer).
+	%role(scout) :  true => enact(scout).
+	role(builder) : true  => enact(builder).
+	~role(R) : true => deact(R).
 	
 	% tell others about enacting roles
 	send(_,tell,org(rea(Me,R))) : bel(agent(A), A \= Me), ~bel(sent(A, org(rea(Me,R)))) => send(A, org(rea(Me,R))).
@@ -9,5 +12,6 @@ if bel(me(Me)){
 	send(Role,tell,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, bel(X)).
 	
 	%~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
+	
 	obj(O) : ~goal(O), cap(O) => commit(O).
 }

@@ -7,4 +7,4 @@ send(_,tell,org(rea(Me,R))) : bel(agent(A), A \= Me), ~bel(sent(A, org(rea(Me,R)
 send(Role,tell,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, bel(X)).
 
 %~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
-obj(O) : ~goal(O) => commit(O).
+obj(O) : ~goal(O), cap(O) => commit(O). 

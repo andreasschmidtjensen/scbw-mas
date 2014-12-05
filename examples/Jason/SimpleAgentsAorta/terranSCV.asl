@@ -5,12 +5,6 @@ cost("Terran Engineering Bay", 125, 0).
 cost("Terran Bunker", 100, 0).
 cost("Terran Refinery", 100, 0).
 
-condition("Terran Supply Depot") :- supply(C, Max) & Max - C < 3.
-condition("Terran Barracks") :- .findall(_, friendly(_, "Terran Barracks", _, _, _, _, _), L) & .length(L,N) & N < 2 & supply(_, Max) & Max > 10.
-condition("Terran Academy") :- not(friendly(_, "Terran Academy", _, _, _, _, _)) & friendly(_, "Terran Barracks", _,_,_, _, _).
-condition("Terran Engineering Bay") :- not(friendly(_, "Terran Engineering Bay", _, _, _, _, _)) & friendly(_, "Terran Barracks", _,_,_, _, _).
-condition("Terran Bunker") :- friendly(_, "Terran Barracks", _,_,_, _, _).
-
 distance(MyX,MyY,X,Y,D)
 	:-	D = math.sqrt((MyX-X)**2 + (MyY-Y)**2).
 
@@ -33,6 +27,52 @@ canBuild(Building, X, Y)
 		buildTilePosition(MyX,MyY) & 
 		distance(MyX,MyY,X,Y,D) &
 		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & distance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), []).
+
++!buildTerranRefinery
+	<-	!build("Terran Refinery").
++!buildTerranBarracks
+	<-	!build("Terran Barracks").
++!buildTerranSupplyDepot
+	<-	!build("Terran Supply Depot").
++!buildTerranAcademy
+	<-	!build("Terran Academy").
+	
++!build(Type)
+	:	Type = "Terran Refinery" &
+		unit(Type,_)
+	<-	+buildTerranRefinery.
++!build(Type)
+	:	Type = "Terran Barracks" &
+		unit(Type,_)
+	<-	+buildTerranBarracks.
++!build("Terran Supply Depot")
+	:	Type = "Terran Supply Depot" &
+		unit("Terran Supply Depot",_)
+	<-	+buildTerranSupplyDepot.
++!build(Type)
+	:	Type = "Terran Academy" &
+		unit(Type,_)
+	<-	+buildTerranAcademy.
++!build(Type)
+	:	Type = "Terran Refinery" &
+		vespeneGeyser(Id, _, _, X, Y) &
+		.print(Type,Id,X,Y)
+	<-	!build(Type, X-2, Y-1).
++!build(Type)
+	:	not Type="Terran Refinery" &
+		canBuild(Type, X, Y)
+	<-	!build(Type, X, Y).
++!build(Type) <-.wait(200).
+-!build(Type) <-.wait(200).
+
++!build(Building, X, Y)
+	:	not(busy) &
+		cost(Building, M, G) & 
+		minerals(MQ) & M <= MQ &
+		gas(GQ) & G <= GQ
+	<-	+busy; +building(Building); build(Building, X, Y); .wait(2000); +build(Building, X, Y); -busy.
++!build(Building, X, Y)
+	<-	.wait(200); !build(Building, X, Y).
 	
 +!scouting
 	:	not(busy) &
@@ -49,22 +89,18 @@ canBuild(Building, X, Y)
 +!scouting  <-.wait(200).
 -!scouting  <-.wait(200).
 
-+constructing <- -building(_).
++!spotEnemy
+	:	enemy(Id,_,_,X,Y) &
+		.findall(Name, agent(Name),Recipients)
+	<-	+spotEnemy; .send(Recipients, tell, lastSpottedEnemy(Id,X,Y)).
++!spotEnemy <-.wait(200).
+-!spotEnemy <-.wait(200).
 
-+!constructBase
-	:	building(Building) | constructing
-	<-	.wait(1000); !constructBase.
-+!constructBase
-	:	condition(Building) &
-		canBuild(Building, X, Y)
-	<-	!build(Building, X, Y).
-+!constructBase
-	:	Building = "Terran Refinery" &
-		vespeneGeyser(Id, _, _, X, Y) & 
-		friendly(_, "Terran Supply Depot", _, _, _, _, _) 
-	<-	!build(Building, X-2, Y-1).
--!constructBase <-.wait(200).
-+!constructBase  <-.wait(200).
++!spotVespeneGeyser
+	:	vespeneGeyser(_, _, _, _, _)
+	<-	+spotVespeneGeyser.
++!spotVespeneGeyser <-.wait(200).
+-!spotVespeneGeyser <-.wait(200).
 
 +!gather
 	:	not(busy) &
@@ -77,15 +113,6 @@ canBuild(Building, X, Y)
 		id(MyId)&
 		closest("mineralField",ClosestId)
 	<-	+busy;gather(ClosestId); .wait(2000); -busy.
- 
 -!gather <- .wait(200).
 +!gather  <-.wait(200).
 
-+!build(Building, X, Y)
-	:	not(busy) &
-		cost(Building, M, G) & 
-		minerals(MQ) & M <= MQ &
-		gas(GQ) & G <= GQ
-	<-	+busy; +building(Building); build(Building, X, Y); .wait(2000); +build(Building, X, Y); -busy.
-+!build(Building, X, Y)
-	<-	.wait(200); !build(Building, X, Y).
