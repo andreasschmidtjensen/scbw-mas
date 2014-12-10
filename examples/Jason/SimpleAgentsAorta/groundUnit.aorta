@@ -8,6 +8,8 @@ if bel(me(Me)){
 	% tell others about dependency roles
 	send(Role,tell,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, bel(X)).
 	
+	%lastSpottedEnemy(Id, X, Y) : bel(agent(A), A \= Me), ~bel(sent(A, bel(lastSpottedEnemy(Id, X, Y)))) => send(A, bel(lastSpottedEnemy(Id, X, Y))).
+	
 	%~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
 	obj(O) : ~goal(O), cap(O) => commit(O).
 }

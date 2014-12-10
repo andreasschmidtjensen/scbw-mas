@@ -1,5 +1,19 @@
 { include("groundUnit.asl") } 
 
+isBuilding("Terran Command Center").
+isBuilding("Terran Barracks").
+isBuilding("Terran Supply Depot").
+isBuilding("Terran Academy").
+isBuilding("Terran Engineering Bay").
+isBuilding("Terran Refinery").
+isBuilding("Terran Machine Shop").
+isBuilding("Terran Bunker").
+isBuilding("Terran Armory").
+isBuilding("Terran Nuclear Silo").
+isBuilding("Terran Missile Turret").
+isBuilding("Terran Comsat Station").
+isBuilding("Terran Factory").
+
 +!scouting
 	:	friendly(Name, "Terran Command Center", _, ComX, ComY, _, _ ) &
 		position(MyX,MyY) &
@@ -14,17 +28,21 @@
 +!scouting  <-.wait(200).
 -!scouting  <-.wait(200).
 
-+!spotEnemy
-	:	enemy(Id,_,_,X,Y) &
-		.findall(Name, agent(Name),Recipients)
-	<-	+spotEnemy; .send(Recipients, tell, lastSpottedEnemy(X,Y)).
-+!spotEnemy <-.wait(200).
--!spotEnemy <-.wait(200).
++!spot(X)
+	:	X = "Vespene Geyser" &
+		vespeneGeyser(_, _, _, _, _)
+	<-	+spot(X).
++!spot("Vespene Geyser") <-.wait(200).
+-!spot("Vespene Geyser") <-.wait(200).
 
-+!spotVespeneGeyser
-	:	vespeneGeyser(_, _, _, _, _)
-	<-	+spotVespeneGeyser.
-+!spotVespeneGeyser <-.wait(200).
--!spotVespeneGeyser <-.wait(200).
++!spot(X)
+	: 	X = "Enemy Base" &	
+		.print("Trying to spot enemy base") &
+		enemy(Type,Id,WX,WY,_,_) &
+		isBuilding(Type) &
+		.print("Enemy Base ", Id)
+	<-	+lastSpottedEnemy(Id,WX,WY); +spot(X).
++!spot("Enemy Base") <-.wait(200).
+-!spot("Enemy Base") <-.wait(200).
 
 /* bunker logic */

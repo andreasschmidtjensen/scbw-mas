@@ -1,17 +1,29 @@
-{ include("groundUnit.asl") }
-+!heal 
-	:	lastSpottedEnemy(X,Y)
-	<-	move(X,Y).
+distance(MyX,MyY,X,Y,D)
+	:-	D = math.sqrt((MyX-X)**2 + (MyY-Y)**2).
 	
-+!spotVespeneGeyser
-	:	vespeneGeyser(_, _, _, _, _)
-	<-	+spotVespeneGeyser.
-+!spotVespeneGeyser <-.wait(200); !!spotVespeneGeyser.
--!spotVespeneGeyser <-.wait(200); !!spotVespeneGeyser.
++gameStart <- !matchUp.
+{ include("groundUnit.asl") }
 
-+!spotEnemy
-	:	enemy(Id,_,_,X,Y) &
-		.findall(Name, agent(Name),Recipients)
-	<-	+spotEnemy; .send(Recipients, tell, lastSpottedEnemy(Id,X,Y)).
-+!spotEnemy <-.wait(200).
--!spotEnemy <-.wait(200).
+
+
++!matchUp
+	:	Type = "Terran Firebat" &
+		friendly(_, Type, Id, _, _, _, _)
+	<-	+match(Id); .print("Matched with: ", Id).
+
++!matchUp
+	<-	.wait(1000); !matchUp.
+	
++!heal 
+	:	match(Id) &
+		friendly(_, _, Id, WX, WY, _, _) & 
+		position(MyX,MyY) &
+		distance(WX,WY,MyX,MyY,Distance) &
+		Distance > 16
+	<-	move(WX,WY).
++!heal
+	:	match(Id) &
+		not friendly(_, _, Id, _, _, _, _)
+	<-	-match(Id); !matchUp.
+-!heal 
+	<-	.wait(200); !!heal.

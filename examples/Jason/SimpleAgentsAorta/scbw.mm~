@@ -1,69 +1,52 @@
 ROLES:
 gatherer: gather.
-builder: constructBase; buildTerranRefinery;buildTerranBarracks;buildTerranSupplyDepot;buildTerranAcademy.
-scout: scouting; spotVespeneGeyser; spotEnemy.
-armyTrainer: trainTerranMarineX;trainTerranFirebatX;trainTerranMedicX.
-attacker: charge.
-commander: trainTerranSCV.
+builder: build(X).
+scout: scouting; spot(X).
+armyTrainer: train(Unit, Amount).
+attacker: charge; defend.
+commander: train("Terran SCV", Amount).
 healer: heal.
 
 OBJECTIVES:
 scouting.
-%spot("Vespene Geyser").
-spotVespeneGeyser.
-spotEnemy.
-constructBase.
+spot("Vespene Geyser").
+spot("EnemyBase").
 gather.
-%train("Terran SCV").
-%train("Terran Marine",X).
-%train("Terran Firebat",X).
-%train("Terran Medic",X).
-%build("Terran Refinery").
-trainTerranSCV.
-trainTerranMarineX.
-trainTerranFirebatX.
-trainTerranMedicX.
-buildTerranRefinery.
-buildTerranBarracks.
-buildTerranSupplyDepot.
-buildTerranAcademy.
+train("Terran SCV", X).
+train("Terran Marine",X).
+train("Terran Firebat",X).
+train("Terran Medic",X).
+build("Terran Refinery").
+build("Terran Barracks").
+build("Terran Supply Depot").
+build("Terran Academy").
 charge.
+defend.
+heal.
 
 DEPENDENCIES:
-%attacker > armyTrainer: train(X,10).
-%armyTrainer > builder: build("Terran Refinery").
-%builder > scout: spot("Vespene Geyser").
-attacker > armyTrainer: trainTerranMarineX.
-armyTrainer > builder: buildTerranRefinery.
-builder > scout: spotVespeneGeyser.
-attacker > scout: spotEnemy.
+attacker > armyTrainer: train("Terran Firebat",1).
+armyTrainer > builder: build("Terran Refinery").
+builder > scout: spot("Vespene Geyser").
+attacker > scout: spot("EnemyBase").
+healer > armyTrainer: train("Terran Firebat", 1).
+healer > scout: spot("EnemyBase").
 
 OBLIGATIONS:
 gatherer: gather < false | true.
-
-%builder: constructBase < false | true.
-%builder: build("Terran Refinery") < false | spot("Vespene Geyser").
-builder: buildTerranRefinery < false | spotVespeneGeyser.
-builder: buildTerranBarracks < false | buildTerranSupplyDepot.
-builder: buildTerranSupplyDepot < false | true.
-builder: buildTerranAcademy < false | buildTerranBarracks.
-
+builder: build("Terran Refinery") < false | spot("Vespene Geyser").
+builder: build("Terran Barracks") < false | build("Terran Supply Depot").
+builder: build("Terran Supply Depot") < false | true.
+builder: build("Terran Academy") < false | build("Terran Barracks").
 scout: scouting < false | true.
-%scout: spot("Vespene Geyser") < false | true.
-scout: trainTerranSCV < false | true.
-scout: spotEnemy < false | true.
-scout: spotVespeneGeyser < false | true.
-
-%commander: train("Terran SCV") < false | true.
-commander: trainTerranSCV < false | true.
-
-%armyTrainer: train("Terran Marine",10) < false | true.
-%armyTrainer: train("Terran Firebat",10) < false | build("Terran Refinery").
-%armyTrainer: train("Terran Medic",10) < false | build("Terran Refinery").
-armyTrainer: trainTerranMarineX < false | true.
-armyTrainer: trainTerranFirebatX < false | buildTerranRefinery.
-armyTrainer: trainTerranMedicX < false | buildTerranRefinery.
-
-attacker: charge < false | spotEnemy.
-
+scout: spot("Vespene Geyser") < false | true.
+scout: spot("EnemyBase") < false | true.
+scout: train("Terran SCV") < false | true.
+commander: train("Terran SCV", 5) < false | true.
+armyTrainer: train("Terran Marine", 1) < false | true.
+armyTrainer: train("Terran Medic", 1) < false | build("Terran Refinery").
+armyTrainer: train("Terran Firebat", 1) < false | build("Terran Refinery").
+attacker: charge < false | spot("EnemyBase"),train("Terran Marine", 1),train("Terran Firebat", 1),train("Terran Medic", 1).
+attacker: defend < false | true.
+healer: heal < false | true.
 

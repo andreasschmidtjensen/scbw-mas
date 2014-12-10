@@ -1,5 +1,5 @@
 cost("Terran Supply Depot", 100, 0).
-cost("Terran Barracks", 150, 0).
+cost("Terran Barracks", 700, 0).
 cost("Terran Academy", 150, 0).
 cost("Terran Engineering Bay", 125, 0).
 cost("Terran Bunker", 100, 0).
@@ -13,7 +13,7 @@ findBuildingLocation(Id,Building,ResX,ResY)
 		.findall([Dist,X,Y],(constructionSite(X,Y)&distance(CX,CY,X,Y,Dist)), L) &
 		.min(L, [_,ResX,ResY]).
 	
-closest("mineralField", ClosestId)
+closest("mineral Field", ClosestId)
 	:-	buildTilePosition(MyX,MyY) &
 		.findall([Dist,Id],(mineralField(Id,_,_,X,Y)&distance(MyX,MyY,X,Y,Dist)),L) &
 		.min(L,[ClosestDist,ClosestId]).
@@ -27,50 +27,29 @@ canBuild(Building, X, Y)
 		buildTilePosition(MyX,MyY) & 
 		distance(MyX,MyY,X,Y,D) &
 		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & distance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), []).
-
-+!buildTerranRefinery
-	<-	!build("Terran Refinery").
-+!buildTerranBarracks
-	<-	!build("Terran Barracks").
-+!buildTerranSupplyDepot
-	<-	!build("Terran Supply Depot").
-+!buildTerranAcademy
-	<-	!build("Terran Academy").
-	
-+!build(Type)
-	:	Type = "Terran Refinery" &
-		unit(Type,_)
-	<-	+buildTerranRefinery.
-+!build(Type)
-	:	Type = "Terran Barracks" &
-		unit(Type,_)
-	<-	+buildTerranBarracks.
-+!build("Terran Supply Depot")
-	:	Type = "Terran Supply Depot" &
-		unit("Terran Supply Depot",_)
-	<-	+buildTerranSupplyDepot.
-+!build(Type)
-	:	Type = "Terran Academy" &
-		unit(Type,_)
-	<-	+buildTerranAcademy.
-+!build(Type)
-	:	Type = "Terran Refinery" &
-		vespeneGeyser(Id, _, _, X, Y) &
-		.print(Type,Id,X,Y)
-	<-	!build(Type, X-2, Y-1).
-+!build(Type)
-	:	not Type="Terran Refinery" &
-		canBuild(Type, X, Y)
-	<-	!build(Type, X, Y).
-+!build(Type) <-.wait(200).
--!build(Type) <-.wait(200).
++!build(Building)
+	:	unit(Building,_)
+	<-	+build(Building).
++!build(Building)
+	:	Building = "Terran Refinery" &
+		vespeneGeyser(Id, _, _, X, Y)&
+		buildTilePosition(MyX,MyY) & 
+		distance(MyX,MyY,X,Y,D) &
+		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & distance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), [])
+	<-	!build(Building, X-2, Y-1).
++!build(Building)
+	:	not Building="Terran Refinery" &
+		canBuild(Building, X, Y)
+	<-	!build(Building, X, Y).
++!build(Building) <-.wait(200).
+-!build(Building) <-.wait(200).
 
 +!build(Building, X, Y)
 	:	not(busy) &
 		cost(Building, M, G) & 
 		minerals(MQ) & M <= MQ &
 		gas(GQ) & G <= GQ
-	<-	+busy; +building(Building); build(Building, X, Y); .wait(2000); +build(Building, X, Y); -busy.
+	<-	+busy; build(Building, X, Y); .wait(2000); -busy.
 +!build(Building, X, Y)
 	<-	.wait(200); !build(Building, X, Y).
 	
@@ -89,29 +68,40 @@ canBuild(Building, X, Y)
 +!scouting  <-.wait(200).
 -!scouting  <-.wait(200).
 
-+!spotEnemy
++!spot(X)
+	:	X = "Vespene Geyser" &
+		vespeneGeyser(_, _, _, _, _)
+	<-	+spot("Vespene Geyser").
++!spot("Vespene Geyser") <-.wait(200).
+-!spot("Vespene Geyser") <-.wait(200).
+
++!spot("Enemy")
 	:	enemy(Id,_,_,X,Y) &
 		.findall(Name, agent(Name),Recipients)
-	<-	+spotEnemy; .send(Recipients, tell, lastSpottedEnemy(Id,X,Y)).
-+!spotEnemy <-.wait(200).
--!spotEnemy <-.wait(200).
+	<-	+spot("Enemy"); .send(Recipients, tell, lastSpottedEnemy(Id,X,Y)).
++!spot("Enemy") <-.wait(200).
+-!spot("Enemy") <-.wait(200).
 
-+!spotVespeneGeyser
-	:	vespeneGeyser(_, _, _, _, _)
-	<-	+spotVespeneGeyser.
-+!spotVespeneGeyser <-.wait(200).
--!spotVespeneGeyser <-.wait(200).
-
++!gather
+	:	gathering(vespene) &
+		.findall(_, gathering(_, vespene), L) &
+		.length(L, N)  &
+		.print("Stopping gathering", N) & 
+		N >= 3 //Off by one due to own ID not present in gathering(Id,vespene) but in gathering(vespene)
+	<-	stop.
 +!gather
 	:	not(busy) &
 		friendly(_, "Terran Refinery", Id, _, _, _, _) &
-		.findall(_, gathering(_, vespene), L) & .length(L, N) & N < 3
+		.findall(_, gathering(_, vespene), L) &
+		.length(L, N) &
+		N < 3 &
+		.print("Vespene count",N)
 	<-	+busy; gather(Id); .wait(2000); -busy.
 +!gather 
 	:	not(busy) &
 		not(gathering(_)) & 
 		id(MyId)&
-		closest("mineralField",ClosestId)
+		closest("mineral Field",ClosestId)
 	<-	+busy;gather(ClosestId); .wait(2000); -busy.
 -!gather <- .wait(200).
 +!gather  <-.wait(200).
