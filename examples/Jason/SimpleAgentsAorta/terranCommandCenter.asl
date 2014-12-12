@@ -1,4 +1,17 @@
 cost("Terran SCV", 50, 0, 2).
++!trainArmy
+	:	.print(trainArmy) &
+		train("Terran SCV", _) &
+		.print(trainArmy2) &
+		train("Terran Marine",_) &
+		.print(trainArmy3) &
+		train("Terran Firebat",_) &
+		.print(trainArmy4) &
+		train("Terran Medic",_) &
+		.print(trainArmy5)
+	<-	+trainArmy.
++!trainArmy.
+-!trainArmy.
 
 +!train(Unit,Y)
 	:	unit(Unit,Count) &

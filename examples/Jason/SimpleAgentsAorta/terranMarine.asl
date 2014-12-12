@@ -14,19 +14,6 @@ isBuilding("Terran Missile Turret").
 isBuilding("Terran Comsat Station").
 isBuilding("Terran Factory").
 
-+!scouting
-	:	friendly(Name, "Terran Command Center", _, ComX, ComY, _, _ ) &
-		position(MyX,MyY) &
-		jia.tileDistance(MyX,MyY,ComX,ComY,D) &
-		.findall([Name,OtherX,OtherY,OtherD], (friendly(Name, _, _, OtherX, OtherY, _, _)), M) &
-		map(MapWidth,MapHeight)& 
-		M = [] &
-		.random(Rand1)& X = Rand1 * MapWidth &
-		.random(Rand2)& Y = Rand2 * MapHeight 
-	<-	move(X,Y). 
-	
-+!scouting  <-.wait(200).
--!scouting  <-.wait(200).
 
 +!spot(X)
 	:	X = "Vespene Geyser" &
@@ -39,9 +26,10 @@ isBuilding("Terran Factory").
 	: 	X = "Enemy Base" &	
 		.print("Trying to spot enemy base") &
 		enemy(Type,Id,WX,WY,_,_) &
+		.print("Enemy Base ", Type) &
 		isBuilding(Type) &
 		.print("Enemy Base ", Id)
-	<-	+lastSpottedEnemy(Id,WX,WY); +spot(X).
+	<-	 .broadcast(tell,lastSpottedEnemy(Id,WX,WY)); +spot(X);+lastSpottedEnemy(Id,WX,WY).
 +!spot("Enemy Base") <-.wait(200).
 -!spot("Enemy Base") <-.wait(200).
 
