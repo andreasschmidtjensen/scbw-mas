@@ -4,7 +4,7 @@ builder: build(X).
 scout: scouting; spot(X).
 armyTrainer: train(Unit, Amount).
 attacker: charge; defend.
-commander: train("Terran SCV", Amount).
+commander: trainArmy; train("Terran SCV", Amount).
 healer: heal.
 
 OBJECTIVES:
@@ -12,6 +12,11 @@ scouting.
 spot("Vespene Geyser").
 spot("Enemy Base").
 gather.
+trainArmy:
+	train("Terran SCV", X);
+	train("Terran Marine",X);
+	train("Terran Firebat",X);
+	train("Terran Medic",X).
 train("Terran SCV", X).
 train("Terran Marine",X).
 train("Terran Firebat",X).
@@ -25,16 +30,13 @@ defend.
 heal.
 
 DEPENDENCIES:
-attacker > armyTrainer: train("Terran Firebat",1).
-attacker > armyTrainer: train("Terran Medic",1).
-attacker > armyTrainer: train("Terran Marine",1).
+attacker > commander: trainArmy.
 armyTrainer > builder: build("Terran Refinery").
+commander > armyTrainer: train("Terran Firebat",1).
+commander > armyTrainer: train("Terran Medic",1).
+commander > armyTrainer: train("Terran Marine",1).
 builder > scout: spot("Vespene Geyser").
 attacker > scout: spot("Enemy Base").
-healer > armyTrainer: train("Terran Firebat", 1).
-healer > armyTrainer: train("Terran Medic", 1).
-healer > armyTrainer: train("Terran Marine", 1).
-healer > scout: spot("Enemy Base").
 
 OBLIGATIONS:
 gatherer: gather < false | true.
@@ -47,10 +49,11 @@ scout: spot("Vespene Geyser") < false | true.
 scout: spot("Enemy Base") < false | true.
 scout: train("Terran SCV") < false | true.
 commander: train("Terran SCV", 5) < false | true.
+commander: trainArmy < false | true.
 armyTrainer: train("Terran Marine", 1) < false | true.
 armyTrainer: train("Terran Medic", 1) < false | build("Terran Refinery").
 armyTrainer: train("Terran Firebat", 1) < false | build("Terran Refinery").
-attacker: charge < false | spot("Enemy Base"),train("Terran Marine", 1),train("Terran Firebat", 1),train("Terran Medic", 1).
+attacker: charge < false | spot("Enemy Base"),trainArmy.
 attacker: defend < false | true.
 healer: heal < false | true.
 

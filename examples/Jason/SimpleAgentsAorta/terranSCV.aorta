@@ -14,5 +14,5 @@ if bel(me(Me)){
 	
 	obj(O) : ~goal(O), cap(O) => commit(O).
 	
-	~role(R) : true => deact(R).
+	~role(R) : org(rea(Me,R)) => deact(R).
 }

@@ -10,4 +10,6 @@ if bel(me(Me)){
 	
 	%~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
 	obj(O) : ~goal(O), cap(O) => commit(O).
+	
+	~role(R) : org(rea(Me,R)) => deact(R).
 }

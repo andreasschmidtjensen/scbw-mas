@@ -1,3 +1,4 @@
+{ include("generalKnowledge.asl") } 
 cost("Terran Supply Depot", 100, 0).
 cost("Terran Barracks", 700, 0).
 cost("Terran Academy", 150, 0).
@@ -5,19 +6,11 @@ cost("Terran Engineering Bay", 125, 0).
 cost("Terran Bunker", 100, 0).
 cost("Terran Refinery", 100, 0).
 
-distance(MyX,MyY,X,Y,D)
-	:-	D = math.sqrt((MyX-X)**2 + (MyY-Y)**2).
-
 findBuildingLocation(Id,Building,ResX,ResY) 
 	:-	friendly(_, "Terran Command Center", _, _, _, CX, CY) &
 		.findall([Dist,X,Y],(constructionSite(X,Y)&distance(CX,CY,X,Y,Dist)), L) &
 		.min(L, [_,ResX,ResY]).
 	
-closest("mineral Field", ClosestId)
-	:-	buildTilePosition(MyX,MyY) &
-		.findall([Dist,Id],(mineralField(Id,_,_,X,Y)&distance(MyX,MyY,X,Y,Dist)),L) &
-		.min(L,[ClosestDist,ClosestId]).
-		
 canBuild(Building, X, Y) 
 	:- 	cost(Building, M, G) & 
 		minerals(MQ) & M <= MQ &
@@ -27,6 +20,12 @@ canBuild(Building, X, Y)
 		buildTilePosition(MyX,MyY) & 
 		distance(MyX,MyY,X,Y,D) &
 		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & distance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), []).
+
+closest("mineral Field", ClosestId)
+	:-	buildTilePosition(MyX,MyY) &
+		.findall([Dist,Id],(mineralField(Id,_,_,X,Y)&distance(MyX,MyY,X,Y,Dist)),L) &
+		.min(L,[ClosestDist,ClosestId]).
+	
 +!build(Building)
 	:	unit(Building,_)
 	<-	+build(Building).
@@ -53,35 +52,6 @@ canBuild(Building, X, Y)
 +!build(Building, X, Y)
 	<-	.wait(200); !build(Building, X, Y).
 	
-+!scouting
-	:	not(busy) &
-		friendly(Name, "Terran Command Center", _, ComX, ComY, _, _ ) &
-		position(MyX,MyY) &
-		distance(MyX,MyY,ComX,ComY,D) &
-		.findall([Name,OtherX,OtherY,OtherD], (friendly(Name, _, _, OtherX, OtherY, _, _)), M) &
-		map(MapWidth,MapHeight)& 
-		M = [] &
-		.random(Rand1)& X = Rand1 * MapWidth &
-		.random(Rand2)& Y = Rand2 * MapHeight 
-	<-	+busy; move(X,Y); .wait(5000);-busy. 
-	
-+!scouting  <-.wait(200).
--!scouting  <-.wait(200).
-
-+!spot(X)
-	:	X = "Vespene Geyser" &
-		vespeneGeyser(_, _, _, _, _)
-	<-	+spot("Vespene Geyser").
-+!spot("Vespene Geyser") <-.wait(200).
--!spot("Vespene Geyser") <-.wait(200).
-
-+!spot("Enemy")
-	:	enemy(Id,_,_,X,Y) &
-		.findall(Name, agent(Name),Recipients)
-	<-	+spot("Enemy"); .send(Recipients, tell, lastSpottedEnemy(Id,X,Y)).
-+!spot("Enemy") <-.wait(200).
--!spot("Enemy") <-.wait(200).
-
 +!gather
 	:	gathering(vespene) &
 		.findall(_, gathering(_, vespene), L) &

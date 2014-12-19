@@ -1,10 +1,5 @@
-distance(MyX,MyY,X,Y,D)
-	:-	D = math.sqrt((MyX-X)**2 + (MyY-Y)**2).
-	
-+gameStart <- !matchUp.
+{ include("generalKnowledge.asl") } 
 { include("groundUnit.asl") }
-
-
 
 +!matchUp
 	:	Type = "Terran Firebat" &
@@ -25,5 +20,8 @@ distance(MyX,MyY,X,Y,D)
 	:	match(Id) &
 		not friendly(_, _, Id, _, _, _, _)
 	<-	-match(Id); !matchUp.
++!heal
+	:	not match(Id)
+	<-	!matchUp.
 -!heal 
 	<-	.wait(200); !!heal.
