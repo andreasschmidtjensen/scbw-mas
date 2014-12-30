@@ -2,12 +2,12 @@ MAS res {
 	infrastructure: AORTA(organization("scbw.mm"),sleep(200),inspector)
 	environment: jason.eis.EISAdapter("../../../EISBW/dist/EISBW-with-deps.jar")
     agents:
-		terranSCV[aorta="terranSCV.aorta"];
-		terranCommandCenter[aorta="terranCommandCenter.aorta"];
-		terranBarracks[aorta="terranBarracks.aorta"];
+		terranSCV[aorta="groundUnit.aorta"];
+		terranCommandCenter[aorta="groundUnit.aorta"];
+		terranBarracks[aorta="groundUnit.aorta"];
 		terranMarine[aorta="groundUnit.aorta"]; 
 		terranFirebat[aorta="groundUnit.aorta"];
-		terranMedic[aorta="terranMedic.aorta"];
+		terranMedic[aorta="groundUnit.aorta"];
 		
 	classpath: "../../../libs/eis-0.3.jar";"../../../libs/jason-eis.jar";"../../../libs/jnibwapi.jar";"../../../EISBW/dist/EISBW-with-deps.jar";
 }

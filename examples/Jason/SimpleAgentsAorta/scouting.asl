@@ -1,8 +1,7 @@
 +!spot("Vespene Geyser")
 	:	vespeneGeyser(_, _, _, _, _)
 	<-	+spot("Vespene Geyser").
-+!spot("Vespene Geyser") <-.wait(200).
--!spot("Vespene Geyser") <-.wait(200).
++!spot("Vespene Geyser") <-.wait(200);!!spot("Vespene Geyser").
 
 +!spot("Enemy Base")
 	: 	.print("Trying to spot enemy base") &

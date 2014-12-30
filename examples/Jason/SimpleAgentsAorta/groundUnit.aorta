@@ -1,15 +1,17 @@
-if bel(me(Me)){
-	role(attacker) : true  => enact(attacker).
-	role(scout) : true  => enact(scout).
-	
+%Enact roles if we have capability for at least one objective and we have not ignored the role.
+role(R) : org(role(R, Os)), bel(member(X,Os)), cap(X), ~bel(ignored(R))  => enact(R).
+
+if bel(me(Me)), org(rea(Me,OwnRole)){
 	% tell others about enacting roles
-	send(_,tell,org(rea(Me,R))) : bel(agent(A), A \= Me), ~bel(sent(A, org(rea(Me,R)))) => send(A, org(rea(Me,R))).
+	send(_,tell,org(rea(Me,OwnRole))) : bel(agent(A), A \= Me), ~bel(sent(A, org(rea(Me,OwnRole)))) => send(A, org(rea(Me,OwnRole))).
 	
 	% tell others about dependency roles
 	send(Role,tell,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, bel(X)).
+	send(Role,achieve,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, goal(X)).
 	
-	%~role(R) : bel(me(Me)), ~org(viol(Me,R,_)) => deact(R).
-	obj(O) : ~goal(O), cap(O) => commit(O).
+	% commit to goals where all subobjectives are done if we have capability to do so. , ~goal(O), cap(O)org(obj(O,SOL)), bel(findall(SO, (member(SO, SOL), \+ bel(SO)),[]))
+	%obj(O) : ~goal(O), cap(O), org(obj(O,SOL)), bel(findall(SO, (member(SO, SOL), \+ bel(SO)),[]))=>commit(O).
+	obj(O) : true => commit(O).
 	
 	~role(R) : org(rea(Me,R)) => deact(R).
 }
