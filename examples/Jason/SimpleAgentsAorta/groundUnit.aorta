@@ -7,11 +7,14 @@ if bel(me(Me)), org(rea(Me,OwnRole)){
 	
 	% tell others about dependency roles
 	send(Role,tell,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, bel(X)).
-	send(Role,achieve,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, bel(X))) => send(A, goal(X)).
+	send(Role,achieve,bel(X)) : bel(agent(A), A \= Me), org(rea(A,Role)), ~bel(sent(A, opt(obj(X)))) => send(A, opt(obj(X))).
+	%send SubObjective to dependee.
+	%obj(O) : ~goal(O), cap(O), org(obj(O,SOL)), bel(member(SO,SOL)),~bel(SO), 
+	%		org(dep(OwnRole,Role,SO)), bel(agent(A), A \= Me), 
+	%		org(rea(A,Role)),~bel(sent(A, opt(obj(SO)))) => send(A, opt(obj(SO))).
 	
 	% commit to goals where all subobjectives are done if we have capability to do so. , ~goal(O), cap(O)org(obj(O,SOL)), bel(findall(SO, (member(SO, SOL), \+ bel(SO)),[]))
-	%obj(O) : ~goal(O), cap(O), org(obj(O,SOL)), bel(findall(SO, (member(SO, SOL), \+ bel(SO)),[]))=>commit(O).
-	obj(O) : true => commit(O).
+	obj(O) : ~goal(O), cap(O), org(obj(O,SOL)), bel(findall(SO, (member(SO, SOL), \+ bel(SO)),[]))=>commit(O).
 	
 	~role(R) : org(rea(Me,R)) => deact(R).
 }
