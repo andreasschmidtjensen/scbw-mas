@@ -1,6 +1,4 @@
 { include("generalKnowledge.asl") } 
-{ include("groundUnit.asl") }
-
 +!matchUp
 	:	Type = "Terran Firebat" &
 		friendly(_, Type, Id, _, _, _, _)

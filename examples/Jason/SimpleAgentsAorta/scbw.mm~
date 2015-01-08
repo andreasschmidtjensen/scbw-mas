@@ -1,7 +1,7 @@
 ROLES:
 gatherer: gather.
-builder: build(X).
-scout: scouting; spot(X).
+builder: build(X); spot("Vespene Geyser").
+scout: scouting.
 armyTrainer: train(Unit, Amount).
 attacker: charge; defend.
 commander: trainArmy.
@@ -13,14 +13,16 @@ spot("Vespene Geyser").
 spot("Enemy Base").
 gather.
 trainArmy:
-	train("Terran SCV", X);
-	train("Terran Marine",X);
-	train("Terran Firebat",X);
-	train("Terran Medic",X).
-train("Terran SCV", X).
-train("Terran Marine",X).
-train("Terran Firebat",X).
-train("Terran Medic",X).
+	train("Terran SCV", 5);
+	train("Terran Marine",1);
+	train("Terran Firebat",1);
+	train("Terran Medic",1).
+train("Terran SCV", 5).
+train("Terran Marine",1).
+train("Terran Firebat",1):
+	build("Terran Refinery").
+train("Terran Medic",1):
+	build("Terran Refinery").
 build("Terran Refinery").
 build("Terran Barracks").
 build("Terran Supply Depot").
@@ -45,26 +47,15 @@ builder: build("Terran Refinery") < false | spot("Vespene Geyser").
 builder: build("Terran Barracks") < false | build("Terran Supply Depot").
 builder: build("Terran Supply Depot") < false | true.
 builder: build("Terran Academy") < false | build("Terran Barracks").
+builder: spot("Vespene Geyser") < false | true.
 scout: scouting < false | true.
-scout: spot("Vespene Geyser") < false | true.
-scout: spot("Enemy Base") < false | true.
-scout: train("Terran SCV") < false | true.
-commander: train("Terran SCV", 5) < false | true.
 commander: trainArmy < false | true.
-armyTrainer: train("Terran Marine", 1) < false | true.
-armyTrainer: train("Terran Medic", 1) < false | build("Terran Refinery").
-armyTrainer: train("Terran Firebat", 1) < false | build("Terran Refinery").
+%armyTrainer: train("Terran SCV", 5) < false | true.
+%armyTrainer: train("Terran Marine", 1) < false | true.
+%armyTrainer: train("Terran Medic", 1) < false | build("Terran Refinery").
+%armyTrainer: train("Terran Firebat", 1) < false | build("Terran Refinery").
 attacker: charge < false | spot("Enemy Base"),trainArmy.
 attacker: defend < false | true.
 healer: heal < false | true.
 
-RULES:
-%Virker ikke
-%checkSubObjectives([]).
-%checkSubObjectives([Head|Tail]) :- bel(Head), checkSubObjectives(Tail).
-
-checkSubObjectives(List) :- List = [].
-checkSubObjectives(List) :- List = [Head|Tail], bel(Head), checkSubObjectives(Tail).
-sendAll(Me,A,Role, Msg) :- bel(agent(A), A =\= Me), org(rea(A,Role)), not(bel(sent(A, Msg))).
-sendAll(Me,A,Msg) :- bel(agent(A), A =\= Me,\+sent(A, Msg)).
 

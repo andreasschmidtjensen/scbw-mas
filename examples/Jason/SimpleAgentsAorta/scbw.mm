@@ -1,6 +1,6 @@
 ROLES:
 gatherer: gather.
-builder: build(X); spot("Vespene Geyser").
+builder: build(X).
 scout: scouting.
 armyTrainer: train(Unit, Amount).
 attacker: charge; defend.
@@ -13,47 +13,49 @@ spot("Vespene Geyser").
 spot("Enemy Base").
 gather.
 trainArmy:
-	train("Terran SCV", X);
-	train("Terran Marine",X);
-	train("Terran Firebat",X);
-	train("Terran Medic",X).
-train("Terran SCV", X).
-train("Terran Marine",X).
-train("Terran Firebat",X).
-train("Terran Medic",X).
-build("Terran Refinery").
+	build("Terran Barracks");
+	train("Terran SCV", 5);
+	train("Terran Marine",1);
+	train("Terran Firebat",1);
+	train("Terran Medic",1).
+train("Terran SCV", 5).
+train("Terran Marine",1).
+train("Terran Firebat",1):
+	build("Terran Academy");
+	build("Terran Refinery").
+train("Terran Medic",1):
+	build("Terran Academy");
+	build("Terran Refinery").
+build("Terran Refinery"):
+	spot("Vespene Geyser").
 build("Terran Barracks").
 build("Terran Supply Depot").
 build("Terran Academy").
-charge.
+charge:
+	trainArmy;
+	spot("Enemy Base").
 defend.
 heal.
 
 DEPENDENCIES:
 attacker > commander: trainArmy.
+attacker > scout: spot("Enemy Base").
+builder > scout: spot("Vespene Geyser").
 armyTrainer > builder: build("Terran Refinery").
+armyTrainer > builder: build("Terran Academy").
+commander > builder: build("Terran Barracks").
 commander > armyTrainer: train("Terran Firebat",1).
 commander > armyTrainer: train("Terran Medic",1).
 commander > armyTrainer: train("Terran Marine",1).
 commander > armyTrainer: train("Terran SCV",5).
-builder > scout: spot("Vespene Geyser").
-attacker > scout: spot("Enemy Base").
 
 OBLIGATIONS:
 gatherer: gather < false | true.
-builder: build("Terran Refinery") < false | spot("Vespene Geyser").
-builder: build("Terran Barracks") < false | build("Terran Supply Depot").
 builder: build("Terran Supply Depot") < false | true.
-builder: build("Terran Academy") < false | build("Terran Barracks").
-builder: spot("Vespene Geyser") < false | true.
 scout: scouting < false | true.
 commander: trainArmy < false | true.
-armyTrainer: train("Terran SCV", 5) < false | true.
-armyTrainer: train("Terran Marine", 1) < false | true.
-armyTrainer: train("Terran Medic", 1) < false | build("Terran Refinery").
-armyTrainer: train("Terran Firebat", 1) < false | build("Terran Refinery").
-attacker: charge < false | spot("Enemy Base"),trainArmy.
 attacker: defend < false | true.
+attacker: charge < false | true.
 healer: heal < false | true.
 
 

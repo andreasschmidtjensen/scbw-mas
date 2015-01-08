@@ -1,4 +1,5 @@
 { include("generalKnowledge.asl") } 
+
 cost("Terran Supply Depot", 100, 0).
 cost("Terran Barracks", 700, 0).
 cost("Terran Academy", 150, 0).
@@ -31,7 +32,7 @@ closest("mineral Field", ClosestId)
 	<-	+build(Building).
 +!build(Building)
 	:	Building = "Terran Refinery" &
-		vespeneGeyser(Id, _, _, X, Y)&
+		spottedVespeneGeyser(Id, X, Y) &
 		buildTilePosition(MyX,MyY) & 
 		distance(MyX,MyY,X,Y,D) &
 		.findall([OtherX,OtherY,OtherD], (friendly(Name, "Terran SCV", _, _, _, OtherX, OtherY) & distance(OtherX,OtherY,X,Y,OtherD) & OtherD < D), [])

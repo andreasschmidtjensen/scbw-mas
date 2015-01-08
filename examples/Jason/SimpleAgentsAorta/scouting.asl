@@ -1,15 +1,14 @@
 +!spot("Vespene Geyser")
-	:	vespeneGeyser(_, _, _, _, _)
-	<-	+spot("Vespene Geyser").
-+!spot("Vespene Geyser") <-.wait(200);!!spot("Vespene Geyser").
+	:	vespeneGeyser(Id, _, _, BX, BY) &
+		not spottedVespeneGeyser(Id,BX,BY)
+	<-	.broadcast(tell,spottedVespeneGeyser(Id,BX,BY));+spottedVespeneGeyser(Id,BX,BY);+spot("Vespene Geyser").
++!spot("Vespene Geyser") <-.wait(200); !!spot("Vespene Geyser").
 
 +!spot("Enemy Base")
-	: 	.print("Trying to spot enemy base") &
-		enemy(Type,Id,WX,WY,_,_) &
-		.print("Enemy Base ", Type) &
+	: 	enemy(Type,Id,WX,WY,_,_) &
 		isBuilding(Type) &
-		.print("Enemy Base ", Id)
-	<-	 .broadcast(tell,lastSpottedEnemy(Id,WX,WY)); +spot("Enemy Base");+lastSpottedEnemy(Id,WX,WY).
+		not lastSpottedEnemy(Id,WX,WY)
+	<-	 .broadcast(tell,lastSpottedEnemy(Id,WX,WY)); +lastSpottedEnemy(Id,WX,WY);+spot("Enemy Base").
 +!spot("Enemy Base") <-.wait(200).
 -!spot("Enemy Base") <-.wait(200).
 

@@ -1,8 +1,5 @@
 +gameStart <- !move.
 
-distance(MyX,MyY,X,Y,D)
-	:-	D = math.sqrt((MyX-X)**2 + (MyY-Y)**2).
-	
 closest("Enemy", ClosestId)
 	:-	position(MyX,MyY) &
 		.findall([Dist,Id],(enemy(_,Id,WX,WY,_,_)&distance(MyX,MyY,WX,WY,Dist)),L) &
