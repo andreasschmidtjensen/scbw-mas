@@ -4,23 +4,30 @@ module handleConstruction{
 		#import "BuildingDatabase.pl".			
 		#import "ResourceKnowledge.pl".		
 	}
+	goals{
+		build('Terran Supply Depot',24).
+		build('Terran Barracks',3).
+		build('Terran Refinery',2).
+		build('Terran Engineering Bay',1).
+		build('Terran Academy',1).
+			
+	}
 	program[order=linearall]{
 		%supply depot
 		%request for resource
-		if bel(not(percept(constructionSite(_,_)))) then log(pb).
-		if bel(shouldConstruct(Type), 
+		
+		if bel(percept(unit(Type,Amount)),build(build(Type,Old))),goal(build(Type,_)) then delete(build(build(Type,Old)))+insert(build(build(Type,Amount))).
+		if bel(percept(unit(Type,Amount)),not(build(build(Type,_)))),goal(build(Type,_)) then insert(build(build(Type,Amount))).
+		if bel(received(Sender,vespene(X,Y))) then insert(vespene(X,Y)).
+		
+		
+		if a-goal(build(Type,Amount)),bel(shouldConstruct(Type), 
 				isBuilding(Type),
 				chooseWorker(Type,WorkerId,X,Y),
 				percept(id(Id)),
-				WorkerId = Id, 
-				string_concat('Building: ', Type, Res), 
-				string_concat(Res,' At pos: ',Res2), 
-				string_concat(Res2, X, Res3), 
-				string_concat(Res3,Y,Res4)) then {
+				WorkerId = Id) then {
 							if bel(gather(vespene,Id,X,Y)) then delete(gather(vespene,Id,X,Y)).	
-							if true then build(Type, X, Y) + 
-										print(Res4).
-					
+							if true then build(Type, X, Y) .					
 				}
 		
 			}

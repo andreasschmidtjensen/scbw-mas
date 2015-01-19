@@ -1,5 +1,5 @@
 environment {
-	env = "../../../EISBW-remote/dist/EISBW-remote.jar".	
+	env = "../../../EISBW/dist/EISBW-with-deps.jar".	
 }
 
 agentfiles{

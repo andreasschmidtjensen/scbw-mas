@@ -11,8 +11,20 @@ module attack{
 	  								Res >Res1 -> findEnemy((EId,X,Y), Rest, Enemy)
 	  											;findEnemy((BestEId,BestX,BestY), Rest, Enemy).	
 	}
+	goals{
+		defend.
+		charge.
+	}
 	program{
-		if bel(findEnemy(EId), percept(enemy(_,EId,_,_,_,_))) then attack(EId).
+		if bel(received(_,lastSpottetEnemy(Id,X,Y))) then insert(lastSpottetEnemy(Id,X,Y)) + insert(defend).
+		
+		
+		if goal(charge),bel(lastSpottetEnemy(Id,X,Y)) then attack(Id).
+		if goal(charge),bel(lastSpottetEnemy(Id,X,Y),findEnemy(EId), percept(enemy(_,EId,_,_,_,_))) then attack(EId).
+		
+		
+		if goal(defend),bel(findEnemy(EId), percept(enemy(_,EId,Wx,Wy,_,_)),percept(freindly(_,'Terran Command Center',Wxc,Wyc,_,_)),distance(Wx,Wy,Wxc,Wyc,Distance),Distance<1000) then attack(EId).
+		
 	}
 	
 	actionspec {	

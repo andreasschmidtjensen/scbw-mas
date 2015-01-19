@@ -1,21 +1,38 @@
 main module{
 	knowledge{
+		#import "Buildings.pl".
 		#import "GeneralKnowledge.pl".
 		
 	}
 	beliefs {
 	}
+	goals{
+		spotEnemyBase.
+		spotVespeneGeyser.
+		scouting.
+	}
 	program{
-	 	if true then attack.
+		if true then attack.
+		%Spot:
+		
+		% spot goal :
+		if a-goal(spotVespeneGeyser), bel(percept(vespeneGeyser(_,_,_,BX,BY)),not(percept(freindly(_,'Terran Refinery',_,_,_,_)))) then allother.sendonce(vespene(BX,BY)) + insert(spotVespeneGeyser)+ print("sender vespene").
+	 	if a-goal(spotEnemyBase),bel(percept(enemy(Type,EId,Ex,Ey,_,_)),isBuilding(Type)) then allother.sendonce(lastSpottedEnemy(EId,Ex,Ey)) + insert(spotEnemyBase) + insert(scouting).
+	 	
+	 	
+	 	%Scout:
+		if a-goal(scouting),bel(not(percept(enemy(_,_,_,_,_,_))),percept(map(Width,Height)),WWidth is Width*4,WHeight is Height *4,random(0,WWidth,RWidth),random(0,WHeight,RHeight))then{
+					if bel(not(percept(attacking(_))),percept(enemy(_,_,_,_,_,_))) then move(RWidth,RHeight).
+					if bel(not(percept(enemy(_,_,_,_,_,_)))) then move(RWidth,RHeight).
+		}
+		
 	}	
-
+	actionspec {	
+			move(X,Y) {
+				pre {true}
+				post {true}
+			}
+	}
 }
 
 #import "AttackHandler.mod2g".
-
-
-event module {
-	program {
-		
-	}
-}

@@ -52,10 +52,7 @@
 		%For some reason the position received from EISBW is off 
 		%since we receive the center building block and the bottom 
 		%left one is needed.
-		someConstructionSite('Terran Refinery',X1,Y1):- 
-				findall( (BestX,BestY),percept(vespeneGeyser(_,_,_,BestX,BestY)), [C1|Rest]),
-				percept(friendly(_, 'Terran Command Center', _,_,_,CX,CY)),
-				someConstructionSite(C1, Rest, CX, CY,[], (X,Y)),X1 is X - 2 , Y1 is Y-1.
+		someConstructionSite('Terran Refinery',X1,Y1):- vespene(X,Y),X1 is X - 2 , Y1 is Y-1.
 				
 		someConstructionSite(_,X,Y):- 
 				findall( (BestX,BestY),percept(constructionSite(BestX,BestY)), [C1|Rest]),

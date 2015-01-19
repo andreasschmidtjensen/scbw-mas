@@ -1,12 +1,13 @@
 main module{
 	knowledge{
 		#import "GeneralKnowledge.pl".
-		train('Terran Marine',80).
-		train('Terran Firebat',50).
-		train('Terran Medic',70).
 		
 	}
-	beliefs {
+	goals {
+		train('Terran Marine',50).
+		train('Terran Firebat',50).
+		train('Terran Medic',50).
+		
 	}
 	program{
 			if true then train.
@@ -22,6 +23,6 @@ main module{
 
 event module {
 	program[order=linearall] {
-				if true then idNameMapping+handlePercepts+clearSent.
+			if true then idNameMapping+handlePercepts+clearSent.
 	}	
 }

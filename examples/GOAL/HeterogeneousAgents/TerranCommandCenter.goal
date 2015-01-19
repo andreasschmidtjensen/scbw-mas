@@ -4,7 +4,6 @@ main module{
 		
 		
 		
-		train('Terran SCV',25).
 		nearestField(vespene, Id, X, Y) :- findall( (BestId,BestX,BestY),
 										percept(friendly(_,'Terran Refinery',BestId,_,_,BestX,BestY)),
 										 [M1|Rest]),
@@ -38,13 +37,14 @@ main module{
 	beliefs {
 	}
 	goals{
-		
+		train('Terran SCV',25).
 	}
 	program[order=linearall]{
 	
 		if true then handlePercepts+train.
 		
 		if bel(shouldMineVespene(Id,VesId,X,Y), nameMapping(Mail,_,Id)) then print('Sending message to SCV')+Mail.send(gather(vespene,VesId,X,Y)).
+		
 	}
 }
 
