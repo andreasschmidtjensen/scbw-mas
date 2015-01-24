@@ -5,10 +5,9 @@ module handleConstruction{
 		#import "ResourceKnowledge.pl".		
 	}
 	goals{
-		build('Terran Supply Depot',24).
-		build('Terran Barracks',3).
-		build('Terran Refinery',2).
-		build('Terran Engineering Bay',1).
+		build('Terran Supply Depot',1).
+		build('Terran Barracks',1).
+		build('Terran Refinery',1).
 		build('Terran Academy',1).
 			
 	}

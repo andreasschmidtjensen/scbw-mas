@@ -9,7 +9,7 @@ module train{
 		%Manage Goals
 		
 		if a-goal(train(Unit,X)),bel(train(Unit,Y),percept(queueSize(Size)),Size<3,Total is Y+Size,Total<X,canAfford(Unit)) then train(Unit).
-		if a-goal(train(Unit,X)),bel(not(train(Unit,_)),percept(queueSize(Size)),Size<3) then train(Unit).
+		if a-goal(train(Unit,X)),bel(not(train(Unit,_)),percept(queueSize(Size)),Size<3, Size<X) then train(Unit).
 		
 		%manage beliefs
 		if bel(percept(unit(Type,Amount)),train(Type,Old),Old\=Amount) then delete(train(Type,Old))+insert(train(Type,Amount)).

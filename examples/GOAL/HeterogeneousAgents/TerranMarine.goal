@@ -5,6 +5,7 @@ main module{
 		
 	}
 	beliefs {
+		wait(0).
 	}
 	goals{
 		spotEnemyBase.
@@ -17,14 +18,12 @@ main module{
 		
 		% spot goal :
 		if a-goal(spotVespeneGeyser), bel(percept(vespeneGeyser(_,_,_,BX,BY)),not(percept(freindly(_,'Terran Refinery',_,_,_,_)))) then allother.sendonce(vespene(BX,BY)) + insert(spotVespeneGeyser)+ print("sender vespene").
-	 	if a-goal(spotEnemyBase),bel(percept(enemy(Type,EId,Ex,Ey,_,_)),isBuilding(Type)) then allother.sendonce(lastSpottedEnemy(EId,Ex,Ey)) + insert(spotEnemyBase) + insert(scouting).
+	 	if a-goal(spotEnemyBase),bel(percept(enemy(Type,EId,Ex,Ey,_,_)),isBuilding(Type)) then allother.sendonce(lastSpottedEnemy(EId,Ex,Ey)) + insert(lastSpottedEnemy(EId,Ex,Ey))+insert(spotEnemyBase) + insert(scouting).
 	 	
 	 	
 	 	%Scout:
-		if a-goal(scouting),bel(not(percept(enemy(_,_,_,_,_,_))),percept(map(Width,Height)),WWidth is Width*4,WHeight is Height *4,random(0,WWidth,RWidth),random(0,WHeight,RHeight))then{
-					if bel(not(percept(attacking(_))),percept(enemy(_,_,_,_,_,_))) then move(RWidth,RHeight).
-					if bel(not(percept(enemy(_,_,_,_,_,_)))) then move(RWidth,RHeight).
-		}
+	 	if a-goal(wait(X)), bel(wait(Y), New is Y+1) then insert(wait(New))+delete(wait(Y)). 
+		if a-goal(scouting),bel(percept(map(Width,Height)),WWidth is Width*4,WHeight is Height *4,random(0,WWidth,RWidth),random(0,WHeight,RHeight), wait(Current)) then move(RWidth,RHeight) + delete(wait(Current)) + adopt(wait(50)) + insert(wait(0)).
 		
 	}	
 	actionspec {	

@@ -19,7 +19,7 @@ main module{
 
 event module {
 	program {
-		if bel(not(paired(_)), percept(friendly(_,'Terran Marine', Id, X, Y, _, _)), percept(id(SelfId)),
+		if bel(not(paired(_)), percept(friendly(_,'Terran Firebat', Id, X, Y, _, _)), percept(id(SelfId)),
 			string_concat('Medic ', SelfId, Res), string_concat(Res, ' paired up with Terran Marrine: ', Res2),
 			string_concat(Res2, Id, Res3)) then print(Res3)+insert(paired(Id)).
 		if bel(paired(Id), not(percept(friendly(_,_, Id, _, _, _, _)))) then delete(paired(Id)).

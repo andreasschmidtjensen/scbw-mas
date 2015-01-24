@@ -37,7 +37,7 @@ main module{
 	beliefs {
 	}
 	goals{
-		train('Terran SCV',25).
+		train('Terran SCV',5).
 	}
 	program[order=linearall]{
 	

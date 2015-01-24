@@ -15,21 +15,26 @@ module attack{
 		defend.
 		charge.
 	}
+	
 	program{
-		if bel(received(_,lastSpottetEnemy(Id,X,Y))) then insert(lastSpottetEnemy(Id,X,Y)) + insert(defend).
+		if bel(received(Sender,lastSpottedEnemy(Id,X,Y))) then delete(received(Sender,lastSpottedEnemy(Id,X,Y)))+insert(lastSpottedEnemy(Id,X,Y)) + insert(defend).
 		
 		
-		if goal(charge),bel(lastSpottetEnemy(Id,X,Y)) then attack(Id).
-		if goal(charge),bel(lastSpottetEnemy(Id,X,Y),findEnemy(EId), percept(enemy(_,EId,_,_,_,_))) then attack(EId).
+		if goal(charge),bel(lastSpottedEnemy(Id,X,Y),findEnemy(EId)) then attack(EId).
+		if goal(charge),bel(lastSpottedEnemy(Id,X,Y)) then move(X,Y).
 		
 		
-		if goal(defend),bel(findEnemy(EId), percept(enemy(_,EId,Wx,Wy,_,_)),percept(freindly(_,'Terran Command Center',Wxc,Wyc,_,_)),distance(Wx,Wy,Wxc,Wyc,Distance),Distance<1000) then attack(EId).
+		if goal(defend),bel(findEnemy(EId), percept(enemy(_,EId,Wx,Wy,_,_)),percept(friendly(_,'Terran Command Center',_,Wxc,Wyc,_,_)),distance(Wx,Wy,Wxc,Wyc,Distance),Distance<125) then attack(EId).
 		
 	}
 	
 	actionspec {	
 		attack(Id) {
-			pre {percept(enemy(_,Id,_,_,_,_))}
+			pre {true}
+			post {true}
+		}
+		move(X,Y) {
+			pre {true}
 			post {true}
 		}
 	}

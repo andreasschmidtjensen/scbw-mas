@@ -4,9 +4,9 @@ main module{
 		
 	}
 	goals {
-		train('Terran Marine',50).
-		train('Terran Firebat',50).
-		train('Terran Medic',50).
+		train('Terran Marine',1).
+		train('Terran Firebat',1).
+		train('Terran Medic',1).
 		
 	}
 	program{
