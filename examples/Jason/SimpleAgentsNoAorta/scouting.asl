@@ -9,8 +9,8 @@
 		isBuilding(Type) &
 		not lastSpottedEnemy(Id,WX,WY)
 	<-	 .broadcast(tell,lastSpottedEnemy(Id,WX,WY)); +lastSpottedEnemy(Id,WX,WY);+spot("Enemy Base").
-+!spot("Enemy Base") <-.wait(200).
--!spot("Enemy Base") <-.wait(200).
++!spot("Enemy Base") <-.wait(200);!!spot("Enemy Base").
+-!spot("Enemy Base") <-.wait(200);!!spot("Enemy Base").
 
 +!scouting
 	:	spot("Enemy Base")
@@ -23,7 +23,7 @@
 		map(MapWidth,MapHeight)& 
 		.random(Rand1)& X = Rand1 * MapWidth * 4 &
 		.random(Rand2)& Y = Rand2 * MapHeight * 4 
-	<-	move(X,Y); .wait(2500). 
+	<-	move(X,Y); .wait(2500); !!scouting. 
 	
-+!scouting  <-.wait(200).
--!scouting  <-.wait(200).
++!scouting  <-.wait(200); !!scouting.
+-!scouting  <-.wait(200); !!scouting.

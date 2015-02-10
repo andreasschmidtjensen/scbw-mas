@@ -13,14 +13,14 @@ closestToBase("Enemy", ClosestId, ClosestDist)
 	<-	attack(ClosestId); .wait(200); !!charge.
 +!charge 
 	:	lastSpottedEnemy(Id,X,Y)
-	<-	move(X,Y); .wait(2000); attack(Id).
+	<-	move(X,Y); .wait(2000); attack(Id); !!charge.
 -!charge 
 	<-	.wait(200); !!charge.
 	
 +!defend 
 	:	closestToBase("Enemy", ClosestId, ClosestDist) &
 		ClosestDist < 125
-	<-	attack(ClosestId).
+	<-	attack(ClosestId); !!defend.
 -!defend 
 	<-	.wait(200); !!defend.
 	

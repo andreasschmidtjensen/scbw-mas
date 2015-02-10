@@ -14,13 +14,13 @@
 		position(MyX,MyY) &
 		distance(WX,WY,MyX,MyY,Distance) &
 		Distance > 16
-	<-	move(WX,WY).
+	<-	move(WX,WY);!!heal.
 +!heal
 	:	match(Id) &
 		not friendly(_, _, Id, _, _, _, _)
-	<-	-match(Id); !matchUp.
+	<-	-match(Id); !matchUp;!!heal.
 +!heal
 	:	not match(Id)
-	<-	!matchUp.
+	<-	!matchUp;!!heal.
 -!heal 
 	<-	.wait(200); !!heal.

@@ -1,7 +1,7 @@
 { include("generalKnowledge.asl") } 
 
 cost("Terran Supply Depot", 100, 0).
-cost("Terran Barracks", 700, 0).
+cost("Terran Barracks", 150, 0).
 cost("Terran Academy", 150, 0).
 cost("Terran Engineering Bay", 125, 0).
 cost("Terran Bunker", 100, 0).
