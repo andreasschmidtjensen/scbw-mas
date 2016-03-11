@@ -1,13 +1,41 @@
 environment {
-	env = "../../../EISBW/dist/EISBW-with-deps.jar".	
+	env = "../../../eisbw/target/eisbw-0.0.1-SNAPSHOT-jar-with-dependencies.jar".
 }
 
 agentfiles {
 	"TerranSCV.goal" [name = terranSCV].
 	"TerranCommandCenter.goal" [name = terranCommandCenter].
+	"TerranBarracks.goal" [name = terranBarracks].
+	"TerranMarine.goal" [name = terranMarine].
+	"TerranAcademy.goal" [name = terranAcademy].
+	"TerranMedic.goal" [name = terranMedic].
+	"TerranEngineeringBay.goal" [name = terranEngineeringBay].
+	"TerranFactory.goal" [name = terranFactory].
+	"TerranMachineShop.goal" [name = terranMachineShop].
+	"TerranSiegeTankTankMode.goal" [name = terranSiegeTankTankMode].
+	"TerranStarport.goal" [name = terranStarport].
+	"TerranScienceVessel.goal" [name = terranScienceVessel].
+	"TerranScienceFacility.goal" [name = terranScienceFacility].
+	"TerranCovertOps.goal" [name = terranCovertOps].
+	"TerranGhost.goal" [name = terranGhost].
+	"TerranBunker.goal" [name = terranBunker].
 }
 
 launchpolicy{
 	when [type = terranSCV]@env do launch terranSCV:terranSCV.
 	when [type = terranCommandCenter]@env do launch terranCommandCenter:terranCommandCenter.
+	when [type = terranBarracks]@env do launch terranBarracks:terranBarracks.
+	when [type = terranMarine]@env do launch terranMarine:terranMarine.
+	when [type = terranAcademy]@env do launch terranAcademy:terranAcademy.
+	when [type = terranMedic]@env do launch terranMedic:terranMedic.
+	when [type = terranEngineeringBay]@env do launch terranEngineeringBay:terranEngineeringBay.
+	when [type = terranFactory]@env do launch terranFactory:terranFactory.
+	when [type = terranMachineShop]@env do launch terranMachineShop:terranMachineShop.
+	when [type = terranSiegeTankTankMode]@env do launch terranSiegeTankTankMode:terranSiegeTankTankMode.
+	when [type = terranStarport]@env do launch terranStarport:terranStarport.
+	when [type = terranScienceVessel]@env do launch terranScienceVessel:terranScienceVessel.
+	when [type = terranScienceFacility]@env do launch terranScienceFacility:terranScienceFacility.
+	when [type = terranCovertOps]@env do launch terranCovertOps:terranCovertOps.
+	when [type = terranGhost]@env do launch terranGhost:terranGhost.
+	when [type = terranBunker]@env do launch terranBunker:terranBunker.
 }

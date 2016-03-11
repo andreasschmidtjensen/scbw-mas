@@ -1,0 +1,26 @@
+main module{
+	
+	program{		
+		if bel(percept(isBeingConstructed)) then skip.
+		if bel(not(research('Personnal Cloaking'))) then research('Personal Cloaking').
+	}
+	
+	actionspec {	
+		research(Name){
+			pre{not(researching)}
+			post{true}
+		}
+		
+		skip {
+			pre {true}
+			post {true}	
+		}
+	}
+}
+
+event module {
+	program {
+		if bel(percept(research(X))) then insert(research(X)) + insert(researching).
+		if bel(researching, not(percept(research(_)))) then delete(researching).
+	}	
+}

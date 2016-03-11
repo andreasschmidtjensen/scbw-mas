@@ -1,0 +1,21 @@
+main module{
+	
+	program{
+		if bel(percept(isBeingConstructed)) then skip.
+		if bel(percept(spaceProvided(Used,Max)), Used < Max, percept(friendly(_,'Terran Marine', Id,_, _, _, _, _, _)),
+			not(percept(unitLoaded(Id,_)))) then load(Id).
+		
+	}	
+
+	actionspec {
+		load(Id){
+			pre{true}
+			post{true}
+		}
+		
+		skip {
+			pre {true}
+			post {true}	
+		}		
+	}
+}

@@ -1,0 +1,36 @@
+main module{
+	
+	program{
+		if bel(percept(isBeingConstructed)) then skip.
+		%if bel(not(research('Restoration'))) then research('Restoration').
+		%if bel(not(research('Stim Packs'))) then research('Stim Packs').
+		
+		if bel(not(upgrade('U-238 Shells'))) then upgrade('U-238 Shells').
+	}
+	
+	actionspec {	
+		upgrade(Type) {
+			pre {not(upgrading)}
+			post {true}
+		}
+		
+		research(Name){
+			pre{not(researching)}
+			post{true}
+		}
+		
+		skip {
+			pre {true}
+			post {true}	
+		}
+	}
+}
+
+event module {
+	program {
+		if bel(percept(research(X))) then insert(research(X)) + insert(researching).
+		if bel(researching, not(percept(research(_)))) then delete(researching).
+		if bel(percept(upgrade(X))) then insert(upgrade(X)) + insert(upgrading).
+		if bel(upgrading, not(percept(upgrade(_)))) then delete(upgrading).
+	}	
+}

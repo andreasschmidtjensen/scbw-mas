@@ -1,0 +1,101 @@
+init module {
+	knowledge {
+		busy :- constructing ; gathering(_).
+		cost("Zerg Spawning Pool", 200, 0).
+		cost("Zerg Evolution Chamber", 75, 0).
+		cost("Zerg Extractor", 75, 0).
+		cost("Zerg Hatchery", 300, 0).
+		cost("Zerg Hydralisk Den", 100, 50).
+						
+		distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
+		
+		chokepointlocation(X,Y, RX,RY) 
+			:-	findall([D,BX,BY], (chokepoint(BX,BY), distance(X,Y,BX,BY,D)), L),
+				sort(L, [[_,RX,RY]|_]).
+				
+		shouldMineVespene :- unit('Zerg Extractor',RefCount),
+								NeededWorkers is RefCount * 2,
+								aggregate_all(count, workerActivity(_,gatheringGas), Count),
+								Count < NeededWorkers.
+			
+	}
+	
+	program {
+		if bel(percept(id(Id))) then insert(id(Id)).
+		if bel(percept(supply(C,M))) then insert(supply(C,M)).
+		if bel(percept(minerals(M))) then insert(minerals(M)).
+		if bel(percept(gas(G))) then insert(gas(G)).
+		forall bel(percept(zergConstructionSite(X,Y)), not(zergConstructionSite(X,Y))) do insert(zergConstructionSite(X,Y)).
+		if bel(percept(position(X,Y))) then insert(position(X,Y)).
+		forall bel(percept(chokepoint(X,Y))) do insert(chokepoint(X,Y)).
+		if bel(me(Name), percept(id(Id))) then ("zergHatchery").sendonce(drone(Name, Id)).
+	}	
+}
+main module{
+	program[order = linearall] {
+		if bel(zergConstructionSite(X,Y), minerals(M), M >= 200, builder, not(friendly(_, "Zerg Spawning Pool", _, _, _))) 
+		then build("Zerg Spawning Pool", X, Y).
+		
+		if bel(not(busy), percept(vespeneGeyser(_, _, _, X , Y)), minerals(M), M > 75, friendly(_ ,"Zerg Hatchery",_ ,BX,BY) 
+		,distance(BX, BY, X, Y, D), D < 10) then build("Zerg Extractor", X, Y).
+		
+		if bel(not(busy), zergConstructionSite(X,Y), minerals(M), M >= 75, not(friendly(_, "Zerg Evolution Chamber", _, _, _))) 
+		then build("Zerg Evolution Chamber", X, Y).
+		
+		if bel(not(busy), percept(constructionSite(X, Y)), minerals(M), M >= 300, unit("Zerg Hatchery", A), A =< 2)
+		then build("Zerg Hatchery", X, Y).
+		
+		if bel(not(busy), zergConstructionSite(X,Y), minerals(M), M >= 100, gas(G), G >= 50,
+		not(friendly(_, "Zerg Hydralisk Den", _, _, _))) then build("Zerg Hydralisk Den", X, Y).
+		
+		if bel(not(busy), percept(friendly(_,"Zerg Extractor", Id, _, _, _ ,_ ,_, _)), shouldMineVespene) then gather(Id).
+		
+		if bel(not(busy), mineralField(Id,X,Y), chokepointlocation(X,Y,CX,CY), distance(X,Y,CX,CY,L), L>10) then gather(Id).
+	}	
+	actionspec {
+		gather(Id) {
+			pre { not(gathering(Id)) }
+			post { true }
+		}
+		build(Building, X, Y) {
+			pre { cost(Building, M, G), minerals(MQ), M =< MQ, gas(GQ), G =< GQ }
+			post { true }	
+		}
+	}
+}
+event module {
+	program {
+		if bel(percept(supply(C,Max)), supply(OC, OMax)) then delete(supply(OC, OMax)) + insert(supply(C,Max)).
+		if bel(percept(minerals(M)), minerals(OM), not(M = OM)) then insert(minerals(M)) + delete(minerals(OM)).
+		if bel(percept(gas(M)), gas(OM), not(M = OM)) then insert(gas(M)) + delete(gas(OM)).
+		
+		forall bel(percept(unit(Unit,Number)), not(unit(Unit,Number))) do insert(unit(Unit,Number)).
+		forall bel(unit(Unit,Number), not(percept(unit(Unit,Number)))) do delete(unit(Unit,Number)).
+		
+		if bel(percept(gathering(X)), not(gathering(X))) then insert(gathering(X)).
+		if bel(gathering(X), not(percept(gathering(X)))) then delete(gathering(X)).
+				
+		forall bel(percept(mineralField(Id,_,_,X,Y)), not(mineralField(Id,X,Y))) do insert(mineralField(Id,X,Y)).
+		
+		forall bel(percept(id(MyId)), percept(friendly(Name,Type,Id,Health,Shields,WX,WY,X,Y)), MyId \= Id, not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
+		forall bel(friendly(Name,Type,Id,X,Y), not(percept(friendly(Name,Type,Id,_,_,_,_,X,Y)))) do delete(friendly(Name,Type,Id,X,Y)).
+		
+		if bel(percept(position(X1,Y1)), position(X2,Y2), (X1 \= X2 ; Y1 \= Y2)) then insert(position(X1,Y1)) + delete(position(X2,Y2)).
+		
+		forall bel(zergConstructionSite(X,Y), not(percept(zergConstructionSite(X,Y)))) do delete(zergConstructionSite(X,Y)).
+		forall bel(percept(zergConstructionSite(X,Y)), not(zergConstructionSite(X,Y))) do insert(zergConstructionSite(X,Y)).
+		
+		if bel(percept(constructing), not(constructing)) then insert(constructing).
+		if bel(not(percept(constructing)), constructing) then delete(constructing).
+		
+		if bel(percept(refinery(Id, Resources, Group)), not(refinery(Id, Resources, Group))) then insert(refinery(Id, Resources, Group)).
+		if bel(not(percept(refinery(Id, Resources, Group))), refinery(Id, Resources, Group)) then delete(refinery(Id, Resources, Group)).
+		
+		forall bel(percept(workerActivity(ID,ACT)), not(workerActivity(ID,ACT))) do insert(workerActivity(ID,ACT)).
+		forall bel(workerActivity(ID,ACT), not(percept(workerActivity(ID,ACT)))) do delete(workerActivity(ID,ACT)).
+		
+		forall bel(received(Sender, builder)) do insert(builder).
+		
+		forall bel(percept(isMorphing(Name, Id)), not(isMorphing(Name, Id))) do insert(isMorphing(Name, Id)).
+	}	
+}

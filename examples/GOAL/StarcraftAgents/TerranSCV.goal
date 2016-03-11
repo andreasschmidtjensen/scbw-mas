@@ -5,15 +5,12 @@ main module{
 	}
 	program{
 		if goal( justSpawned) then drop(justSpawned)+print("sdfsdf")+log(bb). 
-		if true then test.
 	}
 	
 	actionspec {
 		skip { pre {} post {} }
 	}
 }
-
-#import "test.mod2g".
 
 event module {
 	program {

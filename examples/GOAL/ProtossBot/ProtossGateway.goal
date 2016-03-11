@@ -1,0 +1,43 @@
+init module{
+	knowledge{
+		rallyLocation(X,Y, RX,RY) 
+			:-	findall([D,BX,BY], (chokepoint(BX,BY), distance(X,Y,BX,BY,D)), L),
+				sort(L, [[_,RX,RY]|_]). 				
+		distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).	
+	}
+	
+	program{
+		if bel(percept(friendly(_,"Protoss Nexus",_,_,_,_,_,X,Y))) then insert(commandCenter(X,Y)).
+		forall bel(percept(chokepoint(X,Y))) do insert(chokepoint(X,Y)).
+	}	
+}
+
+main module{
+	beliefs{
+		trainMarine.
+		trainMedic.
+	}
+	program{
+		if bel(percept(rallyPoint(RX,RY)), RX = 0, RY = 0, commandCenter(X,Y), rallyLocation(X,Y,NX,NY)) then setRallyPoint(NX,NY).	
+		if bel(trainZealot) then train("Protoss Zealot") + delete(trainZealot).
+	}
+	actionspec {	
+		train(Id) {
+			pre {true}
+			post {true}
+		}
+		
+		setRallyPoint(X,Y){
+			pre {true}
+			post {true}
+		}
+	}
+}
+
+event module {
+	program {
+		if bel(percept(queueSize(N)), N < 2, percept(supply(Y,Z)), percept(minerals(X)), X>=100 , (Z - Y) >= 2 ) then{
+			 if bel(not(trainZealot)) then insert(trainZealot).
+		}
+	}	
+}

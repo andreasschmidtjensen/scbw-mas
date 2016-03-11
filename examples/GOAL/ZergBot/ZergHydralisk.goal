@@ -1,0 +1,40 @@
+main module{
+	knowledge{
+		enemyBase(X, Y) :- percept(base(X, Y, 'true', _)), 
+		percept(friendly(_, "Zerg Hatchery", _, _, _, _, _, X1, Y1)), distance(X, Y, X1, Y1, Res), Res > 10.
+		
+		distance(X1,Y1,X2,Y2,Res):- Res is sqrt((X2-X1)**2 + (Y2-Y1)**2).
+ 	  	
+ 	  	nearestBase(X, Y, RX, RY) 
+				:-	findall([D,BX,BY], (percept(base(BX,BY, 'false', _)), distance(X,Y,BX,BY,D)), L),
+				sort(L, [[_,RX,RY]|_]). 
+	}
+	
+	program{
+		if bel(percept(unit("Zerg Hydralisk", B)), B > 10, percept(unit("Zerg Zergling", A)), A > 20, enemyBase(X,Y)) then attack(X, Y).
+		
+		if bel(percept(position(X, Y)), enemyBase(EX, EY), distance(X, Y, EX, EY, D), D < 5, not(percept(enemy(_,_,_,_,_,_,BX,BY))),
+		distance(X, Y, BX, BY, Res), Res > 5, nearestBase(X, Y, X1, Y1)) then attack(X1, Y1). 
+	}
+	
+	actionspec{
+		attack(X,Y){
+			pre{true}
+			post{true}
+		}
+		
+		attack(Id){
+			pre{true}
+			post{true}
+		}
+	}
+}
+
+event module {
+	program {
+		if bel(percept(enemy(_, Id,_,_, _, _, _, _)), percept(position(MX,MY))) then {
+			if bel(enemyBase(X, Y), distance(MX, MY, X, Y, D), D < 10) then attack(Id).	
+			if bel(percept(friendly(_,"Zerg Hatchery", _, _, _, _, _, X, Y)), distance(MX, MY, X, Y, D), D < 10) then attack(Id).
+		} 
+	}	
+}
