@@ -1,0 +1,11 @@
+use TerranCovertOps as knowledge.
+
+define research(Name) with
+	pre{not(researching)}
+	post{true}
+		
+		
+define skip with
+	pre {true}
+	post {true}	
+		

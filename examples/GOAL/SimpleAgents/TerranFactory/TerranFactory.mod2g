@@ -1,0 +1,17 @@
+use TerranFactory as actionspec.
+use TerranFactory as knowledge.
+
+module main{
+
+		if percept(isBeingConstructed) then skip.
+		if percept(rallyPoint(RX,RY)), bel(RX = 0, RY = 0, commandCenter(X,Y), rallyLocation(X,Y,NX,NY)) then setRallyPoint(NX,NY).	
+		if percept(not(addon("Terran Machine Shop")), queueSize(N), minerals(X), gas(Y)), bel(N = 0, X>=50, Y>=50) 
+			then buildAddon("Terran Machine Shop").
+		
+		%if bel(percept(position(X, Y)), percept(friendly(_,_,_,_,_,_,_,BX,BY)), distance(X, Y, BX, BY, D), D > 2, 
+		%not(percept(lifted)), not(percept(addon("Terran Machine Shop")))) then lift.
+		
+		%if bel(percept(lifted), percept(friendly(_,"Terran Command Center",_,_,_,_,_,X,Y)), BY is Y - 5) then land(X, BY).
+		if bel(trainTank) then train("Terran Siege Tank Tank Mode") + delete(trainTank).
+}
+

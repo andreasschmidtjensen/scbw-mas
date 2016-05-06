@@ -1,0 +1,7 @@
+use TerranMedic as actionspec.
+use TerranMedic as knowledge.
+
+module main{
+		if percept(isBeingConstructed) then skip.
+		if percept(friendly(_,'Terran Marine', Id,_, _, _, _, _, _)) then follow(Id).
+}

@@ -1,0 +1,21 @@
+main module{
+	
+	program{
+		if bel(not(upgrade('Zerg Melee Attacks'))) then upgrade('Zerg Melee Attacks').
+		if bel(not(upgrade('Zerg Carapace'))) then upgrade('Zerg Carapac').
+	}
+	
+	actionspec {	
+		upgrade(Type) {
+			pre {not(upgrading)}
+			post {true}
+		}
+	}	
+}
+
+event module {
+	program {
+		if bel(percept(upgrade(X))) then insert(upgrade(X)) + insert(upgrading).
+		if bel(upgrading, not(percept(upgrade(_)))) then delete(upgrading).
+	}	
+}

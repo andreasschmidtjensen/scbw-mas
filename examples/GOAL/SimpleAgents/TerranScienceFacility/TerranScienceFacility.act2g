@@ -1,0 +1,11 @@
+use TerranScienceFacility as knowledge.
+
+define buildAddon(X) with
+	pre {true}
+	post {true}
+		
+		
+define skip with
+	pre {true}
+	post {true}	
+		

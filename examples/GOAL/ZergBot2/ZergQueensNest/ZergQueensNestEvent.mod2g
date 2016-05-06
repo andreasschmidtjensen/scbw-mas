@@ -1,0 +1,21 @@
+use ZergQueensNest as knowledge.
+
+module ZergQueensNestEvent {
+	%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
+	
+	if percept(upgrade(X)) then insert(upgrade(X)).
+	
+	if percept(research(X)) then insert(research(X)).
+		
+	if percept(minerals(M)), bel(minerals(OM), not(M == OM)) then insert(minerals(M)) + delete(minerals(OM)).
+		
+	if percept(gas(M)), bel(gas(OM), not(M = OM)) then insert(gas(M)) + delete(gas(OM)).
+	
+	%%%%%%%%%%%%%%% --------------------------------------- GOALS --------------------------------------- %%%%%%%%%%%%%%%
+	
+	if bel(not(upgrade('Gamete Meiosis')), minerals(M), M >= 150, gas(G), G >= 150) then adopt(upgrade('Gamete Meiosis')).
+	
+	if bel(not(research('Ensnare')), minerals(M), M >= 100, gas(G), G >= 100) then adopt(research("Ensnare")).
+	
+	if bel(not(research('Spawn Broodling')), minerals(M), M >= 100, gas(G), G >= 100) then adopt(research("Spawn Broodling")).
+}

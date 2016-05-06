@@ -1,0 +1,49 @@
+use TerranSCV as actionspec.
+use TerranSCV as knowledge.
+
+order = linearall.
+
+module main{	
+		if bel(builder, commandCenter(X,Y), chokepointlocation(X, Y, TX, TY), 
+			friendly(_ ,"Terran Barracks",_ ,_,_),
+			not(friendly(_ ,"Terran Bunker",_ ,_,_)), buildingLocation(TX, TY, RX, RY)) then
+			build("Terran Bunker", RX, RY).
+		
+		if bel((builder ; not(busy)), supply(C, Max), (Max - C) < 10, buildLocation(X, Y)) 
+		then insert(constructing) + build("Terran Supply Depot", X, Y).
+		
+		if percept(vespeneGeyser(_, _, _, X , Y)), bel(not(busy), minerals(M), M > 100, 
+		friendly(_ ,"Terran Command Center",_ ,BX,BY) ,distance(BX, BY, X, Y, D), D < 10) 
+		then insert(constructing) + build("Terran Refinery", X, Y).
+		
+		if percept(mineralField(_,Amount,_,MX,MY)), bel(builder ,Amount < 500 ,friendly(_ ,"Terran Command Center",_ ,X,Y)
+		,nearestBase(X, Y, NX, NY), minerals(M), M >= 400, distance(X, Y, MX, MY, Res), Res < 7) 
+		then insert(constructing) + build("Terran Command Center", NX, NY).
+		
+		if bel(not(builder), not(busy), buildLocation(X, Y), not(unit("Terran Engineering Bay", _)), minerals(M), M > 125) 
+		then insert(constructing) + build("Terran Engineering Bay", X, Y).
+		
+		if bel(not(builder), ((unit("Terran Barracks",Num), Num < 3) ; not(unit("Terran Barracks",_))), buildLocation(X, Y), not(busy), minerals(M), M > 100) 
+		then insert(constructing) + build("Terran Barracks", X, Y).
+		
+		if bel(not(builder), unit("Terran Barracks", _), not(unit("Terran Academy", _)), buildLocation(X, Y), not(busy), minerals(M), M > 150) 
+		then insert(constructing) + build("Terran Academy", X, Y).
+		
+		if bel(not(busy), addonBuildingLocation(X, Y), not(unit("Terran Factory", _)), minerals(M), M > 200, gas(G), G > 100, 
+		unit("Terran Barracks", _)) 
+		then insert(constructing) + build("Terran Factory", X, Y).
+		
+		if bel(not(busy), addonBuildingLocation(X, Y), not(unit("Terran Starport", _)), minerals(M), M > 150, gas(G), G > 100, unit("Terran Factory", _))
+		then insert(constructing) + build("Terran Starport", X, Y).
+		
+		if bel(not(busy), buildLocation(X, Y), unit("Terran Starport", _), not(unit("Terran Science Facility", _)), minerals(M), M > 100, gas(G), G > 150)
+		then insert(constructing) + build("Terran Science Facility", X, Y).
+		
+		if percept(friendly(_,"Terran Refinery", Id, _, _, _ ,_ ,_, _)), bel(not(busy), shouldMineVespene) then gather(Id).
+		
+		%if bel(canBuild("Terran Supply Depot", X, Y)) then insert(constructing) + build("Terran Supply Depot", X, Y).
+		if bel(not(busy), mineralField(Id,X,Y), chokepointlocation(X,Y,CX,CY), distance(X,Y,CX,CY,L), L>10,
+		friendly(_ ,"Terran Command Center",_ ,BX,BY), distance(X, Y, BX, BY, Res), Res < 10) 
+		then gather(Id).
+		
+}

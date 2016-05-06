@@ -1,0 +1,8 @@
+use TerranBunker as knowledge.
+use TerranBunker as actionspec.
+
+module main{	
+		if percept(isBeingConstructed) then skip.
+		if percept(spaceProvided(Used,Max), friendly(_,'Terran Marine', Id,_, _, _, _, _, _), not(unitLoaded(Id,_))), 
+		bel(Used < Max) then load(Id).		
+}

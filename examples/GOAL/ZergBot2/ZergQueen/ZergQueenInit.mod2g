@@ -1,0 +1,6 @@
+use ZergQueen as knowledge.
+
+module ZergQueenInit {
+	if percept(energy(C, M)) then insert(energy(C, M)).
+	forall percept(base(X, Y, Begin, RegionID)) do insert(base(X, Y, Begin, RegionID)).
+}

@@ -1,13 +1,111 @@
-environment {
-	env = "../../../EISBW/dist/EISBW-with-deps.jar".	
+use "../../../eisbw/target/eisbw-0.0.1-SNAPSHOT-jar-with-dependencies.jar" as environment with
+	map="(2)Destination.scx",
+	race="Terran",
+	starcraft_location="C:\\Starcraft No Install",
+	debug="true".
+
+
+define terranSCV as agent {
+	use TerranSCV.TerranSCV as main module.
+	use TerranSCV.TerranSCVInit as init module.
+	use TerranSCV.TerranSCVEvent as event module.
+} 
+
+define terranCommandCenter as agent {
+	use TerranCommandCenter.TerranCommandCenter as main module.
+	use TerranCommandCenter.TerranCommandCenterEvent as event module.
 }
 
-agentfiles {
-	"TerranSCV.goal" [name = terranSCV].
-	"TerranCommandCenter.goal" [name = terranCommandCenter].
+define terranBarracks as agent {
+	use TerranBarracks.TerranBarracks as main module.
+	use TerranBarracks.TerranBarracksInit as init module.
+	use TerranBarracks.TerranBarracksEvent as event module.
+}
+
+define terranMarine as agent {
+	use TerranMarine.TerranMarine as main module.
+	use TerranMarine.TerranMarineEvent as event module.
+}
+
+define terranAcademy as agent {
+	use TerranAcademy.TerranAcademy as main module.
+	use TerranAcademy.TerranAcademyEvent as event module.
+}
+
+define terranMedic as agent {
+	use TerranMedic.TerranMedic as main module.
+}
+
+define terranEngineeringBay as agent {
+	use TerranEngineeringBay.TerranEngineeringBay as main module.
+	use TerranEngineeringBay.TerranEngineeringBayEvent as event module.
+}
+
+define terranMachineShop as agent{
+	use TerranMachineShop.TerranMachineShop as main module.
+	use TerranMachineShop.TerranMachineShopEvent as event module.
+}
+
+define terranSiegeTankTankMode as agent{
+	use TerranSiegeTankTankMode.TerranSiegeTankTankMode as main module.
+	use TerranSiegeTankTankMode.TerranSiegeTankTankModeEvent as event module.
+}
+
+define terranStarport as agent{
+	use TerranStarport.TerranStarport as main module.
+	use TerranStarport.TerranStarportInit as init module.
+	use TerranStarport.TerranStarportEvent as event module.
+}
+
+define terranScienceVessel as agent{
+	use TerranScienceVessel.TerranScienceVessel as main module.
+}
+
+define terranScienceFacility as agent {
+	use TerranScienceFacility.TerranScienceFacility as main module.
+}
+
+define terranCovertOps as agent {
+	use TerranCovertOps.TerranCovertOps as main module.
+	use TerranCovertOps.TerranCovertOpsEvent as event module.
+}
+
+define terranGhost as agent {
+	use TerranGhost.TerranGhost as main module.
+	use TerranGhost.TerranGhostInit as init module.
+	use TerranGhost.TerranGhostEvent as event module.
+}
+
+define terranBunker as agent {
+	use TerranBunker.TerranBunker as main module.
+}
+
+define terranFactory as agent {
+	use TerranFactory.TerranFactory as main module.
+	use TerranFactory.TerranFactoryInit as init module.
+	use TerranFactory.TerranFactoryEvent as event module.
+}
+
+define stayAlive as agent {
+	use stayAlive.stayAlive as main module.	
 }
 
 launchpolicy{
-	when [type = terranSCV]@env do launch terranSCV:terranSCV.
-	when [type = terranCommandCenter]@env do launch terranCommandCenter:terranCommandCenter.
+	when type = unknown launch stayAlive.
+	when type = terranSCV launch terranSCV.
+	when type = terranCommandCenter launch terranCommandCenter.
+	when type = terranBarracks launch terranBarracks.
+	when type = terranMarine launch terranMarine.
+	when type = terranAcademy launch terranAcademy.
+	when type = terranMedic launch terranMedic.
+	when type = terranEngineeringBay launch terranEngineeringBay.
+	when type = terranFactory launch terranFactory.
+	when type = terranMachineShop launch terranMachineShop.
+	when type = terranSiegeTankTankMode launch terranSiegeTankTankMode.
+	when type = terranStarport launch terranStarport.
+	when type = terranScienceVessel launch terranScienceVessel.
+	when type = terranScienceFacility launch terranScienceFacility.
+	when type = terranCovertOps launch terranCovertOps.
+	when type = terranGhost launch terranGhost.
+	when type = terranBunker launch terranBunker.
 }

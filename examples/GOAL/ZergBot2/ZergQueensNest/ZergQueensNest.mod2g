@@ -1,0 +1,10 @@
+use ZergQueensNest as knowledge.
+use ZergQueensNest as actionspec.
+
+module ZergQueensNest {
+	if a-goal(upgrade('Gamete Meiosis')) then upgrade('Gamete Meiosis').
+	
+	if a-goal(research('Ensnare')) then research('Ensnare').	
+	
+	if a-goal(research('Spawn Broodling')) then research('Spawn Broodling').
+}

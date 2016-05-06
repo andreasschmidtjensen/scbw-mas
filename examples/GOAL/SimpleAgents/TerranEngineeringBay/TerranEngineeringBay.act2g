@@ -1,0 +1,11 @@
+use TerranEngineeringBay as knowledge.
+
+define upgrade(Type) with 
+	pre {not(upgrading)}
+	post {true}
+		
+		
+define skip with
+	pre {true}
+	post {true}	
+		

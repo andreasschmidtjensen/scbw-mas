@@ -1,0 +1,12 @@
+use ZergDrone as knowledge.
+
+module ZergDroneInit {
+		if percept(id(Id)) then insert(id(Id)) + ("zergHatchery").send(drone(Id)).
+		if percept(supply(C,M)) then insert(supply(C,M)).
+		if percept(minerals(M)) then insert(minerals(M)).
+		if percept(gas(G)) then insert(gas(G)).
+		forall percept(base(X,Y,Start,RegID)) do insert(base(X,Y,Start,RegID)).
+		forall percept(constructionSite(X,Y)) do insert(constructionSite(X,Y)).
+		if percept(position(X,Y)) then insert(position(X,Y)).
+		forall percept(chokepoint(X,Y)) do insert(chokepoint(X,Y)).
+}

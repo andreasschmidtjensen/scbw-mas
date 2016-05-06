@@ -1,0 +1,5 @@
+use TerranSiegeTankTankMode as knowledge.
+
+module TerranSiegeTankTankModeInit {
+	forall percept(base(X, Y, Begin, RegionID)) do insert(base(X, Y, Begin, RegionID)).
+}

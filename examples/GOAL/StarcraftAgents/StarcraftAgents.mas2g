@@ -1,5 +1,5 @@
 environment {
-	env = "../../../EISBW/dist/EISBW-with-deps.jar".	
+	env = "../../../eisbw/target/eisbw-0.0.1-SNAPSHOT-jar-with-dependencies.jar".	
 }
 
 agentfiles{

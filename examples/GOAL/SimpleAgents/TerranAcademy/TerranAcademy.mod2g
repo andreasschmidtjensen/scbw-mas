@@ -1,0 +1,13 @@
+use TerranAcademy as actionspec.
+use TerranAcademy as knowledge.
+
+module main{
+	
+		if percept(isBeingConstructed) then skip.
+		%if bel(not(research('Restoration'))) then research('Restoration').
+		%if bel(not(research('Stim Packs'))) then research('Stim Packs').
+		
+		if bel(not(upgrade('U-238 Shells'))) then upgrade('U-238 Shells').
+}
+
+

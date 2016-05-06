@@ -1,0 +1,15 @@
+use TerranBarracks as knowledge.
+
+define train(Id) with
+	pre {true}
+	post {true}
+	
+		
+define setRallyPoint(X,Y) with
+	pre {true}
+	post {true}
+		
+		
+define skip with
+	pre {true}
+	post {true}	

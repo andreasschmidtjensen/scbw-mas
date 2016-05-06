@@ -1,0 +1,9 @@
+use TerranCovertOps as actionspec.
+use TerranCovertOps as knowledge.
+
+module main{
+			
+		if percept(isBeingConstructed) then skip.
+		if bel(not(research('Personnal Cloaking'))) then research('Personal Cloaking').
+}
+

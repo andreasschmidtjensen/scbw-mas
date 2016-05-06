@@ -1,0 +1,5 @@
+use TerranGhost as knowledge.
+
+module TerranGhostInit {
+	forall percept(base(X, Y, Begin, RegionID)) do insert(base(X, Y, Begin, RegionID)).
+}

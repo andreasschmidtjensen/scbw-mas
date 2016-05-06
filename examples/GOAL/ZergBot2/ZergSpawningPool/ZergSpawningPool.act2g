@@ -1,0 +1,5 @@
+use ZergSpawningPool as knowledge.
+
+define upgrade(Type) with
+	pre{ true }
+	post{ true }

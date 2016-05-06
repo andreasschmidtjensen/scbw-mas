@@ -1,0 +1,28 @@
+use ZergZergling as knowledge.
+
+module ZergZerglingEvent {
+		%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
+		
+	%	if percept(isStuck) then insert(isStuck).
+		
+		forall percept(friendly(Name,Type,Id,Health,_,X,Y)), bel(id(MyId), not(friendly(Name,Type,Id,Health,X,Y)), MyId \= Id) 
+		do insert(friendly(Name,Type,Id,Health,X,Y)).
+		forall bel(friendly(Name,Type,Id,Health,X,Y)) , not(percept(friendly(Name,Type,Id,Health,_,X,Y)))
+		do delete(friendly(Name,Type,Id,Health,X,Y)).
+		
+		forall percept(enemy(Name,Id,Health,Shields,IsFlying,X,Y)), bel(not(enemy(Name,Id,Health,Shields,IsFlying,X,Y)))
+		do insert(enemy(Name,Id,Health,Shields,IsFlying,X,Y)).
+		forall bel(enemy(Name,Id,Health,Shields,IsFlying,X,Y)) , not(percept(enemy(Name,Id,Health,Shields,IsFlying,X,Y)))
+		do delete(enemy(Name,Id,Health,Shields,IsFlying,X,Y)).
+		
+		forall percept(unit(Type,Count)), not(bel(unit(Type,Count))) do insert(unit(Type,Count)).
+		forall bel(unit(Type,Count)),not(percept(unit(Type,Count))) do delete(unit(Type,Count)).
+		
+		%%%%%%%%%%%%%%% ----------------------------------------- GOALS ---------------------------------------- %%%%%%%%%%%%%%%
+		
+		if bel(unit("Zerg Zergling", Amount), Amount >= 30, enemyBase(X, Y)) then adopt(attack(X,Y)).
+		
+		if bel(enemy(_, Id, _, _, 'false', _, _)) then adopt(attack(Id)).
+		
+		%if bel(isStuck) then adopt(stop).
+}

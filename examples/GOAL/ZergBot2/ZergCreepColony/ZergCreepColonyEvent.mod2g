@@ -1,0 +1,7 @@
+use ZergCreepColony as knowledge.
+
+module ZergCreepColonyEvent {
+	if percept(minerals(M)), bel(minerals(OM), not(M == OM)) then insert(minerals(M)) + delete(minerals(OM)).
+	
+	if percept(friendly(_, "Zerg Spawning Pool", _, _, _,_,_)), bel(minerals(M), M >= 50) then adopt(morph("Zerg Sunken Colony")). 
+}

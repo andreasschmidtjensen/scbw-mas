@@ -1,0 +1,8 @@
+use ZergZergling as knowledge.
+
+module ZergZerglingInit {
+	forall percept(base(X, Y, Begin, RegionID)) do insert(base(X, Y, Begin, RegionID)).
+	forall percept(chokepoint(X,Y)) do insert(chokepoint(X,Y)).
+	if percept(position(X,Y)) then insert(position(X,Y)).
+	%if bel(position(X,Y), rallyLocation(X,Y,NX,NY)) then adopt(move(NX,NY)).	
+}

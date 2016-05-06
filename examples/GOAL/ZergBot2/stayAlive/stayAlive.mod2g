@@ -1,0 +1,5 @@
+use stayAlive as knowledge.
+
+module stayAlive {
+	if bel(mandatory) then delete(mandatory).
+}

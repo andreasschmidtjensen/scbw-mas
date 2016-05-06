@@ -1,0 +1,90 @@
+use "../../../eisbw/target/eisbw-0.0.1-SNAPSHOT-jar-with-dependencies.jar" as environment with
+	map="(2)Destination.scx",
+	race="Zerg",
+	starcraft_location="C:\\Starcraft No Install",
+	debug="true".
+	
+define zergDrone as agent {
+	use ZergDrone.ZergDrone as main module.
+	use ZergDrone.ZergDroneInit as init module.
+	use ZergDrone.ZergDroneEvent as event module.
+} 
+
+define zergHatchery as agent {
+	use ZergHatchery.ZergHatcheryInit as init module.
+	use ZergHatchery.ZergHatchery as main module.
+	use ZergHatchery.ZergHatcheryEvent as event module.
+}	
+
+define zergZergling as agent{
+	use ZergZergling.ZergZerglingInit as init module.
+	use ZergZergling.ZergZergling as main module.
+	use ZergZergling.ZergZerglingEvent as event module.
+}
+
+define zergSpawningPool as agent{
+	use ZergSpawningPool.ZergSpawningPoolInit as init module.
+	use ZergSpawningPool.ZergSpawningPool as main module.
+	use ZergSpawningPool.ZergSpawningPoolEvent as event module.
+}
+
+define zergEvolutionChamber as agent{
+	use ZergEvolutionChamber.ZergEvolutionChamberInit as init module.
+	use ZergEvolutionChamber.ZergEvolutionChamber as main module.
+	use ZergEvolutionChamber.ZergEvolutionChamberEvent as event module.	
+}
+
+define zergHydralisk as agent{
+	use ZergHydralisk.ZergHydraliskInit as init module.
+	use ZergHydralisk.ZergHydralisk as main module.
+	use ZergHydralisk.ZergHydraliskEvent as event module.
+}
+
+define zergHydraliskDen as agent{
+	use ZergHydraliskDen.ZergHydraliskDenInit as init module.
+	use ZergHydraliskDen.ZergHydraliskDen as main module.
+	use ZergHydraliskDen.ZergHydraliskDenEvent as event module.
+}
+
+define zergCreepColony as agent{
+	use ZergCreepColony.ZergCreepColonyInit as init module.
+	use ZergCreepColony.ZergCreepColony as main module.
+	use ZergCreepColony.ZergCreepColonyEvent as event module.	
+}
+
+define zergLair as agent{
+	use ZergLair.ZergLairInit as init module.
+	use ZergLair.ZergLair as main module.
+	use ZergLair.ZergLairEvent as event module.	
+}
+
+define zergQueensNest as agent{
+	use ZergQueensNest.ZergQueensNestInit as init module.
+	use ZergQueensNest.ZergQueensNest as main module.
+	use ZergQueensNest.ZergQueensNestEvent as event module.
+}
+
+define zergQueen as agent{
+	use ZergQueen.ZergQueenInit as init module.
+	use ZergQueen.ZergQueen as main module.
+	use ZergQueen.ZergQueenEvent as event module.
+}
+
+define stayAlive as agent {
+	use stayAlive.stayAlive as main module.	
+}
+
+launchpolicy{
+	when type = zergDrone launch zergDrone.
+	when type = zergHatchery launch zergHatchery.
+	when type = unknown launch stayAlive.
+	when type = zergZergling launch zergZergling.
+	when type = zergSpawningPool launch zergSpawningPool.
+	when type = zergEvolutionChamber launch zergEvolutionChamber.
+	when type = zergHydralisk launch zergHydralisk.
+	when type = zergCreepColony launch zergCreepColony.
+	when type = zergLair launch zergLair.
+	when type = zergHydraliskDen launch zergHydraliskDen.
+	when type = zergQueensNest launch zergQueensNest.
+	when type = zergQueen launch zergQueen.
+	}

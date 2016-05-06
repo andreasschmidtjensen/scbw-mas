@@ -1,0 +1,43 @@
+main module{
+	beliefs{
+		trainDrone.
+	}
+	program{
+		if bel(percept(unit("Zerg Drone",X)),X<20, trainDrone) then train("Zerg Drone") + delete(trainDrone).
+		
+		if bel(trainOverlord, not(percept(isMorphing("Zerg Overlord", _)))) then train("Zerg Overlord").
+		
+		if bel(trainZergling) then train("Zerg Zergling").
+		
+		if bel(trainHydralisk) then train("Zerg Hydralisk").
+	}
+	actionspec {	
+		train(Id) {
+			pre {true}
+			post {true}
+		}
+	}
+}
+
+event module {
+	program {
+		forall bel(received(Sender, drone(Name, Id))) do insert(drone(Name, Id)).
+		
+		if bel(not(trainDrone), percept(queueSize(N)), N < 2, percept(minerals(X)),X>=50,percept(supply(Y,Z)),Y<Z) then insert(trainDrone).
+		
+		if bel(not(trainOverlord),percept(queueSize(N)), N < 2 ,percept(minerals(X)), X >= 100, percept(supply(Y, Z)), (Z - Y) < 6, 
+		not(percept(isMorphing("Zerg Overlord", _)))) then insert(trainOverlord).
+		
+		if bel(not(trainHydralisk), percept(minerals(X)), X >= 75, percept(gas(G)), G >= 25, percept(supply(Y,Z)), Y < Z,
+		percept(friendly(_ , "Zerg Hydralisk Den", _, _, _, _, _, _, _))) then insert(trainHydralisk).
+		
+		if bel(not(trainZergling), percept(minerals(X)), X >= 50, percept(supply(Y,Z)), Y<Z, 
+		percept(friendly(_, "Zerg Spawning Pool", _, _, _, _, _, _, _))) then insert(trainZergling).
+		
+		if bel(percept(supply(C,Max)), supply(OC, OMax)) then delete(supply(OC, OMax)) + insert(supply(C,Max)).
+		
+		if bel(not(done), drone(Name, Id), percept(friendly(_ ,"Zerg Drone",Id,_ ,_ ,_ ,_ ,_ ,_ ))) then (Name).sendonce(builder) + insert(done).
+		
+		if bel(done, drone(Name, Id), not(percept(friendly(_ ,"Zerg Drone",Id,_ ,_ ,_ ,_ ,_ ,_ )))) then delete(done) + delete(drone(Name, Id)).
+	}	
+}

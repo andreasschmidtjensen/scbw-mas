@@ -1,0 +1,6 @@
+use ZergEvolutionChamber as knowledge.
+
+define upgrade(Type) with
+	pre{ not(upgrade(Type)) }
+	post{ true }
+	

@@ -1,0 +1,21 @@
+use ZergHydraliskDen as knowledge.
+
+module ZergHydraliskDenEvent {
+	%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
+	
+	if percept(upgrade(X)) then insert(upgrade(X)).
+	
+	if percept(research(X)) then insert(research(X)).
+		
+	if percept(minerals(M)), bel(minerals(OM), not(M == OM)) then insert(minerals(M)) + delete(minerals(OM)).
+		
+	if percept(gas(M)), bel(gas(OM), not(M = OM)) then insert(gas(M)) + delete(gas(OM)).
+	
+	%%%%%%%%%%%%%%% --------------------------------------- GOALS --------------------------------------- %%%%%%%%%%%%%%%
+	
+	if bel(not(upgrade('Muscular Augments')), minerals(M), M >= 150, gas(G), G >= 150) then adopt(upgrade('Muscular Augments')).
+	
+	if bel(not(upgrade('Grooved Spines')), minerals(M), M >= 150, gas(G), G >= 150) then adopt(upgrade('Grooved Spines')).	
+	
+	if bel(not(research('Lurker Aspect')), minerals(M), M >= 200, gas(G), G >= 200) then adopt(research("Lurker Aspect")).
+}

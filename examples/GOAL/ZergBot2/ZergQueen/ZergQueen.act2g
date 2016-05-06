@@ -1,0 +1,17 @@
+use ZergQueen as knowledge.
+
+define move(X, Y) with
+	pre{ true }
+	post{ true }
+
+define attack(Id) with
+	pre{ true }
+	post{ true }
+	
+define follow(Id) with
+	pre{ true }
+	post{ true }
+	
+define ability(Type, Id) with
+	pre{ true }
+	post{ true }

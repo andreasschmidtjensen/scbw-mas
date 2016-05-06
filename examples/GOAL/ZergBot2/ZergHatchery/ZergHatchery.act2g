@@ -1,0 +1,10 @@
+use ZergHatchery as knowledge.
+
+define train(Id) with
+	pre {true}
+	post {true}
+	
+define morph(Type) with
+	pre {true}
+	post {true}
+		

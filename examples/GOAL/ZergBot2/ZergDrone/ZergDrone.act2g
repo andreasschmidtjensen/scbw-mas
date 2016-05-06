@@ -1,0 +1,18 @@
+use ZergDrone as knowledge.
+
+define stop with
+	pre{ true }
+	post{ true }
+
+define move(X, Y) with
+	pre{ true }
+	post{ true }
+
+define gather(Id) with
+	pre { not(gathering(Id)) }
+	post { gathering(Id) }
+
+define build(Building, X, Y) with
+	pre { cost(Building, M, G), minerals(MQ), M =< MQ, gas(GQ), G =< GQ }
+	post { true }	
+	

@@ -1,0 +1,113 @@
+init module {
+	knowledge {
+		busy :- constructing ; gathering(_).
+		cost("Protoss Pylon", 100, 0).
+		cost("Protoss Gateway", 150, 0).
+		condition("Protoss Pylon") 
+			:- supply(C, Max), Max - C < 6.
+		condition("Protoss Gateway") 
+			:- supply(C, Max), Max >= 20, Max - C > 6,
+				((unit("Protoss Gateway",Num), Num < 3) ; not(unit("Protoss Gateway",_))).
+			
+		canBuild(Building, X, Y) 
+			:- 	condition(Building),
+				cost(Building, M, G), 
+				minerals(MQ), M =< MQ, 
+				gas(GQ), G =< GQ,
+				friendly(_, "Protoss Nexus", _, TX, TY),
+				buildingLocation(TX, TY, X, Y).
+								
+		buildingLocation(X,Y, RX,RY) 
+			:-	findall([D,BX,BY], (protossConstructionSite(BX,BY), distance(X,Y,BX,BY,D)), L),
+				sort(L, [[_,RX,RY]|_]). 
+				
+				 
+		pylonLocation(RX,RY) 
+			:-	condition("Protoss Pylon"),
+				findall([D,BX,BY], (percept(friendly(_, "Protoss Pylon", _,_ ,_ , _, _ , TX, TY)),
+					pylonConstructionSite(BX,BY), distance(TX,TY,BX,BY,D)), L),
+					sort(L, [[_,RX,RY]|_]). 
+								
+		distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
+		
+		chokepointlocation(X,Y, RX,RY) 
+			:-	findall([D,BX,BY], (chokepoint(BX,BY), distance(X,Y,BX,BY,D)), L),
+				sort(L, [[_,RX,RY]|_]).
+		
+	}
+	
+	program {
+		if bel(percept(id(Id))) then insert(id(Id)).
+		if bel(percept(supply(C,M))) then insert(supply(C,M)).
+		if bel(percept(minerals(M))) then insert(minerals(M)).
+		if bel(percept(gas(G))) then insert(gas(G)).
+		forall bel(percept(pylonConstructionSite(X,Y)), not(pylonConstructionSite(X,Y))) do insert(pylonConstructionSite(X,Y)).
+		forall bel(percept(protossConstructionSite(X,Y)), not(protossConstructionSite(X,Y))) do insert(protossConstructionSite(X,Y)).
+		if bel(percept(position(X,Y))) then insert(position(X,Y)).
+		forall bel(percept(chokepoint(X,Y))) do insert(chokepoint(X,Y)).
+		if bel(me(Name), percept(id(Id))) then ("protossNexus").sendonce(scv(Name, Id)).
+	}	
+}
+main module{
+	program[order = linearall] {		
+		if bel(builder, canBuild("Protoss Gateway",X,Y)) 
+			then insert(constructing) + build("Protoss Gateway", X, Y).
+		
+		if bel(builder, pylonConstructionSite(BX,BY), condition("Protoss Pylon")) 
+			then insert(constructing) + build("Protoss Pylon", BX, BY).
+			
+		if bel(builder, not(percept(friendly(_, "Protoss Pylon", _,_ ,_ , _, _ , _, _))), pylonConstructionSite(BX,BY)) 
+			then insert(constructing) + build("Protoss Pylon", BX, BY).
+		
+		if bel(not(busy), mineralField(Id,X,Y), chokepointlocation(X,Y,CX,CY), distance(X,Y,CX,CY,L), L>10) then gather(Id).
+	}	
+	actionspec {
+		gather(Id) {
+			pre { not(gathering(Id)) }
+			post { true }
+		}
+		build(Building, X, Y) {
+			pre { cost(Building, M, G), minerals(MQ), M =< MQ, gas(GQ), G =< GQ }
+			post { true }	
+		}
+	}
+}
+event module {
+	program {
+		if bel(percept(supply(C,Max)), supply(OC, OMax)) then delete(supply(OC, OMax)) + insert(supply(C,Max)).
+		if bel(percept(minerals(M)), minerals(OM), not(M = OM)) then insert(minerals(M)) + delete(minerals(OM)).
+		if bel(percept(gas(M)), gas(OM), not(M = OM)) then insert(gas(M)) + delete(gas(OM)).
+		
+		forall bel(percept(unit(Unit,Number)), not(unit(Unit,Number))) do insert(unit(Unit,Number)).
+		forall bel(unit(Unit,Number), not(percept(unit(Unit,Number)))) do delete(unit(Unit,Number)).
+		
+		if bel(percept(gathering(X)), not(gathering(X))) then insert(gathering(X)).
+		if bel(gathering(X), not(percept(gathering(X)))) then delete(gathering(X)).
+				
+		forall bel(percept(mineralField(Id,_,_,X,Y)), not(mineralField(Id,X,Y))) do insert(mineralField(Id,X,Y)).
+		
+		forall bel(percept(id(MyId)), percept(friendly(Name,Type,Id,Health,Shields,X,Y,BX,BY)), MyId \= Id, not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
+		
+		if bel(percept(position(X1,Y1)), position(X2,Y2), (X1 \= X2 ; Y1 \= Y2)) then insert(position(X1,Y1)) + delete(position(X2,Y2)).
+		
+		forall bel(pylonConstructionSite(X,Y), not(percept(pylonConstructionSite(X,Y)))) do delete(pylonConstructionSite(X,Y)).
+		forall bel(percept(pylonConstructionSite(X,Y)), not(pylonConstructionSite(X,Y))) do insert(pylonConstructionSite(X,Y)).
+		
+		forall bel(protossConstructionSite(X,Y), not(percept(protossConstructionSite(X,Y)))) do delete(protossConstructionSite(X,Y)).
+		forall bel(percept(protossConstructionSite(X,Y)), not(protossConstructionSite(X,Y))) do insert(protossConstructionSite(X,Y)).
+		
+		if bel(percept(constructing), not(constructing)) then insert(constructing).
+		if bel(not(percept(constructing)), constructing) then delete(constructing).
+		
+		if bel(percept(refinery(Id, Resources, Group)), not(refinery(Id, Resources, Group))) then insert(refinery(Id, Resources, Group)).
+		if bel(not(percept(refinery(Id, Resources, Group))), refinery(Id, Resources, Group)) then delete(refinery(Id, Resources, Group)).
+		
+		%forall bel(received(Sender, building)) do insert(building).
+		%forall bel(supply(C, M), M -C > 5) do delete(building).
+		
+		forall bel(percept(workerActivity(ID,ACT)), not(workerActivity(ID,ACT))) do insert(workerActivity(ID,ACT)).
+		forall bel(workerActivity(ID,ACT), not(percept(workerActivity(ID,ACT)))) do delete(workerActivity(ID,ACT)).
+		
+		forall bel(received(Sender, builder)) do insert(builder).
+	}	
+}

@@ -1,0 +1,9 @@
+use ZergHatchery as knowledge.
+
+module ZergHatcheryInit {
+	if percept(id(Id)) then insert(id(Id)).
+	if percept(queueSize(Amount)) then insert(queueSize(Amount)).
+	if percept(supply(C,M)) then insert(supply(C,M)).
+	if percept(minerals(M)) then insert(minerals(M)).
+	if percept(gas(G)) then insert(gas(G)).
+}

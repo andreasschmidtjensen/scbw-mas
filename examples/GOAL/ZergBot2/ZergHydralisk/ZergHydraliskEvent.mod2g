@@ -1,0 +1,31 @@
+use ZergHydralisk as knowledge.
+
+module ZergHydraliskEvent {
+	%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
+	
+	if percept(minerals(M)), bel(minerals(OM), not(M == OM)) then insert(minerals(M)) + delete(minerals(OM)).
+		
+	if percept(gas(M)), bel(gas(OM), not(M = OM)) then insert(gas(M)) + delete(gas(OM)).
+	
+	forall percept(friendly(Name,Type,Id,Health,_,X,Y)), bel(id(MyId), not(friendly(Name,Type,Id,Health,X,Y)), MyId \= Id) 
+	do insert(friendly(Name,Type,Id,Health,X,Y)).
+	forall bel(friendly(Name,Type,Id,Health,X,Y)) , not(percept(friendly(Name,Type,Id,Health,_,X,Y)))
+	do delete(friendly(Name,Type,Id,Health,X,Y)).
+		
+	forall percept(enemy(Name,Id,Health,Shields,IsFlying,X,Y)), bel(not(enemy(Name,Id,Health,Shields,IsFlying,X,Y)))
+	do insert(enemy(Name,Id,Health,Shields,IsFlying,X,Y)).
+	forall bel(enemy(Name,Id,Health,Shields,IsFlying,X,Y)) , not(percept(enemy(Name,Id,Health,Shields,IsFlying,X,Y)))
+	do delete(enemy(Name,Id,Health,Shields,IsFlying,X,Y)).
+		
+	forall percept(unit(Type,Count)), not(bel(unit(Type,Count))) do insert(unit(Type,Count)).
+	forall bel(unit(Type,Count)),not(percept(unit(Type,Count))) do delete(unit(Type,Count)).
+		
+	%%%%%%%%%%%%%%% ----------------------------------------- GOALS ---------------------------------------- %%%%%%%%%%%%%%%
+		
+	if bel(unit("Zerg Zergling", Amount), Amount >= 30, enemyBase(X, Y)) then adopt(attack(X,Y)).
+	
+	if bel(enemy(_, Id, _, _, _, _, _)) then adopt(attack(Id)).
+	
+	if bel((unit("Zerg Lurker", Amount), Amount =< 30 ; not(unit("Zerg Lurker", _))), minerals(M), M >= 50, gas(G), G >= 100)
+	then adopt(morph("Zerg Lurker")).
+}

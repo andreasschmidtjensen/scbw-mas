@@ -1,0 +1,10 @@
+use TerranBarracks as knowledge.
+
+module TerranBarracksEvent {
+	if percept(queueSize(N), supply(Y,Z), minerals(X)), bel(N < 2, X>=50 , (Z - Y) >= 2 ) then{
+			 if bel(not(trainMarine)) then insert(trainMarine).
+			 if percept(gas(G), unit("Terran Marine", A), unit("Terran Medic", B)), 
+			 bel(not(trainMedic), G >= 25, (A > (B * 2))) then insert(trainMedic).
+			 if percept(gas(G), friendly(_, "Terran Covert Ops", _, _, _, _, _)), bel(not(trainGhost), G >= 75) then insert(trainGhost).
+		}
+}

@@ -1,0 +1,80 @@
+use ZergDrone as knowledge.
+
+
+module ZergDroneEvent {
+		%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
+
+		if percept(supply(C,Max)), bel(supply(OC, OMax), not(C == OC), not(Max == OMax)) then delete(supply(OC, OMax)) + insert(supply(C,Max)).
+		
+		if percept(minerals(M)), bel(minerals(OM), not(M == OM)) then insert(minerals(M)) + delete(minerals(OM)).
+		
+		if percept(gas(M)), bel(gas(OM), not(M = OM)) then insert(gas(M)) + delete(gas(OM)).
+		
+		if percept(gathering(X)), not(bel(gathering(X))) then insert(gathering(X)).
+		if bel(gathering(X)), not(percept(gathering(X))) then delete(gathering(X)).
+				
+		forall percept(mineralField(Id,Amount,_,X,Y)), not(bel(mineralField(Id,Amount,X,Y))) do insert(mineralField(Id,Amount,X,Y)).
+		forall percept(mineralField(Id,Amount1,_,X,Y)), bel(mineralField(Id,Amount2,X,Y), (Amount1 \= Amount2)) do delete(mineralField(Id,Amount2,X,Y)).
+		
+		forall percept(friendly(Name,Type,Id,Health,Shields,X,Y)), bel(id(MyId), not(friendly(Name,Type,Id,X,Y)), MyId \= Id) 
+		do insert(friendly(Name,Type,Id,X,Y)).
+		forall bel(friendly(Name,Type,Id,X,Y)) , not(percept(friendly(Name,Type,Id,_,_,X,Y)))
+		do delete(friendly(Name,Type,Id,X,Y)).
+		
+		if percept(position(X1,Y1)), bel(position(X2,Y2), (X1 \= X2 ; Y1 \= Y2)) then delete(position(X2,Y2)) + insert(position(X1,Y1)).
+		
+		forall percept(constructionSite(X,Y)), not(bel(constructionSite(X,Y))) do insert(constructionSite(X,Y)).
+		forall bel(constructionSite(X,Y)),not(percept(constructionSite(X,Y))) do delete(constructionSite(X,Y)).
+		
+		forall percept(vespeneGeyser(Id,_,_,X,Y)), bel(not(vespeneGeyser(Id,X,Y))) do insert(vespeneGeyser(Id,X,Y)).
+		
+		forall percept(workerActivity(ID,ACT)), bel(not(workerActivity(ID,ACT))) do insert(workerActivity(ID,ACT)).
+		forall bel(workerActivity(ID,ACT)),not(percept(workerActivity(ID,ACT))) do delete(workerActivity(ID,ACT)).
+		
+		forall percept(unit(Type,Count)), not(bel(unit(Type,Count))) do insert(unit(Type,Count)).
+		forall bel(unit(Type,Count)),not(percept(unit(Type,Count))) do delete(unit(Type,Count)).
+		
+		if percept(isMorphing(Name, Id)), not(bel(isMorphing(Name, Id))) then insert(isMorphing(Name, Id)).
+		if bel(isMorphing(Name, Id)), not(percept(isMorphing(Name, Id))) then delete(isMorphing(Name, Id)).
+		
+		%if percept(isStuck) then insert(isStuck).
+		
+		%%%%%%%%%%%%%%% --------------------------------------- GOALS --------------------------------------- %%%%%%%%%%%%%%%
+		
+		if bel(builder, friendly(_ ,"Zerg Hatchery",_ ,X,Y) ,nearestBase(X, Y, NX, NY), minerals(M), M >= 300,
+		not(friendly(_, Type, _, NX, NY)), member(Type,["Zerg Hatchery", "Zerg Lair", "Zerg Hive"])) 
+		then drop(true) + adopt(expandTo(NX, NY)).
+		
+		if goal(expandTo(X, Y)), bel((friendly(_ ,Type,_ ,X,Y),
+		member(Type,["Zerg Hatchery", "Zerg Lair", "Zerg Hive"])) ; isMorphing("Zerg Hatchery", _)) then drop(expandTo(X, Y)) + adopt(move(1,1)).
+		
+		if not(goal(expandTo(_, _))), bel(constructionSite(X,Y), minerals(M), M >= 75, builder, friendly(_, "Zerg Spawning Pool", _, _, _),
+		((unit("Zerg Sunken Colony", Amount), Amount < 2) ; not(unit("Zerg Sunken Colony",_)))) 
+		then adopt(buildColony(X, Y)).
+		
+		if not(goal(expandTo(_, _))), bel(constructionSite(X,Y), minerals(M), M >= 200, builder, 
+		not(friendly(_, "Zerg Spawning Pool", _, _, _))) then adopt(buildPool(X, Y)).
+		
+		if not(goal(expandTo(_, _))), bel(friendly(_ ,"Zerg Hatchery",_,BX,BY), vespeneGeyser(Id, X , Y), 
+		friendly(_, "Zerg Spawning Pool", _, _, _), builder, minerals(M), M >= 75, distance(BX, BY, X, Y, D), D < 10) 
+		then adopt(buildExtractor(X, Y)).
+		
+		if not(goal(expandTo(_, _))), bel(constructionSite(X,Y), minerals(M), M >= 75, builder, 
+		not(friendly(_, "Zerg Evolution Chamber", _, _, _)), friendly(_, "Zerg Spawning Pool", _, _, _)) 
+		then drop(true) + adopt(buildEvoChamber(X, Y)).
+		
+		if not(goal(expandTo(_, _))), bel(constructionSite(X,Y), minerals(M), M >= 100, gas(G), G >= 50,
+		not(friendly(_, "Zerg Hydralisk Den", _, _, _)), builder) then drop(true) + adopt(buildHydraDen(X,Y)).
+		
+		if not(goal(true)), bel(mineralField(Id,Amount,X,Y), friendly(_, Type, _, CX, CY), 
+		member(Type,["Zerg Hatchery", "Zerg Lair", "Zerg Hive"]), distance(X,Y,CX,CY,L), L<10) then adopt(goGather(Id)).
+		
+		if bel(constructionSite(X,Y), minerals(M), M >= 150, gas(G), G >= 100, builder, 
+		not(friendly(_, "Zerg Queens Nest", _, _, _)), friendly(_, "Zerg Lair", _, _, _)) then adopt(build("Zerg Queens Nest", X, Y)).
+		
+		%if bel(isStuck) then adopt(stop).
+		
+		%%%%%%%%%%%%%%% --------------------------------------- Messaging --------------------------------------- %%%%%%%%%%%%%%%
+		
+		if (Name).sent(builder) then insert(builder).
+}

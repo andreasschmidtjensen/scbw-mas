@@ -1,0 +1,22 @@
+use ZergQueen as knowledge.
+
+module ZergQueenEvent {
+		%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
+		if percept(energy(C, M)), bel(energy(CO, MO), (CO \= C ; MO \= M)) then delete(energy(CO, MO)) + insert(energy(C, M)).
+		
+		forall percept(friendly(Name,Type,Id,Health,_,X,Y)), bel(id(MyId), not(friendly(Name,Type,Id,Health,X,Y)), MyId \= Id) 
+		do insert(friendly(Name,Type,Id,Health,X,Y)).
+		forall bel(friendly(Name,Type,Id,Health,X,Y)) , not(percept(friendly(Name,Type,Id,Health,_,X,Y)))
+		do delete(friendly(Name,Type,Id,Health,X,Y)).
+		
+		forall percept(enemy(Name,Id,Health,Shields,IsFlying,X,Y)), bel(not(enemy(Name,Id,Health,Shields,IsFlying,X,Y)))
+		do insert(enemy(Name,Id,Health,Shields,IsFlying,X,Y)).
+		forall bel(enemy(Name,Id,Health,Shields,IsFlying,X,Y)) , not(percept(enemy(Name,Id,Health,Shields,IsFlying,X,Y)))
+		do delete(enemy(Name,Id,Health,Shields,IsFlying,X,Y)).
+		
+		%%%%%%%%%%%%%%% ----------------------------------------- GOALS ---------------------------------------- %%%%%%%%%%%%%%%
+		
+		%if bel(friendly(_, "Zerg Hydralisk", Id, _, _, _)) then adopt(follow(Id)).
+		
+		if bel(enemy(_, Id, _, _, _, _, _), energy(C,_), C >= 75) then adopt(ability("Parasite", Id)).
+}

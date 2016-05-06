@@ -1,0 +1,11 @@
+use TerranMedic as knowledge.
+
+define follow(Id) with
+	pre{true} %note to self -> prob fix this by saying not(following)
+	post{true}
+		
+		
+define skip with
+	pre {true}
+	post {true}	
+			

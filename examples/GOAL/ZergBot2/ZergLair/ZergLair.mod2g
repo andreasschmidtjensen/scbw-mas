@@ -1,0 +1,14 @@
+use ZergLair as knowledge.
+use ZergLair as actionspec.
+
+module Zerglair {
+	if a-goal(train("Zerg Drone")), bel(unit("Zerg Drone",X) ,X<20, supply(C, Max), Max - C > 1) then train("Zerg Drone").
+		
+	if a-goal(train("Zerg Overlord")), bel(not(isMorphing("Zerg Overlord", _))) then train("Zerg Overlord").
+	
+	if a-goal(train("Zerg Queen")), bel(supply(C, Max), Max - C > 1) then train("Zerg Queen").
+	
+	if a-goal(train("Zerg Hydralisk")), bel(supply(C, Max), Max - C > 1) then train("Zerg Hydralisk").
+		
+	if a-goal(train("Zerg Zergling")), bel(supply(C, Max), Max - C > 1) then train("Zerg Zergling").
+}

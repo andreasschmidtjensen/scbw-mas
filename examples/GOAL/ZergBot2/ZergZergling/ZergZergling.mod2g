@@ -1,0 +1,12 @@
+use ZergZergling as knowledge.
+use ZergZergling as actionspec.
+
+module ZergZergling {
+	if a-goal(stop) then stop.
+	
+	if a-goal(attack(Id)) then attack(Id).
+	
+	if a-goal(attack(X,Y)) then attack(X,Y).
+	
+	if a-goal(move(X, Y)) then move(X, Y).
+}

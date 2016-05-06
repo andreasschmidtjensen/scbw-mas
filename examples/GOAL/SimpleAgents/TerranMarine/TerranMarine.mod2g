@@ -1,0 +1,11 @@
+use TerranMarine as actionspec.
+use TerranMarine as knowledge.
+
+module main{
+		if percept(isBeingConstructed ; loaded) then skip.
+		if percept(unit("Terran Siege Tank Tank Mode", B), unit("Terran Marine", A)), bel(A > 30,B > 3 , enemyBase(X,Y)) then attack(X, Y).
+		
+		if percept(position(X, Y), not(enemy(_,_,_,_,_,BX,BY))), bel(enemyBase(EX, EY), distance(X, Y, EX, EY, D), D < 5,
+		distance(X, Y, BX, BY, Res), Res > 5, nearestBase(X, Y, X1, Y1)) then attack(X1, Y1). 
+}
+

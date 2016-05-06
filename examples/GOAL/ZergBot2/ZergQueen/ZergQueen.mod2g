@@ -1,0 +1,8 @@
+use ZergQueen as knowledge.
+use ZergQueen as actionspec.
+
+module ZergQueen {
+	if a-goal(ability("Parasite", Id)) then ability("Parasite", Id).
+	
+	if a-goal(follow(Id)) then follow(Id).
+}

@@ -1,0 +1,6 @@
+use TerranBarracks as knowledge.
+
+module TerranBarracksInit {
+	if percept(friendly(_,"Terran Command Center",_,_,_,X,Y)) then insert(commandCenter(X,Y)).
+	forall percept(chokepoint(X,Y)) do insert(chokepoint(X,Y)).
+}

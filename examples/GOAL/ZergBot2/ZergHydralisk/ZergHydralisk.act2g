@@ -1,0 +1,21 @@
+use ZergHydralisk as knowledge.
+
+define move(X, Y) with
+	pre{ true }
+	post{ true }
+
+define attack(Id) with
+	pre{ true }
+	post{ true }
+
+define attack(X, Y) with
+	pre{ true }
+	post{ true }
+	
+define morph(Type) with
+	pre{ true }
+	post{ true }
+	
+define stop with
+	pre{ true }
+	post { true }

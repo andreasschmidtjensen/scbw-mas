@@ -1,0 +1,11 @@
+use TerranEngineeringBay as knowledge.
+use TerranEngineeringBay as actionspec.
+
+module main{
+	
+		if percept(isBeingConstructed) then skip.
+		if bel(not(upgrade('Terran Infantry Weapons'))) then upgrade('Terran Infantry Weapons').
+		if bel(not(upgrade('Terran Infantry Armor'))) then upgrade('Terran Infantry Armor').
+	
+}
+

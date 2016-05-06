@@ -1,0 +1,12 @@
+use TerranCommandCenter as actionspec.
+use TerranCommandCenter as knowledge.
+
+module main{
+	%beliefs{
+	%	trainSCV.
+	%}
+		if percept(unit("Terran SCV",X)), bel(X<20) then train("Terran SCV").
+		%if bel(supply(C, M), (M - C) =< 2, percept(friendly(_ , "Terran SCV", Id, _, _, _, _))) then (Id).send(build("Terran Supply Depot")).
+	
+}
+

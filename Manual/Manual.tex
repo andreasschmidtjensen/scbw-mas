@@ -1,0 +1,777 @@
+%% Manual for the environment made by the group Tygron connect.
+%%% https://github.com/tygron-virtual-humans/tygron-connect
+
+\documentclass[english,11pt]{report}		
+%\documentclass[ngerman,11pt]{report}
+\usepackage{hgb}
+\usepackage{hgbbib}
+\usepackage{hgbheadings}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{tabularx}
+
+\graphicspath{{images/}}   
+\bibliography{literatur} 
+
+\title{Starcraft Environment Manual}
+
+%%%----------------------------------------------------------
+\begin{document}
+%%%----------------------------------------------------------
+\maketitle
+\tableofcontents
+%%%----------------------------------------------------------
+
+%%%----------------------------------------------------------
+\chapter{Percepts}
+%%%----------------------------------------------------------
+
+This section will list all the percepts that are usable in the Starcraft environment. The percepts vary per unit, for example: an attacking unit will not percept the amount of resources available to the player as he does not need them. For the implementation of these percepts in your GOAL code, please refer to the GOAL manual.
+
+\newpage
+\section{Percepts for all units}
+These percepts are available to all the units and buildings.
+
+\subsection{Generic unit percepts}
+\textbf{Idle percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & If this percept is perceived, this unit is currently idling. \\
+ Type & Send on change \\
+ Syntax & idle \\
+ Parameters &   This percept has no parameters.
+\end{tabularx}\\
+\\
+\\
+\textbf{ID percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The ID of this unit, ID's are unique. \\
+ Type & Send once \\
+ Syntax & id(<ID>) \\
+ Parameters &   <ID>: The id of this unit, this is a numeral value.
+\end{tabularx}\\
+\\
+\\
+\textbf{Unit type percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The Type of this unit, for example "Terran Marine". \\
+ Type & Send once \\
+ Syntax & unitType(<Type>) \\
+ Parameters &   <Type>: The type of this unit, this is a string value.
+\end{tabularx}\\
+\\
+\\
+\textbf{Is being constructed percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & If this percept is perceived, this unit is not yet ready. \\
+ Type & Send on change \\
+ Syntax & isBeingConstructed \\
+ Parameters &   This percept has no parameters.
+\end{tabularx}\\
+\\
+\newpage
+\textbf{Position percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The position of this unit in the world. \\
+ Type & Send on change \\
+ Syntax & position(<X>,<Y>) \\
+ Parameters &   <X>: The X value of the position in the world.\\
+            &   <Y>: The Y value of the position in the world.
+\end{tabularx}\\
+\\
+\textbf{Build tile position percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The position of the build tile this unit is currently standing on. \\
+ Type & Send on change \\
+ Syntax & buildTilePosition(<X>,<Y>) \\
+ Parameters &   <X>: The X value of the build tile position in the world.\\
+            &   <Y>: The Y value of the build tile position in the world.
+\end{tabularx}
+
+\subsection{Map percepts}
+\textbf{Map percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the width and the height of the map. \\
+ Type & Send once \\
+ Syntax & map(<Width>,<Height>) \\
+ Parameters &   <Width>: The width of the map.\\
+            &   <Height>: The height of the map.
+\end{tabularx}\\
+\\
+\\
+\textbf{Base percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the base locations present on the map. \\
+ Type & Send once \\
+ Syntax & base(<X>,<Y>,<IsStart>,<RegionID>) \\
+ Parameters &   <X>,<Y>: The coordinates of the baselocation.\\
+            &   <IsStart>: 'true' when the location is a starting point, else 'false'.\\
+            &   <RegionID>: The ID of the region this location is in.
+\end{tabularx}\\
+\\
+\newpage
+\textbf{Chokepoint percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the chokepoints present on the map. \\
+ Type & Send once \\
+ Syntax & chokepoint(<X>,<Y>) \\
+ Parameters &   <X>,<Y>: The coordinates of the chokepoint.
+\end{tabularx}\\
+\\
+\\
+
+\subsection{Enemy percepts}
+\textbf{Enemy percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the enemies that are currently visible to the player. \\
+ Type & Send on change \\
+ Syntax & enemy(<Name>,<ID>,<Health>,<Shields>,<WX>,<WY>,<BX>,<BY>) \\
+ Parameters &   <Name>: The name of the unit.\\
+            &   <ID>: The ID of the unit.\\
+            &   <Health>: The health of the unit.\\
+            &   <Shields>: The amount of shield of the unit.\\
+            &   <WX>,<WY>: The world coordinates of the unit.\\
+            &   <BX>,<BY>: The build tile coordinates of the unit.
+\end{tabularx}\\
+\\
+\\
+
+\subsection{Player unit percepts}
+\textbf{Friendly percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts all the friendly units. \\
+ Type & Send on change \\
+ Syntax & friendly(<Name>,<Type>,<ID>,<Health>,<Shields>,<WX>,<WY>,<BX>,<BY>) \\
+ Parameters &   <Name>: The agent name of the unit.\\
+            &   <Type>: The type of the unit.\\
+            &   <ID>: The ID of the unit.\\
+            &   <Health>: The health of the unit.\\
+            &   <Shields>: The amount of shield of the unit.\\
+            &   <WX>,<WY>: The world coordinates of the unit.\\
+            &   <BX>,<BY>: The build tile coordinates of the unit.
+\end{tabularx}\\
+\\
+\\
+\textbf{Loadable percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts if a friendly unit is loadable. \\
+ Type & Send on change \\
+ Syntax & friendly(<Type>,<ID>,<Current>,<Max>) \\
+ Parameters &   <Type>: The type of the unit.\\
+            &   <ID>: The ID of the unit.\\
+            &   <Current>: The current load of the unit.\\
+            &   <Max>: The max load of the unit.
+\end{tabularx}
+
+\newpage
+\section{Building percepts}
+These percepts are available to buildings.
+
+\subsection{Available Resources}
+\textbf{Minerals percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the amount of minerals currently available to the player. \\
+ Type & Send on change \\
+ Syntax & minerals(<Quantity>) \\
+ Parameters &   <Quantity>: The amount of minerals available.
+\end{tabularx}\\
+\\
+\\
+\textbf{Gas percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the amount of gas currently available to the player. \\
+ Type & Send on change \\
+ Syntax & gas(<Quantity>) \\
+ Parameters &   <Quantity>: The amount of gas available.
+\end{tabularx}\\
+\\
+\\
+\textbf{Supply percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the amount of supply used and the maximum amount of supply. NOTE: supply is multiplied by 2, so 10 supply in game corresponds with 20 supply in the environment. \\
+ Type & Send on change \\
+ Syntax & supply(<Current>,<Max>) \\
+ Parameters &   <Current>: The amount of supply currently in use.\\
+            &   <Max>: The maximum amount of supply that is available at this moment.
+\end{tabularx}
+
+\newpage
+\subsection{Queue size}
+\textbf{Queue size percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The queue size of the building, this indicates how many units are currently being build by this building. \\
+ Type & Send on change \\
+ Syntax & queueSize(<Quantity>) \\
+ Parameters &   <Quantity>: The amount of units currently being trained.
+\end{tabularx}
+
+\subsection{}
+\textbf{Build unit percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The id of the unit that is currently being built by this building. \\
+ Type & Send on change \\
+ Syntax & buildUnit(<ID>) \\
+ Parameters &   <ID>: The ID of the unit.
+\end{tabularx}
+
+\subsection{Research}
+\textbf{Research percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The name of the tech that is being researched. \\
+ Type & Send on change \\
+ Syntax & research(<Name>) \\
+ Parameters &   <Name>: The name of the tech that is being researched.
+\end{tabularx}
+
+\subsection{Upgrade}
+\textbf{Upgrade percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The name of the upgrade that is being upgraded. \\
+ Type & Send on change \\
+ Syntax & updrade(<Name>) \\
+ Parameters &   <Name>: The name of the upgrade that is being upgraded.
+\end{tabularx}
+
+\subsection{Rally point}
+\textbf{Rally point percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The position of the rally point. \\
+ Type & Send on change \\
+ Syntax & rallyPoint(<X>,<Y>) \\
+ Parameters &   <X>,<Y>: The coordinates of the rally point.
+\end{tabularx}\\
+\\
+\newpage
+
+\textbf{Rally unit percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & The unit the rally point points to. \\
+ Type & Send on change \\
+ Syntax & rallyUnit(<Unit>) \\
+ Parameters &   <Unit>: The unit the rally point points to.
+\end{tabularx}
+
+\subsection{Terran building percepts}
+\textbf{Lifted percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & This is percepted when this building is lifted. \\
+ Type & Send on change \\
+ Syntax & lifted \\
+ Parameters &   This percept does not have any parameters.
+\end{tabularx}\\
+\\
+\\
+\textbf{Addon percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & This is percepted when a building has an addon. \\
+ Type & Send on change \\
+ Syntax & addon(<Name>) \\
+ Parameters &  <Name>: The name of the addon.
+\end{tabularx}
+
+\newpage
+\section{Refinery percepts}
+These percepts are available to refineries.
+
+\subsection{Worker activity}
+\textbf{Worker activity percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information on what workers are currently doing. \\
+ Type & Send on change \\
+ Syntax & workerActivity(<ID>,<Activity>) \\
+ Parameters &   <ID>: The ID of the worker.\\
+            &   <Activity>: The activity that the worker is currently doing, one of the following: gatheringGas, gatheringMinerals, constructing or idling.
+\end{tabularx}
+
+\newpage
+\section{Attack unit percepts}
+These percepts are available to units that can attack.
+
+\subsection{Attacking units}
+\textbf{Attacking percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates which units are the targets of friendly units. \\
+ Type & Send on change \\
+ Syntax & attacking(<ID>,<TargetID>) \\
+ Parameters &   <ID>: The ID of a friendly unit.\\
+            &   <TargetID>: The ID of the enemy unit that the friendly unit is attacking.
+\end{tabularx}
+
+\newpage
+\section{Moving unit percepts}
+These percepts are available to units that can move when built, so not terran flying buildings for example.
+
+\subsection{Loaded units}
+\textbf{loaded percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates whether or not a unit is loaded in a loadable unit. \\
+ Type & Send on change \\
+ Syntax & loaded \\
+ Parameters &   This percept does not have any parameters.
+\end{tabularx}
+
+\subsection{Moving units}
+\textbf{move percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates that a unit is moving. \\
+ Type & Send on change \\
+ Syntax & moving \\
+ Parameters &   This percept does not have any parameters.
+\end{tabularx}
+
+\newpage
+\section{Worker percepts}
+These percepts are available to SCV's.
+
+\subsection{Available Resources}
+\textbf{Minerals percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the amount of minerals currently available to the player. \\
+ Type & Send on change \\
+ Syntax & minerals(<Quantity>) \\
+ Parameters &   <Quantity>: The amount of minerals available.
+\end{tabularx}\\
+\\
+\\
+\textbf{Gas percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the amount of gas currently available to the player. \\
+ Type & Send on change \\
+ Syntax & gas(<Quantity>) \\
+ Parameters &   <Quantity>: The amount of gas available.
+\end{tabularx}\\
+\\
+\\
+\textbf{Supply percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts the amount of supply used and the maximum amount of supply. NOTE: supply is multiplied by 2, so 10 supply in game corresponds with 20 supply in the environment. \\
+ Type & Send on change \\
+ Syntax & supply(<Current>,<Max>) \\
+ Parameters &   <Current>: The amount of supply currently in use.\\
+            &   <Max>: The maximum amount of supply that is available at this moment.
+\end{tabularx}
+
+\subsection{Builder unit}
+\textbf{Constructing percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts whether of not this unit is constructing. \\
+ Type & Send on change \\
+ Syntax & constructing \\
+ Parameters &   This percept does not have any parameters
+\end{tabularx}
+
+\subsection{Gatherer unit}
+\textbf{Carrying percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts whether of not this unit is carrying resources. \\
+ Type & Send on change \\
+ Syntax & carrying \\
+ Parameters &   This percept does not have any parameters
+\end{tabularx}\\
+\\
+\\
+\textbf{Gathering percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts if the unit is gathering and what the unit is gathering. \\
+ Type & Send on change \\
+ Syntax & gathering(<Resource>) \\
+ Parameters &   <Resource>: The resource that is being gathered, either 'vespene' or 'mineral'.
+\end{tabularx}\\
+\\
+\\
+\textbf{Gathering percept (Other unit)}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts if another unit is gathering and what the other unit is gathering. \\
+ Type & Send on change \\
+ Syntax & gathering(<ID>,<Resource>) \\
+ Parameters &   <ID>: The ID of the unit.\\
+            &   <Resource>: The resource that is being gathered, either 'vespene' or 'mineral'.
+\end{tabularx}\\
+\\
+\\
+\textbf{Vespene geyser percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Percepts a vespene geyser on the map. \\
+ Type & Send on change \\
+ Syntax & vespeneGeyser(<ID>,<Resources>,<ResourceGroup>,<X>,<Y>) \\
+ Parameters &   <ID>: The ID of the geyser.\\
+            &   <Resources>: The amount of resources left in the geyser.\\
+            &   <ResourceGroup>: The resource group.\\
+            &   <X>,<Y>: The coordinates of the geyser, a refinery can be built at this position.
+\end{tabularx}
+
+\newpage
+\section{Transporter percepts}
+These percepts are available to units with transport capabilities.
+\subsection{Transporter}
+\textbf{Space provided percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information about the maximum transport capacity and the current load. \\
+ Type & Send on change \\
+ Syntax & spaceProvided(<Used>,<Max>) \\
+ Parameters &   <Used>: The amount of units this vehicle is currently carrying.\\
+            &   <Max>: The maximum carrying amount of this vehicle.
+\end{tabularx}\\
+\\
+\\
+\textbf{Unit loaded percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information about the units that are currently inside this vehicle. \\
+ Type & Send on change \\
+ Syntax & unitLoaded(<ID>,<Type>) \\
+ Parameters &   <ID>: The ID of the unit.\\
+            &   <Type>: The type of the unit.
+\end{tabularx}
+
+\newpage
+\section{Command center percepts}
+These percepts are available to command centers.
+\subsection{Idle workers}
+\textbf{Idle worker percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Lists the workers that are idle. \\
+ Type & Send on change \\
+ Syntax & idleWorker(<Name>) \\
+ Parameters &   <Name>: The name of the unit.
+\end{tabularx}
+
+\subsection{Worker activity}
+\textbf{Worker activity percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information on what workers are currently doing. \\
+ Type & Send on change \\
+ Syntax & workerActivity(<ID>,<Activity>) \\
+ Parameters &   <ID>: The ID of the worker.\\
+            &   <Activity>: The activity that the worker is currently doing, one of the following: gatheringGas, gatheringMinerals, constructing or idling.
+\end{tabularx}
+
+\newpage
+\section{Unit specific percepts}
+\subsection{Terran marine/firebat}
+\textbf{Stimmed percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Perceived if the marine or firebat is under the effect of a stim pack. \\
+ Type & Send on change \\
+ Syntax & stimmed \\
+ Parameters &   This percept has no parameters
+\end{tabularx}\\
+\\
+\\
+\subsection{Terran siege tank}
+\textbf{Siege percept}\\
+\\
+\begin{tabularx}{\textwidth}{lX}
+ Description & Perceived if the siege tank is in siege mode. \\
+ Type & Send on change \\
+ Syntax & sieged \\
+ Parameters &   This percept has no parameters
+\end{tabularx}
+
+\chapter{Actions}
+This section will list all the actions that are usable in the Starcraft environment.
+
+\section{Attack action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Attack a unit or building. \\
+ Syntax & attack(<TargetID>) \\
+ Parameters & <TargetID>: The ID of the target that has to be attacked.\\
+ Effects &  If the unit is attack capable, attack the target.
+\end{tabularx}
+
+\section{Attack move action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Go to a location and attack everything you encounter. \\
+ Syntax & attack(<X>,<Y>) \\
+ Parameters & <X>,<Y>: The coordinates to move to.\\
+ Effects &  Go to a location and attack every enemy encountered if a unit can move and is attack capable.
+\end{tabularx}
+
+\section{Upgrade action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Upgrade an upgrade. \\
+ Syntax & upgrade(<UpgradeName>) \\
+ Parameters & <UpgradeName>: The name of the upgrade you want to upgrade.\\
+ Effects &  Buy an upgrade.\\
+ NOTE & At the moment this is only possible with the terran engineering bay and terran academy.
+\end{tabularx}
+
+\section{Build action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Build a building. \\
+ Syntax & build(<Type>,<X>,<Y>) \\
+ Parameters & <Type>: The Type of the building that has to be built.\\
+            & <X>,<Y>: The coordinates to build on.\\
+ Effects &  Build a building at the location specified if this unit is capable to do so.
+\end{tabularx}
+
+\section{Gather action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Instruct a unit to gather a resource. \\
+ Syntax & gather(<ID>) \\
+ Parameters & <ID>: The ID of the resource to gather.\\
+ Effects &  The unit starts gathering the resource if this unit is capable to do so.
+\end{tabularx}
+
+\section{Move action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Instruct a unit to move to a location. \\
+ Syntax & move(<X>,<Y>) \\
+ Parameters & <X>,<Y>: The coordinates to move to.\\
+ Effects &  Go to a location if a unit can move.
+\end{tabularx}
+
+\section{Train action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Train a unit from a building. \\
+ Syntax & train(<Type>) \\
+ Parameters & <Type>: The type of unit to train.\\
+ Effects &  If a unit can be built from this building, train the unit if there are enough resources.
+\end{tabularx}
+
+\section{Stop action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Stop a unit. \\
+ Syntax & stop \\
+ Effects &  Stops this unit from doing what he is doing.
+\end{tabularx}
+
+\section{Use action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Use a technology. \\
+ Syntax & use(<Type>) \\
+ Parameters & <Type>: The type of technology to use.\\
+ Effects &  If this unit can use the tech and it is researched, use the technology.
+\end{tabularx}
+
+\section{Use on target action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Use a technology on a target. \\
+ Syntax & use(<Type>, <Target>) \\
+ Parameters & <Type>: The type of technology to use.\\
+            & <Target>: The target to use the technology on.\\
+ Effects &  If this unit can use the tech and it is researched, use the technology on the target.
+\end{tabularx}
+
+\section{Use on location action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Use a technology on a location. \\
+ Syntax & use(<Type>, <X>, <Y>) \\
+ Parameters & <Type>: The type of technology to use.\\
+            & <X>,<Y>: The coordinates to use the technology on.\\
+ Effects &  If this unit can use the tech and it is researched, use the technology on the location.
+\end{tabularx}
+
+\section{Research action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Research a technology. \\
+ Syntax & research(<Type>) \\
+ Parameters & <Type>: The type of technology to research.\\
+ Effects &  If this building can research this tech, research the technology.
+\end{tabularx}
+
+\section{Set rally point action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Set the rally point of a building. \\
+ Syntax & setRallyPoint(<X>, <Y>) \\
+ Parameters & <X>,<Y>: The coordinates to set the rally point to.\\
+ Effects &  If this unit can set a rally point, set it to the specified location.
+\end{tabularx}
+
+\section{Set rally point to unit action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Set the rally point of a building. \\
+ Syntax & setRallyPoint(<Unit>) \\
+ Parameters & <Unit>: The unit to set the rally point to.\\
+ Effects &  If this unit can set a rally point, set it to the specified unit.
+\end{tabularx}
+
+\section{Lift action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Lift a building. \\
+ Syntax & lift \\
+ Effects &  The building starts flying.\\
+ Note & Only for Terran buildings.
+\end{tabularx}
+
+\section{Land action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Land the unit. \\
+ Syntax & land(<X>, <Y>) \\
+ Parameters & <X>,<Y>: The coordinates to land on.\\
+ Effects &  If the unit is lifted, land the unit on the location.\\
+ Note & The location has to be visible.
+\end{tabularx}
+
+\section{Siege action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Order a tank to go in siege mode. \\
+ Syntax & siege \\
+ Effects &  The tank enters siege mode.\\
+ Note & Only for Terran Siege Tank.
+\end{tabularx}
+
+\section{Unsiege action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Order a tank to go out of siege mode. \\
+ Syntax & unsiege \\
+ Effects &  The tank exits siege mode.\\
+ Note & Only for Terran Siege Tank.
+\end{tabularx}
+
+\section{Build addon action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Order a building to build an addon. \\
+ Syntax & buildAddon(<Name>) \\
+ Parameters & <Name>: The name of the addon.\\
+ Effects &  The building builds an addon\\
+ Note & Only for Terran buildings.
+\end{tabularx}
+
+\section{Load action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Order a unit to load this unit. \\
+ Syntax & load(<ID>) \\
+ Parameters & <ID>: The ID of the unit to load in this unit.\\
+ Effects &  The unit loads another unit\\
+\end{tabularx}
+
+\section{RightClick action}
+\begin{tabularx}{\textwidth}{lX}
+ Desription & Order a building to build an addon. \\
+ Syntax & rightClick(<ID>) or rightClick(<X>,<Y>) \\
+ Parameters & <ID>: The ID of a unit.\\
+            & <X>,<Y>: A position.\\
+ Effects &  The unit rightclicks
+\end{tabularx}
+
+\chapter{TechTypes}
+Here is a list of technology types that can be researched and used.\\
+\\
+Stim Packs\\
+Lockdown\\
+EMP Shockwave\\
+Spider Mines\\
+Scanner Sweep\\
+Tank Siege Mode\\
+Defensive Matrix\\
+Irradiate\\
+Yamato Gun\\
+Cloaking Field\\
+Personnel Cloaking\\
+Burrowing\\
+Infestation\\
+Spawn Broodlings\\
+Dark Swarm\\
+Plague\\
+Consume\\
+Ensnare\\
+Parasite\\
+Psionic Storm\\
+Hallucination\\
+Recall\\
+Stasis Field\\
+Archon Warp\\
+Restoration\\
+Disruption Web\\
+Mind Control\\
+Dark Archon Meld\\
+Feedback\\
+Optical Flare\\
+Maelstrom\\
+Lurker Aspect\\
+Healing
+
+\chapter{UpgradeTypes}
+Here is a list of upgrade types that can be researched.\\
+\\
+Terran Infantry Armor\\
+Terran Vehicle Plating\\
+Terran Ship Plating\\
+Zerg Carapace\\
+Zerg Flyer Carapace\\
+Protoss Ground Armor\\
+Protoss Air Armor\\
+Terran Infantry Weapons\\
+Terran Vehicle Weapons\\
+Terran Ship Weapons\\
+Zerg Melee Attacks\\
+Zerg Missile Attacks\\
+Zerg Flyer Attacks\\
+Protoss Ground Weapons\\
+Protoss Air Weapons\\
+Protoss Plasma Shields\\
+U 238 Shells\\
+Ion Thrusters\\
+Titan Reactor\\
+Ocular Implants\\
+Moebius Reactor\\
+Apollo Reactor\\
+Colossus Reactor\\
+Ventral Sacs\\
+Antennae\\
+Pneumatized Carapace\\
+Metabolic Boost\\
+Adrenal Glands\\
+Muscular Augments\\
+Grooved Spines\\
+Gamete Meiosis\\
+Metasynaptic Node\\
+Singularity Charge\\
+Leg Enhancements \\
+Scarab Damage\\
+Reaver Capacity\\
+Gravitic Drive\\
+Sensor Array\\
+Gravitic Boosters\\
+Khaydarin Amulet\\
+Apial Sensors\\
+Gravitic Thrusters \\
+Carrier Capacity\\
+Khaydarin Core\\
+Argus Jewel\\
+Argus Talisman\\
+Caduceus Reactor\\
+Chitinous Plating\\
+Anabolic Synthesis\\
+Charon Boosters
+
+\end{document}

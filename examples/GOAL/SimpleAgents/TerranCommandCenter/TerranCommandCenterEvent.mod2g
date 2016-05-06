@@ -1,0 +1,13 @@
+use TerranCommandCenter as knowledge.
+
+module TerranCommandCenterEvent {
+		forall (Name).sent(scv(Id)) do insert(scv(Name, Id)).
+		
+		if percept(queueSize(N), minerals(X), supply(Y,Z)), bel(not(trainSCV), N < 2,X>=50,Y<Z) then insert(trainSCV).
+		
+		if percept(supply(C,Max)), bel(supply(OC, OMax)) then delete(supply(OC, OMax)) + insert(supply(C,Max)).
+		
+		if percept(friendly(_ ,"Terran SCV",Id,_ ,_ ,_ ,_ )), bel(not(done), scv(Name, Id)) then (Name).send(builder) + insert(done).
+		
+		if not(percept(friendly(_ ,"Terran SCV",Id,_ ,_ ,_ ,_))), bel(done, scv(Name, Id)) then delete(done).
+}

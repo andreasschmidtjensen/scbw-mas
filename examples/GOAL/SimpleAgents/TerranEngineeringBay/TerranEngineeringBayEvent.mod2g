@@ -1,0 +1,6 @@
+use TerranEngineeringBay as knowledge.
+
+module TerranEngineeringBayEvent {
+	if percept(upgrade(X)) then insert(upgrade(X)) + insert(upgrading).
+	if percept(upgrade(_)), bel(upgrading) then delete(upgrading).
+}

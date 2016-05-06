@@ -1,0 +1,6 @@
+use TerranMarine as knowledge.
+
+module TerranMarineInit {
+	if percept(id(Id)) then insert(id(Id)).
+	forall percept(base(X, Y, Begin, RegionID)) do insert(base(X, Y, Begin, RegionID)).
+}

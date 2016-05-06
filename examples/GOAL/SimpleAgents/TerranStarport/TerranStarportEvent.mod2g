@@ -1,0 +1,15 @@
+use TerranStarPort as actionspec.
+use TerranStarport as knowledge.
+
+module TerranStarportEvent {
+	forall percept(id(MyId), friendly(Name,Type,Id,Health,Shields,WX,WY,X,Y)), bel(MyId \= Id, not(friendly(Name,Type,Id,X,Y))) do insert(friendly(Name,Type,Id,X,Y)).
+	forall percept(not(friendly(Name,Type,Id,_,_,_,_,X,Y))), bel(friendly(Name,Type,Id,X,Y)) do delete(friendly(Name,Type,Id,X,Y)).
+	
+	forall percept(not(constructionSite(X,Y))), bel(constructionSite(X,Y)) do delete(constructionSite(X,Y)).
+	forall percept(constructionSite(X,Y)), bel(not(constructionSite(X,Y))) do insert(constructionSite(X,Y)).
+	
+	if percept(queueSize(N), supply(Y,Z), minerals(X), gas(G)), bel(N < 1, X>=100, G>= 225 , (Z - Y) >= 4 ) then{
+	if percept(addon("Terran Control Tower"), friendly(_, "Terran Science Facility", _, _, _, _, _, _, _), 
+	(Amount < 3 , unit("Terran Science Vessel", Amount) ; not(unit("Terran Science Vessel", _)))) then insert(trainVessel).
+}
+}

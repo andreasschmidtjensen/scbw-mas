@@ -1,0 +1,35 @@
+use TerranFactory as knowledge.
+
+define move(X, Y) with
+	pre{true}
+	post{true}	
+		
+		
+define train(Id) with
+	pre {trainTank}
+	post {not(trainTank)}
+		
+		
+define lift with
+	pre{true}
+	post{true}	
+		
+		
+define buildAddon(X) with
+	pre{true}
+	post{true}	
+		
+		
+define land(X,Y) with
+	pre{true}
+	post{true}	
+	
+		
+define setRallyPoint(X,Y) with
+	pre {true}
+	post {true}
+
+		
+define skip with
+	pre {true}
+	post {true}	

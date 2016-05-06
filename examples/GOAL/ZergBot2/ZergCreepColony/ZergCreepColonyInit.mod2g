@@ -1,0 +1,5 @@
+use ZergCreepColony as knowledge.
+
+module ZergCreepColonyInit {
+	if percept(minerals(M)) then insert(minerals(M)).
+}

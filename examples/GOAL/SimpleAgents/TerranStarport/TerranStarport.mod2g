@@ -1,0 +1,17 @@
+use TerranStarPort as actionspec.
+use TerranStarport as knowledge.
+
+module main{
+		if percept(isBeingConstructed) then skip.
+		if percept(rallyPoint(RX,RY)), bel(RX = 0, RY = 0, commandCenter(X,Y), rallyLocation(X,Y,NX,NY)) then setRallyPoint(NX,NY).	
+		
+		if percept(not(addon("Terran Control Tower")), queueSize(N), minerals(X), gas(Y)), bel(N = 0, 
+		X>=50, Y>=50) then buildAddon("Terran Control Tower").
+			
+		%if bel(not(percept(addon("Terran Control Tower")))) then lift.
+		
+		%if bel(percept(lifted), buildLocation(X, Y)) then land(X, Y).
+		
+		if bel(trainVessel) then train("Terran Science Vessel") + delete(trainVessel). 
+}
+

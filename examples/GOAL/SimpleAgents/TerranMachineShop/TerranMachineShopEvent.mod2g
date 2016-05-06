@@ -1,0 +1,8 @@
+use TerranMachineShop as knowledge.
+
+module TerranMachineShopEvent {
+	if percept(research(X)) then insert(research(X)) + insert(researching).
+		if percept(not(research(_))), bel(researching) then delete(researching).
+		if percept(upgrade(X)) then insert(upgrade(X)) + insert(upgrading).
+		if percept(not(upgrade(_))) , bel(upgrading) then delete(upgrading).
+}

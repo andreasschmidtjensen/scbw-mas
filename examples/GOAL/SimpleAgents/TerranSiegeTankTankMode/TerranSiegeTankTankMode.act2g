@@ -1,0 +1,25 @@
+use TerranSiegeTankTankMode as knowledge.
+
+define attack(X,Y) with
+	pre{true}
+	post{true}
+
+		
+define attack(Id) with
+	pre{true}
+	post{true}
+
+		
+define siege with
+	pre{true}
+	post{true}
+	
+		
+define unsiege with
+	pre{true}
+	post{true}
+		
+define skip with
+	pre {true}
+	post {true}	
+		

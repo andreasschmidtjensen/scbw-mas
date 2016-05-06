@@ -1,0 +1,8 @@
+use TerranMachineShop as actionspec.
+use TerranMachineShop as knowledge.
+
+module main{	
+		if percept(isBeingConstructed) then skip.	
+		if bel(not(research('Tank Siege Mode'))) then research('Tank Siege Mode').
+}
+

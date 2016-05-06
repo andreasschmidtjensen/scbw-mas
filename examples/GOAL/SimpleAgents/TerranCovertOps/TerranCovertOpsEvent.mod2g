@@ -1,0 +1,6 @@
+use TerranCovertOps as knowledge.
+
+module TerranCovertOpsEvent {
+	if percept(research(X)) then insert(research(X)) + insert(researching).
+	if percept(not(research(_))), bel(researching) then delete(researching).
+}

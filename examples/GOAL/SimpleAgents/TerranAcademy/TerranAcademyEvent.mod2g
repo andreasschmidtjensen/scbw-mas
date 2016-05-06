@@ -1,0 +1,11 @@
+use TerranAcademy as actionspec.
+use TerranAcademy as knowledge.
+
+module TerranAcademyEvent {
+
+		if percept(research(X)) then insert(research(X)) + insert(researching).
+		if bel(researching), percept(not(research(_))) then delete(researching).
+		if percept(upgrade(X)) then insert(upgrade(X)) + insert(upgrading).
+		if bel(upgrading), percept(not(upgrade(_))) then delete(upgrading).
+	
+}

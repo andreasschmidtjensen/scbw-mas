@@ -1,0 +1,11 @@
+use TerranBunker as knowledge.
+
+define load(Id) with
+	pre{true}
+	post{true}
+		
+		
+define skip with
+	pre {true}
+	post {true}	
+			

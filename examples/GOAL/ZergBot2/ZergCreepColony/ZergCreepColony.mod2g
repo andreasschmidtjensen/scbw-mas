@@ -1,0 +1,6 @@
+use ZergCreepColony as knowledge.
+use ZergCreepColony as actionspec.
+
+module ZergCreepColony {	
+	if a-goal(morph("Zerg Sunken Colony")) then morph("Zerg Sunken Colony").
+}

@@ -1,0 +1,26 @@
+use TerranCommandCenter as knowledge.
+
+define move(X, Y) with
+	pre{true}
+	post{true}	
+		
+		
+define train(Id) with
+	pre {trainSCV}
+	post {not(trainSCV)}
+		
+		
+define lift with
+	pre{true}
+	post{true}	
+		
+		
+define buildAddon(X) with
+	pre{true}
+	post{true}	
+		
+		
+define land(X,Y) with
+	pre{true}
+	post{true}	
+		

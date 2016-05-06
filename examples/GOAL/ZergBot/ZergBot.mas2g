@@ -1,0 +1,17 @@
+environment {
+	env = "../../../eisbw/target/eisbw-0.0.1-SNAPSHOT-jar-with-dependencies.jar".
+}
+
+agentfiles{
+	"ZergDrone.goal" [name = zergDrone].
+	"ZergHatchery.goal" [name = zergHatchery].
+	"ZergZergling.goal" [name = zergZergling].
+	"ZergEvolutionChamber.goal" [name = zergEvolutionChmaber].
+}
+
+launchpolicy{
+	when [type = zergDrone]@env do launch zergDrone:zergDrone.
+	when [type = zergHatchery]@env do launch zergHatchery:zergHatchery.
+	when [type = zergZergling]@env do launch zergZergling:zergZergling.
+	when [type = zergEvolutionChamber]@env do launch zergEvolutionChmaber:zergEvolutionChmaber.
+}

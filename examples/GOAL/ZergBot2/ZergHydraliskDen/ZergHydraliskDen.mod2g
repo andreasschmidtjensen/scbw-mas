@@ -1,0 +1,10 @@
+use ZergHydraliskDen as knowledge.
+use ZergHydraliskDen as actionspec.
+
+module ZergHydraliskDen {
+	if a-goal(upgrade('Muscular Augments')) then upgrade('Muscular Augments').
+	
+	if a-goal(upgrade('Grooved Spines')) then upgrade('Grooved Spines').	
+	
+	if a-goal(research('Lurker Aspect')) then research('Lurker Aspect').
+}
